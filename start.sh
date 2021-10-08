@@ -21,7 +21,7 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 	mkdir -p "$datadir"
 	$tezosnode config init 	--data-dir=$datadir \
 				--net-addr=[::]:$netport \
-				--history-mode=$mode
+				--history-mode=$mode $othercliopts
 fi
 
 # Let's go then
