@@ -7,6 +7,7 @@ background=0
 dontconfig=0
 netport=8732
 rpcport=9732
+piddir=/tmp
 
 if [ -z "$1" ]; then
 	echo "Usage: $0 configfile"
@@ -59,7 +60,7 @@ if [ "$background" = "1" ]; then
 		exit 1
 	fi
 	echo "Started with PID $pid"
-	echo "$pid" > /tmp/_tezos_$name.pid
+	echo "$pid" > $piddir/_tezos_$name.pid
 else
 	$com
 fi
