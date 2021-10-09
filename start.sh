@@ -5,6 +5,8 @@
 logging=stdout
 background=0
 dontconfig=0
+netport=8732
+rpcport=9732
 
 if [ -z "$1" ]; then
 	echo "Usage: $0 configfile"
@@ -40,6 +42,7 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 	mkdir -p "$datadir"
 	$tezosnode config init 	--data-dir=$datadir \
 				--net-addr=[::]:$netport \
+				--rpc-addr=[::]:$rpcport \
 				--log-output=$logging \
 				--history-mode=$mode $otherconfigopts
 fi
