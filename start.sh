@@ -58,7 +58,8 @@ if [ "$background" = "1" ]; then
 		echo "Failed to start"
 		exit 1
 	fi
-	echo "Started with PID $!"
+	echo "Started with PID $pid"
+	echo "$pid" > /tmp/_tezos_$name.pid
 else
 	$com
 fi
