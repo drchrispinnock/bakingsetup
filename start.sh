@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This script has the Ming Vase license. If you use the script
+# and it breaks you get to keep the pieces.
+
 # Defaults - override in the configuration file (shell)
 #
 logging=stdout
@@ -16,7 +19,11 @@ fi
 
 source $1
 
+pidfile=$piddir/_tezos_$name.pid
+
 [ -z "$tezosroot" ] && tezosroot=/home/cjep/tezos/$vers/tezos
+
+[ -f "$pidfile" ] && echo "PID file already exists!" && exit 1
 
 tezosnode=$tezosroot/tezos-node
 
@@ -60,7 +67,7 @@ if [ "$background" = "1" ]; then
 		exit 1
 	fi
 	echo "Started with PID $pid"
-	echo "$pid" > $piddir/_tezos_$name.pid
+	echo "$pid" > $pidfile
 else
 	$com
 fi
