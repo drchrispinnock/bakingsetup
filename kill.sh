@@ -13,16 +13,28 @@ if [ -z "$1" ]; then
 fi
 
 source $1
-pidfile=$piddir/_tezos_$name.pid
+pidfilebase=$piddir/_pid_tezos_$name
 
 if [ -z "$name" ]; then
 	echo "I need name set"
 	exit 1
 fi
 
-
-if [ -f $pidfile ]; then
-	pid=`cat $pidfile`
-	sudo kill -TERM $pid
-	rm $pidfile
+if [ `whoami` != $username ]; then
+        echo "Must be run by $username"
+        exit 3;
 fi
+
+
+for pidfile in ${pidfilebase}_node ${pidfilebase}_baker \
+		${pidfilebase}_endorser ${pidfilebase}_accuser; do
+
+
+	if [ -f $pidfile ]; then
+		pid=`cat $pidfile`
+		kill -TERM $pid
+		rm $pidfile
+	fi
+done
+
+

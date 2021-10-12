@@ -5,6 +5,7 @@
 
 # Defaults - override in the configuration file (shell)
 #
+bake=0
 logging=stdout
 background=0
 dontconfig=0
@@ -15,6 +16,7 @@ rpcaddr="[::]"
 netaddr="[::]"
 piddir=/tmp
 snapshot=""
+protocol="010-PtGRANAD"
 
 #snapfile="tezos-mainnet.full"
 #snapshot="https://mainnet.xtz-shots.io/full -O $snapfile"
@@ -30,24 +32,28 @@ fi
 
 source $1
 
-pidfile=$piddir/_tezos_$name.pid
+if [ `whoami` != $username ]; then
+	echo "Must be run by $username"
+	exit 3;
+fi
+
+[ "$bake" = "1" ] && background=1
+
+pidfilebase=$piddir/_pid_tezos_$name
+pidfile=${pidfilebase}_node
 
 [ -z "$tezosroot" ] && tezosroot=/home/cjep/tezos/$vers/tezos
 
 [ -f "$pidfile" ] && echo "PID file already exists!" && exit 1
 
 tezosnode=$tezosroot/tezos-node
+tezosbaker=$tezosroot/tezos-baker-$protocol
+tezosendorse=$tezosroot/tezos-endorser-$protocol
+tezosaccuse=$tezosroot/tezos-accuser-$protocol
 
 # Sanity
 #
 [ ! -x "$tezosnode" ] && echo "Cannot find node software" && exit 1
-
-# Adjust for sudo
-#
-if [ ! -z "$username" ]; then
-	# Do something
-	tezosnode="sudo -u $username $tezosnode"
-fi
 
 # Setup
 #
@@ -93,6 +99,16 @@ if [ "$background" = "1" ]; then
 	fi
 	echo "Started with PID $pid"
 	echo "$pid" > $pidfile
+
+	if [ "$bake" = "1" ]; then
+		$tezosbaker run with local node $datadir $ledger --pidfile ${pidfilebase}_baker >> $bakerlogging 2>&1 &
+		$tezosendorse run $ledger >> $endorselogging  2>&1 &
+		echo "$!" > ${pidfilebase}_endorser
+		$tezosaccuse run >> $accuselogging  2>&1 &
+		echo "$!" > ${pidfilebase}_accuser
+
+	fi
+
 else
 	$com
 fi
