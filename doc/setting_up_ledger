@@ -3,3 +3,6 @@
 https://www.xmodulo.com/change-usb-device-permission-linux.html
 
 Use the template 20-hw1.rules in /etc/udev/rules.d/
+
+2. 
+tezos-client import secret key ledger_tezos "ledger://kaleidoscopic-uguisu-gripping-nightingale/ed25519/0h/0h"
