@@ -8,13 +8,24 @@
 logging=stdout
 background=0
 dontconfig=0
+justconfig=0
 netport=8732
 rpcport=9732
+rpcaddr="[::]"
+netaddr="[::]"
 piddir=/tmp
+snapshot=""
+
+#snapfile="tezos-mainnet.full"
+#snapshot="https://mainnet.xtz-shots.io/full -O $snapfile"
 
 if [ -z "$1" ]; then
 	echo "Usage: $0 configfile"
 	exit 1
+fi
+
+if [ "$2" = "justconfig" ]; then
+	justconfig=1
 fi
 
 source $1
@@ -49,10 +60,24 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 	echo "Setting up configuration"
 	mkdir -p "$datadir"
 	$tezosnode config init 	--data-dir=$datadir \
-				--net-addr=[::]:$netport \
-				--rpc-addr=[::]:$rpcport \
+				--net-addr=$netaddr:$netport \
+				--rpc-addr=$rpcaddr:$rpcport \
 				--log-output=$logging \
 				--history-mode=$mode $otherconfigopts
+fi
+
+[ "$justconfig" = "1" ] && echo "Just configuring - exit" && exit 0
+
+# Import a snapshot
+#
+if [ ! -z "$snapshot" ]; then
+
+	[ -z "$snapfile" ] && snapfile=`basename $snapshot`
+	echo "Fetching $snapshot"
+	wget $snapshot
+	echo "Importing $snapshot"
+	$tezosnode --data-dir=$datadir snapshot import "$snapfile"
+	rm -f "$snapfile"
 fi
 
 # Let's go then
