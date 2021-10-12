@@ -1,8 +1,14 @@
 
-1. For USB devices access
+1. For USB devices access note this:
 https://www.xmodulo.com/change-usb-device-permission-linux.html
 
 Use the template 20-hw1.rules in /etc/udev/rules.d/
 
-2. 
-tezos-client import secret key ledger_tezos "ledger://kaleidoscopic-uguisu-gripping-nightingale/ed25519/0h/0h"
+If you don't get this right, only root will have access to the ledger.
+
+2. You must use the right path and cipher. Note the 0h/0h. Check the 
+key hash you get is the expected one.
+
+tezos-client list connected ledgers
+tezos-client import secret key ledger_tezos \
+	"ledger://kaleidoscopic-uguisu-gripping-nightingale/ed25519/0h/0h"
