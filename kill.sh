@@ -26,8 +26,8 @@ if [ `whoami` != $username ]; then
 fi
 
 
-for pidfile in ${pidfilebase}_node ${pidfilebase}_baker \
-		${pidfilebase}_endorser ${pidfilebase}_accuser; do
+for pidfile in ${pidfilebase}_node* ${pidfilebase}_baker* \
+		${pidfilebase}_endorser* ${pidfilebase}_accuser*; do
 
 
 	if [ -f $pidfile ]; then

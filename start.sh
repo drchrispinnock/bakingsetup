@@ -16,7 +16,7 @@ rpcaddr="[::]"
 netaddr="[::]"
 piddir=/tmp
 snapshot=""
-protocol="010-PtGRANAD"
+protocols="010-PtGRANAD 011-PtHangz2 alpha"
 
 #snapfile="tezos-mainnet.full"
 #snapshot="https://mainnet.xtz-shots.io/full -O $snapfile"
@@ -47,9 +47,6 @@ pidfile=${pidfilebase}_node
 [ -f "$pidfile" ] && echo "PID file already exists!" && exit 1
 
 tezosnode=$tezosroot/tezos-node
-tezosbaker=$tezosroot/tezos-baker-$protocol
-tezosendorse=$tezosroot/tezos-endorser-$protocol
-tezosaccuse=$tezosroot/tezos-accuser-$protocol
 
 # Sanity
 #
@@ -101,12 +98,20 @@ if [ "$background" = "1" ]; then
 	echo "$pid" > $pidfile
 
 	if [ "$bake" = "1" ]; then
-		$tezosbaker run with local node $datadir $ledger --pidfile ${pidfilebase}_baker >> $bakerlogging 2>&1 &
-		$tezosendorse run $ledger >> $endorselogging  2>&1 &
-		echo "$!" > ${pidfilebase}_endorser
-		$tezosaccuse run >> $accuselogging  2>&1 &
-		echo "$!" > ${pidfilebase}_accuser
 
+		for protocol in $protocols; do
+			tezosbaker=$tezosroot/tezos-baker-$protocol
+			tezosendorse=$tezosroot/tezos-endorser-$protocol
+			tezosaccuse=$tezosroot/tezos-accuser-$protocol
+
+			$tezosbaker run with local node $datadir $ledger --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging 2>&1 &
+			if [ -x "$tezosendorse" ]; then 
+				$tezosendorse run $ledger >> $endorselogging  2>&1 &
+				echo "$!" > ${pidfilebase}_endorser-$protocol
+			fi
+			$tezosaccuse run >> $accuselogging  2>&1 &
+			echo "$!" > ${pidfilebase}_accuser-$protocol
+		done
 	fi
 
 else
