@@ -105,10 +105,14 @@ if [ "$background" = "1" ]; then
 			tezosaccuse=$tezosroot/tezos-accuser-$protocol
 
 			$tezosbaker run with local node $datadir $ledger --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging 2>&1 &
+
+			# Future protocols will not have endorsers
+			#
 			if [ -x "$tezosendorse" ]; then 
-				$tezosendorse run $ledger >> $endorselogging  2>&1 &
+				$tezosendorse run >> $endorselogging  2>&1 &
 				echo "$!" > ${pidfilebase}_endorser-$protocol
 			fi
+			
 			$tezosaccuse run >> $accuselogging  2>&1 &
 			echo "$!" > ${pidfilebase}_accuser-$protocol
 		done
