@@ -16,7 +16,6 @@ rpcaddr="[::]"
 netaddr="[::]"
 piddir=/tmp
 snapshot=""
-protocols="010-PtGRANAD 011-PtHangz2 alpha"
 
 #snapfile="tezos-mainnet.full"
 #snapshot="https://mainnet.xtz-shots.io/full -O $snapfile"
@@ -42,9 +41,15 @@ fi
 pidfilebase=$piddir/_pid_tezos_$name
 pidfile=${pidfilebase}_node
 
+[ -f "$pidfile" ] && echo "PID file already exists!" && exit 1
+
 [ -z "$tezosroot" ] && tezosroot=/home/cjep/tezos/$vers/tezos
 
-[ -f "$pidfile" ] && echo "PID file already exists!" && exit 1
+# On a proper installation, this is in a file
+protocols="010-PtGRANAD 011-PtHangz2 alpha"
+if [ -f "$tezosroot/active_protocol_versions" ]; then
+	protocols=`cat $tezosroot/active_protocol_versions`
+fi
 
 tezosnode=$tezosroot/tezos-node
 
