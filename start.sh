@@ -44,6 +44,7 @@ pidfile=${pidfilebase}_node
 [ -f "$pidfile" ] && echo "PID file already exists!" && exit 1
 
 [ -z "$tezosroot" ] && tezosroot=/home/cjep/tezos/$vers/tezos
+[ -z "$network" ] && network=mainnet
 
 # On a proper installation, this is in a file
 protocols="010-PtGRANAD 011-PtHangz2 alpha"
@@ -74,6 +75,7 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 				--net-addr=$netaddr:$netport \
 				--rpc-addr=$rpcaddr:$rpcport \
 				--log-output=$logging \
+				--network=$network \
 				--history-mode=$mode $otherconfigopts
 fi
 
