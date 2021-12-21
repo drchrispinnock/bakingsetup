@@ -49,6 +49,9 @@ pidfile=${pidfilebase}_node
 protocols="010-PtGRANAD 011-PtHangz2 alpha"
 if [ -f "$tezosroot/active_protocol_versions" ]; then
 	protocols=`cat $tezosroot/active_protocol_versions`
+else
+	echo "WARNING: check active protocols $protocols"
+	sleep 3
 fi
 
 tezosnode=$tezosroot/tezos-node
