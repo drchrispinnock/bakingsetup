@@ -10,8 +10,8 @@ logging=stdout
 background=0
 dontconfig=0
 justconfig=0
-netport=8732
-rpcport=9732
+netport=9732
+rpcport=8732
 rpcaddr="[::]"
 netaddr="[::]"
 piddir=/tmp
@@ -109,24 +109,25 @@ if [ "$background" = "1" ]; then
 
 	if [ "$bake" = "1" ]; then
 
-		echo "Waiting for node to be bootstrapped"
-		$tezosroot/tezos-client -E http://127.0.0.1:$netport bootstrapped
+		echo "Sleeping for node to come up"
+		sleep 10
+		$tezosroot/tezos-client -E http://127.0.0.1:$rpcport bootstrapped
 
 		for protocol in $protocols; do
 			tezosbaker=$tezosroot/tezos-baker-$protocol
 			tezosendorse=$tezosroot/tezos-endorser-$protocol
 			tezosaccuse=$tezosroot/tezos-accuser-$protocol
 
-			$tezosbaker -E http://127.0.0.1:$netport run with local node $datadir $bakerid --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging 2>&1 &
+			$tezosbaker -E http://127.0.0.1:$rpcport run with local node $datadir $bakerid --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging 2>&1 &
 
 			# Future protocols will not have endorsers
 			#
 			if [ -x "$tezosendorse" ]; then 
-				$tezosendorse -E http://127.0.0.1:$netport run >> $endorselogging  2>&1 &
+				$tezosendorse -E http://127.0.0.1:$rpcport run >> $endorselogging  2>&1 &
 				echo "$!" > ${pidfilebase}_endorser-$protocol
 			fi
 			
-			$tezosaccuse -E http://127.0.0.1:$netport run >> $accuselogging  2>&1 &
+			$tezosaccuse -E http://127.0.0.1:$rpcport run >> $accuselogging  2>&1 &
 			echo "$!" > ${pidfilebase}_accuser-$protocol
 		done
 	fi
