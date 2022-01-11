@@ -14,7 +14,7 @@ buildroot=$HOME
 gitrepos="https://gitlab.com/tezos/tezos.git"
 branch=master
 startscript=$HOME/startup/start.sh
-startconf=$HOME/startup/mondaynet.conf
+startconf=$HOME/startup/mondaynet/mondaynet.conf
 
 # Config
 #
