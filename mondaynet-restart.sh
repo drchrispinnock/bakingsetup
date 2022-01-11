@@ -7,6 +7,9 @@ startconf=$HOME/startup/mondaynet.conf
 #
 $killscript $startconf
 
+# Cron will run this on a Monday... erm.
+echo `date %Y-%m-%d` > $HOME/monday.txt 
+
 # Update OS
 #
 sudo apt update
