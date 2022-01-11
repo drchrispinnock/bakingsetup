@@ -97,6 +97,7 @@ fi
 #
 echo "Starting $name node"
 com="$tezosnode run --data-dir=$datadir --log-output=$logging $otherrunopts"
+echo "$com"
 if [ "$background" = "1" ]; then
 	$com &
 	pid=$!
