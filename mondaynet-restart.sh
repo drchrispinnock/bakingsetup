@@ -1,4 +1,13 @@
-#!/bin/sh
+#!/bin/bash
+
+# Restart a Mondaynet node
+# Chris Pinnock
+#
+# Ming Vase license - if you break it, it will probably be expensive
+# but you get to keep the pieces.
+#
+# Run me out of cron on a Monday
+
 
 killscript=$HOME/startup/kill.sh
 startconf=$HOME/startup/mondaynet.conf

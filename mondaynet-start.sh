@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Start a Mondaynet node.
+# Chris Pinnock
+#
+# Ming Vase license - if you break it, it will probably be expensive
+# but you get to keep the pieces.
+
+# Run me out of cron at @reboot
+
 # Defaults
 #
 buildroot=$HOME
@@ -73,9 +81,10 @@ fi
 
 # Reset baking account
 #
-echo "===> Resetting baking accounts"
+echo "===> Resetting node and baking"
 echo ""
-
+rm -rf "$HOME/.tezos-node"
+# XXX also pieces in tezos client
 sleep 5
 
 # Start the node
