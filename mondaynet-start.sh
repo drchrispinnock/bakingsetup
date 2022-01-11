@@ -39,14 +39,14 @@ if [ ! -f "$HOME/.firstrun" ]; then
 	chmod +x rustup-init.sh
 	./rustup-init.sh --profile minimal --default-toolchain 1.52.1 -y
 	touch "$HOME/.firstrun"
+	sleep 5
 fi
 . $HOME/.cargo/env
-echo $PATH
-sleep 5
 
 # Update the software to latest master branch of Octez
 #
 if [ ! -d $builddir ]; then
+	echo "===> Setting up software"
 	mkdir -p "$buildroot"
 	cd $buildroot
 	git clone $gitrepos
@@ -56,10 +56,13 @@ fi
 
 eval $(opam env) 
 
+echo "===> Updating the branch"
 cd $builddir
 git checkout $branch
 git pull
-rm -f _build _opam
+rm -rf _build _opam
+
+echo "===> Rebuilding the software"
 make build-deps && make
 
 if [ ! -f tezos-node ]; then
@@ -73,7 +76,7 @@ fi
 echo "===> Resetting baking accounts"
 echo ""
 
-sleep 30
+sleep 5
 
 # Start the node
 #
@@ -82,5 +85,4 @@ echo ""
 
 # Start the node
 #
-$startscript $startconf
 $startscript $startconf
