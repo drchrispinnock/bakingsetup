@@ -12,8 +12,7 @@
 #
 buildroot=$HOME
 gitrepos="https://gitlab.com/tezos/tezos.git"
-#branch=96b50a69
-branch=master
+branch=96b50a69
 startscript=$HOME/startup/start.sh
 startconf=$HOME/startup/mondaynet/mondaynet.conf
 perlscript=$HOME/startup/mondaynet/last_monday.pl
@@ -80,12 +79,13 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 	echo "===> Setting up software"
 	mkdir -p "$buildroot"
 	cd $buildroot
-	git clone $gitrepos -b $branch >> $buildlogs/git.txt 2>&1
+	git clone $gitrepos >> $buildlogs/git.txt 2>&1
 	if [ "$?" != 0 ]; then
 		echo "CANNOT GET SOURCES"
 		exit 1
 	fi
 	cd tezos
+	git checkout -b $branch
 	opam init --bare --yes > $buildlogs/opam.txt 2>&1
 	eval $(opam env) 
 
