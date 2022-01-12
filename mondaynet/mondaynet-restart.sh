@@ -18,7 +18,17 @@ perlscript=$HOME/startup/mondaynet/last_monday.pl
 $killscript $startconf
 
 # Cron will run this on a Monday... but get last monday
-/usr/bin/perl $perlscript > $HOME/monday.txt 
+monday=""
+if [ -f "$HOME/monday.txt" ]; then
+	monday=`cat $HOME/monday.txt`
+fi
+newmonday=`/usr/bin/perl $perlscript`
+echo $newmonday > $HOME/monday.txt
+
+if [ "$monday" != "$newmonday" ]; then
+	echo "New Monday! Will reset wallet on next boot."
+	touch "$HOME/.resetwallet"
+fi
 
 # Update OS
 #
