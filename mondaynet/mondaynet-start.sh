@@ -63,7 +63,7 @@ if [ ! -f "$HOME/.firstrun" ]; then
 	./rustup-init.sh --profile minimal --default-toolchain 1.52.1 -y >> $buildlogs/rust.txt 2>&1
 	touch "$HOME/.firstrun"
 fi
-. $HOME/.cargo/env
+source $HOME/.cargo/env
 
 # Update the software to latest master branch of Octez
 #
@@ -88,12 +88,6 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 	git checkout -b $branch
 	opam init --bare --yes > $buildlogs/opam.txt 2>&1
 	eval $(opam env) 
-
-	cd $builddir
-#	echo "===> Updating the branch"
-#	git checkout $branch  >> $buildlogs/git.txt 2>&1
-#	git pull >> $buildlogs/git.txt 2>&1
-#	rm -rf _build _opam
 
 	echo "===> Rebuilding the software - build-deps"
 	make build-deps > $buildlogs/builddeps.txt 2>&1
