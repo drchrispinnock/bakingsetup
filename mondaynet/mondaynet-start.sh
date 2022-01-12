@@ -34,7 +34,7 @@ if [ -f "$HOME/.cleanup" ]; then
 	echo "===> Cleaning up"
 	rm -rf tezos rustup-init.sh logs fetch-params.sh \
 		.zcash-params .opam .rustup .cargo .cache $HOME/.cleanup \
-		$HOME/.firstrun "$HOME/.skipbuild"
+		$HOME/.firstrun "$HOME/.skipbuild" rustup-init.sh
 fi
 
 
@@ -79,16 +79,16 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 	echo "===> Setting up software"
 	mkdir -p "$buildroot"
 	cd $buildroot
-	git clone $gitrepos >> $buildlogs/git.txt 2>&1
+	git clone $gitrepos 0b $master >> $buildlogs/git.txt 2>&1
 	cd tezos
 	opam init --bare --yes > $buildlogs/opam.txt 2>&1
 	eval $(opam env) 
 
-	echo "===> Updating the branch"
 	cd $builddir
-	git checkout $branch >> $buildlogs/git.txt 2>&1
-	git pull >> $buildlogs/git.txt 2>&1
-	rm -rf _build _opam
+#	echo "===> Updating the branch"
+#	git checkout $branch  >> $buildlogs/git.txt 2>&1
+#	git pull >> $buildlogs/git.txt 2>&1
+#	rm -rf _build _opam
 
 	echo "===> Rebuilding the software - build-deps"
 	make build-deps > $buildlogs/builddeps.txt 2>&1
