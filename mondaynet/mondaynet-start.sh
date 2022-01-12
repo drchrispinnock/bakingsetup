@@ -71,7 +71,9 @@ git pull
 rm -rf _build _opam
 
 echo "===> Rebuilding the software"
-make build-deps && make
+make build-deps
+eval $(opam env) 
+make
 
 if [ ! -f tezos-node ]; then
 	echo "XXX Build unsuccessful!"
