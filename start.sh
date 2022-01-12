@@ -69,13 +69,13 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 	#
 	[ "$dontconfig" = "1" ] && echo "Skipping configuration!" && exit 1
 
-	echo "Setting up configuration"
+	echo "===> Setting up configuration"
 	mkdir -p "$datadir"
 	$tezosnode config init 	--data-dir=$datadir \
 				--net-addr=$netaddr:$netport \
 				--rpc-addr=$rpcaddr:$rpcport \
 				--log-output=$logging \
-				--network=$network \
+				--network="$network" \
 				--history-mode=$mode $otherconfigopts
 fi
 
@@ -86,16 +86,16 @@ fi
 if [ ! -z "$snapshot" ]; then
 
 	[ -z "$snapfile" ] && snapfile=`basename $snapshot`
-	echo "Fetching $snapshot"
+	echo "===> Fetching $snapshot"
 	wget $snapshot
-	echo "Importing $snapshot"
+	echo "===> Importing $snapshot"
 	$tezosnode --data-dir=$datadir snapshot import "$snapfile"
 	rm -f "$snapfile"
 fi
 
 # Let's go then
 #
-echo "Starting $name node"
+echo "===> Starting $name node"
 com="$tezosnode run --data-dir=$datadir --log-output=$logging $otherrunopts"
 echo "$com"
 if [ "$background" = "1" ]; then
@@ -110,7 +110,7 @@ if [ "$background" = "1" ]; then
 
 	if [ "$bake" = "1" ]; then
 
-		echo "Sleeping for node to come up"
+		echo "===> Sleeping for node to come up"
 		sleep 10
 		$tezosroot/tezos-client -E http://127.0.0.1:$rpcport bootstrapped
 
