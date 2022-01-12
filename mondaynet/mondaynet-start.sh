@@ -57,7 +57,7 @@ if [ ! -f "$HOME/.firstrun" ]; then
 	sudo apt-get update > $buildlogs/apt.txt 2>&1
 	sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev opam jq zlib1g-dev bc autoconf >> $buildlogs/apt.txt 2>&1
 
-	echo "==> Installing rust"
+	echo "===> Installing rust"
 	wget https://sh.rustup.rs/rustup-init.sh > $buildlogs/rust.txt 2>&1
 	chmod +x rustup-init.sh
 	./rustup-init.sh --profile minimal --default-toolchain 1.52.1 -y >> $buildlogs/rust.txt 2>&1
@@ -109,6 +109,7 @@ if [ ! -f "$builddir/tezos-node" ]; then
 	echo "EXITING"
 	exit 1
 fi
+export PATH=$builddir:$PATH
 
 if [ ! -f "$HOME/.skipreset" ]; then
 	# Reset baking account
