@@ -12,7 +12,7 @@
 #
 buildroot=$HOME
 gitrepos="https://gitlab.com/tezos/tezos.git"
-branch=master
+branch=96b50a69
 startscript=$HOME/startup/start.sh
 startconf=$HOME/startup/mondaynet/mondaynet.conf
 perlscript=$HOME/startup/mondaynet/last_monday.pl
@@ -70,17 +70,19 @@ fi
 rm -f $buildlogs/git.txt
 if [ ! -d $builddir ]; then
 	rm -f "$HOME/.skipbuild"
+fi
+
+if [ ! -f "$HOME/.skipbuild" ]; then 
+	echo "===> Cleaning sources"
+	rm -rf $builddir	
+
 	echo "===> Setting up software"
 	mkdir -p "$buildroot"
 	cd $buildroot
 	git clone $gitrepos >> $buildlogs/git.txt 2>&1
 	cd tezos
 	opam init --bare --yes > $buildlogs/opam.txt 2>&1
-fi
-
-eval $(opam env) 
-
-if [ ! -f "$HOME/.skipbuild" ]; then 
+	eval $(opam env) 
 
 	echo "===> Updating the branch"
 	cd $builddir
