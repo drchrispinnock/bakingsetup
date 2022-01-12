@@ -79,7 +79,7 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 	echo "===> Setting up software"
 	mkdir -p "$buildroot"
 	cd $buildroot
-	git clone $gitrepos 0b $master >> $buildlogs/git.txt 2>&1
+	git clone $gitrepos -b $master >> $buildlogs/git.txt 2>&1
 	cd tezos
 	opam init --bare --yes > $buildlogs/opam.txt 2>&1
 	eval $(opam env) 
