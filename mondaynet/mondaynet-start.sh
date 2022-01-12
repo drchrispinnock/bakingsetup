@@ -32,7 +32,7 @@ builddir=$buildroot/tezos
 
 if [ -f "$HOME/.cleanup" ]; then
 	echo "===> Cleaning up"
-	rm -rf tezos rustup-init.sh monday.txt logs fetch-params.sh \
+	rm -rf tezos rustup-init.sh logs fetch-params.sh \
 		.zcash-params .opam .rustup .cargo .cache $HOME/.cleanup \
 		$HOME/.firstrun "$HOME/.skipbuild"
 fi
