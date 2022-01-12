@@ -15,12 +15,16 @@ gitrepos="https://gitlab.com/tezos/tezos.git"
 branch=master
 startscript=$HOME/startup/start.sh
 startconf=$HOME/startup/mondaynet/mondaynet.conf
+perlscript=$HOME/startup/mondaynet/last_monday.pl
+wallet=$HOME/startup/mondaynet/wallet
+buildlogs=$HOME/buildlogs
 
 # Config
 #
 if [ -f "$HOME/monday.setup" ]; then
 	. $HOME/monday.setup
 fi
+mkdir -p $buildlogs
 
 # Do not change these
 #
@@ -39,8 +43,8 @@ fi
 if [ ! -d $HOME/.zcash-params ]; then
 	# Fetch Zcash Params
 	#
-	wget https://raw.githubusercontent.com/zcash/zcash/master/zcutil/fetch-params.sh
-	sh ./fetch-params.sh
+	wget https://raw.githubusercontent.com/zcash/zcash/master/zcutil/fetch-params.sh > $buildlogs/zcash.txt 2>&1
+	sh ./fetch-params.sh >> $buildlogs/zcash.txt 2>&1
 fi
 
 if [ ! -d $HOME/.cargo ]; then
@@ -50,49 +54,49 @@ fi
 # Check first run
 #
 if [ ! -f "$HOME/.firstrun" ]; then
-	sudo apt-get update
-	sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev opam jq zlib1g-dev bc autoconf
+	sudo apt-get update > $buildlogs/apt.txt 2>&1
+	sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev opam jq zlib1g-dev bc autoconf >> $buildlogs/apt.txt 2>&1
 
 	echo "==> Installing rust"
-	echo ""
-	wget https://sh.rustup.rs/rustup-init.sh
+	wget https://sh.rustup.rs/rustup-init.sh > $buildlogs/rust.txt 2>&1
 	chmod +x rustup-init.sh
-	./rustup-init.sh --profile minimal --default-toolchain 1.52.1 -y
+	./rustup-init.sh --profile minimal --default-toolchain 1.52.1 -y >> $buildlogs/rust.txt 2>&1
 	touch "$HOME/.firstrun"
-	sleep 5
 fi
 . $HOME/.cargo/env
 
 # Update the software to latest master branch of Octez
 #
+rm -f $buildlogs/git.txt
 if [ ! -d $builddir ]; then
 	rm -f "$HOME/.skipbuild"
 	echo "===> Setting up software"
 	mkdir -p "$buildroot"
 	cd $buildroot
-	git clone $gitrepos
+	git clone $gitrepos >> $buildlogs/git.txt 2>&1
 	cd tezos
-	opam init --bare --yes
+	opam init --bare --yes > $buildlogs/opam.txt 2>&1
 fi
 
+eval $(opam env) 
 
 if [ ! -f "$HOME/.skipbuild" ]; then 
-	eval $(opam env) 
 
 	echo "===> Updating the branch"
 	cd $builddir
-	git checkout $branch
-	git pull
+	git checkout $branch >> $buildlogs/git.txt 2>&1
+	git pull >> $buildlogs/git.txt 2>&1
 	rm -rf _build _opam
 
-	echo "===> Rebuilding the software"
-	make build-deps
+	echo "===> Rebuilding the software - build-deps"
+	make build-deps > $buildlogs/builddeps.txt 2>&1
 	if [ $? != "0" ]; then
 		echo "XXX Failed to build dependencies"
 		exit 1
 	fi
 	eval $(opam env) 
-	make
+	echo "===> Rebuilding the software - main build"
+	make > $buildlogs/make.txt 2>&1
 	if [ $? != "0" ]; then
 		echo "XXX Failed to build tezos"
 		exit 1
@@ -110,17 +114,24 @@ if [ ! -f "$HOME/.skipreset" ]; then
 	# Reset baking account
 	#
 	echo "===> Resetting node and baking"
-	echo ""
 	rm -rf "$HOME/.tezos-node"
-	# XXX also pieces in tezos client
-	sleep 5
+
+	[ ! -d "$HOME/.tezos-client" ] && touch "$HOME/.resetwallet"
+
+	if [ -f "$HOME/.resetwallet" ]; then
+		echo "===> Resetting client folder"
+		if [ -d "$wallet" ]; then
+			rm -rf "$HOME/.tezos-client"
+			cp -pR "$wallet" "$HOME/.tezos-client"
+		fi
+		rm "$HOME/.resetwallet"
+	fi
 fi
 rm -f "$HOME/.skipreset"
 
 # Start the node
 #
 echo "===> Starting the nodes and baking daemons"
-echo ""
 
 # Start the node
 #
