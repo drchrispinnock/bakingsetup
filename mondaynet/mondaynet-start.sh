@@ -14,9 +14,9 @@ buildroot=$HOME
 gitrepos="https://gitlab.com/tezos/tezos.git"
 branch=96b50a69
 startscript=$HOME/startup/start.sh
-startconf=$HOME/startup/mondaynet/mondaynet.conf
+startconf=$HOME/startup/mondaynet/`hostname -s`.conf
 perlscript=$HOME/startup/mondaynet/last_monday.pl
-wallet=$HOME/startup/mondaynet/wallet
+wallet=$HOME/startup/mondaynet/wallet # XXX set me
 buildlogs=$HOME/buildlogs
 
 # Config
