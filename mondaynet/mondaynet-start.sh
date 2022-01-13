@@ -124,6 +124,7 @@ if [ ! -f "$HOME/.skipreset" ]; then
 		echo "===> Resetting client folder"
 		if [ -d "$wallet" ]; then
 			rm -rf "$HOME/.tezos-client"
+			mkdir -p "$HOME/.tezos-client"
 			cp -pR "$wallet/*key*" "$HOME/.tezos-client"
 		fi
 		rm "$HOME/.resetwallet"
