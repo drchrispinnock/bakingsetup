@@ -10,7 +10,7 @@
 
 
 killscript=$HOME/startup/kill.sh
-startconf=$HOME/startup/mondaynet/mondaynet.conf
+startconf=$HOME/startup/mondaynet/`hostname -s`.conf
 perlscript=$HOME/startup/mondaynet/last_monday.pl
 
 # Terminate node gracefully
