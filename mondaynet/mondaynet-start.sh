@@ -45,7 +45,7 @@ if [ -f "$HOME/.cleanup" ]; then
 	echo "===> Cleaning up"
 	rm -rf tezos rustup-init.sh logs fetch-params.sh \
 		.zcash-params .opam .rustup .cargo .cache $HOME/.cleanup \
-		$HOME/.firstrun "$HOME/.skipbuild" rustup-init.sh
+		"$HOME/.skipbuild" rustup-init.sh
 fi
 
 
@@ -58,23 +58,16 @@ if [ ! -d $HOME/.zcash-params ]; then
 	sh ./fetch-params.sh >> $buildlogs/zcash.txt 2>&1
 fi
 
-if [ ! -d $HOME/.cargo ]; then
-	rm -f "$HOME/.firstrun"
-fi
-
-# Check first run
+# Prerequisites
 #
-if [ ! -f "$HOME/.firstrun" ]; then
-	echo "===> Installing prerequisites"
-	sudo apt-get update > $buildlogs/apt.txt 2>&1
-	sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev opam jq zlib1g-dev bc autoconf >> $buildlogs/apt.txt 2>&1
+echo "===> Installing prerequisites"
+sudo apt-get update > $buildlogs/apt.txt 2>&1
+sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev opam jq zlib1g-dev bc autoconf >> $buildlogs/apt.txt 2>&1
 
-	echo "===> Installing rust"
-	wget https://sh.rustup.rs/rustup-init.sh > $buildlogs/rust.txt 2>&1
-	chmod +x rustup-init.sh
-	./rustup-init.sh --profile minimal --default-toolchain 1.52.1 -y >> $buildlogs/rust.txt 2>&1
-	touch "$HOME/.firstrun"
-fi
+echo "===> Installing rust"
+wget https://sh.rustup.rs/rustup-init.sh > $buildlogs/rust.txt 2>&1
+chmod +x rustup-init.sh
+./rustup-init.sh --profile minimal --default-toolchain 1.52.1 -y >> $buildlogs/rust.txt 2>&1
 source $HOME/.cargo/env
 
 # Update the software to latest master branch of Octez
