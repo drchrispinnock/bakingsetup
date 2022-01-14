@@ -7,6 +7,8 @@
 # but you get to keep the pieces.
 #
 
+sudo apt-get install libjson-perl
+
 # Assuming a throw away AWS environment
 #
 if [ `whoami` != "ubuntu" ]; then
