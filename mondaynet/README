@@ -80,11 +80,4 @@ TODO/IMPROVEMENTS
 the last boot. Maybe look into this. The delay is about 30-40 minutes
 as the node rebuilds itself.
 
-* Actually perhaps it would be better to get a tarball of software from
-somewhere instead. Then the buildid would be irrelevant.
-
-* There is no reason why this could not be used for dailynet, just I've
-littered mondaynet everywhere. If this were a variable somewhere, perhaps
-driven by hostname the same logic could be used.
-
 
