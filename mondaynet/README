@@ -48,6 +48,9 @@ git push
 touch ~/.skipbuild
 sudo shutdown -r now
 
+9. The system should automatically update and reset the wallet on Monday
+at 0 10 for mondaynet and daily for dailynet
+
 Files:
 mondaynet-common.conf - a common configuration file that should work
 	for all instances, based on hostnames. The key should be called
