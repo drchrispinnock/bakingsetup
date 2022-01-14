@@ -32,12 +32,14 @@ grep mondaynet /etc/hostname
 if [ "$?" = "0" ]; then
 	mondaynet=1
 	testnetwork=mondaynet
+	freq="10 0 * * 0" # Monday at 00:10
 fi
 
 grep dailynet /etc/hostname
 if [ "$?" = "0" ]; then
 	dailynet=1
 	testnetwork=dailynet
+	freq="10 0 * * *" # Daily at 00:10
 fi
 
 if [ "$mondaynet" = "1" ]; then
@@ -108,6 +110,14 @@ grep mondaynet-start.sh /tmp/_cron >/dev/null 2>&1
 if [ "$?" != "0" ]; then
 	echo "Adding start scripts to crontab"
 	echo "@reboot         /bin/bash $HOME/startup/mondaynet/mondaynet-start.sh >$HOME/start-log.txt 2>&1" >> /tmp/_cron
+	crontab - < /tmp/_cron
+fi
+
+crontab -l > /tmp/_cron
+grep mondaynet-setup.sh /tmp/_cron >/dev/null 2>&1
+if [ "$?" != "0" ]; then
+	echo "Adding start scripts to crontab"
+	echo "$freq         /bin/bash $HOME/startup/mondaynet/mondaynet-start.sh >$HOME/start-log.txt 2>&1" >> /tmp/_cron
 	crontab - < /tmp/_cron
 fi
 
