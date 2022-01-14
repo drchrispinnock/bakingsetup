@@ -91,6 +91,7 @@ else
 		else
 			newbranch=$new
 		fi
+		rm -f $testnetfile
 	fi
 
 fi
