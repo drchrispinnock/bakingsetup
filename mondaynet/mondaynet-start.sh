@@ -32,7 +32,7 @@ fi
 
 # The repos is called mondaynet
 #
-startconf=$HOME/startup/mondaynet/$testnet-common.conf
+startconf=$HOME/startup/mondaynet/mondaynet-common.conf
 wallet=$HOME/startup/mondaynet/wallet-`hostname -s`
 
 
