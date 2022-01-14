@@ -14,18 +14,37 @@ if [ `whoami` != "ubuntu" ]; then
 	exit 3;
 fi
 
-grep mondaynet /etc/hostname
-if [ "$?" != "0" ]; then
-	echo "Set hostname to something suitable (e.g. mondaynet-dog)"
-	exit 1
-fi
-
-
 killscript=$HOME/startup/kill.sh
 startconf=$HOME/startup/mondaynet/mondaynet-common.conf
 perlscript=$HOME/startup/mondaynet/last_monday.pl
 branch=96b50a69 # default
 monday="2022-01-10"
+
+mondaynet=0
+dailynet=0
+grep mondaynet /etc/hostname
+if [ "$?" = "0" ]; then
+	mondaynet=1
+	testnetwork=mondaynet
+fi
+
+grep dailynet /etc/hostname
+if [ "$?" = "0" ]; then
+	dailynet=1
+	testnetwork=dailynet
+fi
+
+if [ "$mondaynet" = "1" ]; then
+	echo "MondayNet"
+	newmonday=`/usr/bin/perl $perlscript`
+
+else if [ "$dailynet" = "1" ]; then
+	echo "DailyNet"
+	newmonday=`date +%Y-%m-%d`
+else
+	echo "Set hostname to include mondaynet or dailynet please!"
+	exit 1
+fi
 
 # Set the software branch
 #
@@ -41,8 +60,8 @@ echo $branch > "$HOME/branch.txt"
 if [ -f "$HOME/monday.txt" ]; then
 	monday=`cat $HOME/monday.txt`
 fi
-newmonday=`/usr/bin/perl $perlscript`
 echo $newmonday > $HOME/monday.txt
+echo "$testnetwork-$newmonday" > $HOME/network.txt
 
 if [ "$monday" != "$newmonday" ]; then
 	echo "New Monday! Will reset wallet on next boot."
@@ -75,5 +94,5 @@ echo "Rebooting in 15 seconds!"
 sleep 15
 # Reboot
 #
-sudo shutdown -r now "===MondayNet Restart==="
+sudo shutdown -r now "===Restart==="
 
