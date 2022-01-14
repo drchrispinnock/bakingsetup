@@ -85,7 +85,7 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 		exit 1
 	fi
 	cd tezos
-	git checkout $branch
+	git checkout $branch >> $buildlogs/git.txt 2>&1
 	opam init --bare --yes > $buildlogs/opam.txt 2>&1
 	eval $(opam env) 
 
