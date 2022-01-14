@@ -82,12 +82,13 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 	rm -rf $builddir	
 
 	echo "===> Attempting to get binaries"
-	wget $warezurl
+	wget -q $warezurl 
 	if [ "$?" != "0" ]; then
 		echo "XXX FAIL - will build from scratch"
 		touch "$HOME/.build"
 	else
-		tar zxvf $warez
+		tar zxf $warez
+		rm -f $warez
 	fi
 
 fi
