@@ -146,7 +146,7 @@ fi
 
 # No wallet - attempt to restore it
 #	
-[ ! -d "$HOME/.tezos-client" ] && touch "$HOME/.resetwallet"
+[ ! -f "$HOME/.tezos-client/public_keys" ] && touch "$HOME/.resetwallet"
 
 if [ -f "$HOME/.resetwallet" ]; then
 	echo "===> Resetting client folder"
