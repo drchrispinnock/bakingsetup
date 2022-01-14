@@ -20,8 +20,8 @@ warezserver="http://downloads.chrispinnock.com/tezos"
 
 # Config
 #
-if [ -f "$HOME/monday.setup" ]; then
-	. $HOME/monday.setup
+if [ -f "$HOME/testsetup.txt" ]; then
+	source $HOME/testsetup.txt
 fi
 
 # The repos is called mondaynet
