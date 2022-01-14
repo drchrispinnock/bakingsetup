@@ -7,6 +7,7 @@ if [ -f "faucet.json" ]; then
 	if [ -f "startup/mondaynet/wallet-$key/public_keys" ]; then
 		echo "Warning - already keys in the repo"
 	else
+		mkdir -p startup/mondaynet/wallet-$key
 		cp ~/.tezos-client/*key* startup/mondaynet/wallet-$key
 		mv faucet.json startup/mondaynet/wallet-$key
 		cd startup/mondaynet/wallet-$key
