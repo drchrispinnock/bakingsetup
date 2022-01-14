@@ -1,38 +1,38 @@
 #!/bin/bash
 
-# Reset a Mondaynet node
+# Setup or reset a Mondaynet node manually
 # Chris Pinnock
 #
 # Ming Vase license - if you break it, it will probably be expensive
 # but you get to keep the pieces.
 #
-# Run me out of cron on a Monday
 
+# Assuming a throw away AWS environment
+#
+if [ `whoami` != "ubuntu" ]; then
+	echo "Must be run by ubuntu"
+	exit 3;
+fi
 
 killscript=$HOME/startup/kill.sh
 startconf=$HOME/startup/mondaynet/mondaynet-common.conf
 perlscript=$HOME/startup/mondaynet/last_monday.pl
-jsonfile=https://teztnets.xyz/teztnets.json
+branch=96b50a69 # default
+monday="2022-01-10"
+
+# Set the software branch
+#
+if [ "$1" != "" ]; then
+	branch=$1
+fi
+echo $branch > "$HOME/branch.txt"
 
 # Terminate node gracefully
 #
 $killscript $startconf
 
-
-# Cron will run this on a Monday... but the best place to get the status
-# is the JSON file
-
-wget $jsonfile
-if [ $? != "0" ]; then
-	echo "XXX failure to get Json file"
-	exit 1
-fi 
-
-
-
-
-
-monday=""
+# Has Monday changed
+#
 if [ -f "$HOME/monday.txt" ]; then
 	monday=`cat $HOME/monday.txt`
 fi
@@ -44,11 +44,16 @@ if [ "$monday" != "$newmonday" ]; then
 	touch "$HOME/.resetwallet"
 fi
 
+
+exit 1
+
 # Update OS
 #
 sudo apt-get update
 sudo apt-get upgrade -y
 
+echo "Rebooting in 15 seconds!"
+sleep 15
 # Reboot
 #
 sudo shutdown -r now "===MondayNet Restart==="
