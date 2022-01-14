@@ -11,24 +11,31 @@
 # Defaults
 #
 buildroot=$HOME
+testnet="mondaynet"
 gitrepos="https://gitlab.com/tezos/tezos.git"
 branch=96b50a69 # Will be overriden
 startscript=$HOME/startup/start.sh
-startconf=$HOME/startup/mondaynet/mondaynet-common.conf
-perlscript=$HOME/startup/mondaynet/last_monday.pl
-wallet=$HOME/startup/mondaynet/wallet-`hostname -s`
 buildlogs=$HOME/buildlogs
+warezserver="http://downloads.chrispinnock.com/tezos"
 
 # Config
 #
 if [ -f "$HOME/monday.setup" ]; then
 	. $HOME/monday.setup
 fi
+
+# The repos is called mondaynet
+#
+startconf=$HOME/startup/mondaynet/$testnet-common.conf
+perlscript=$HOME/startup/mondaynet/last_monday.pl
+wallet=$HOME/startup/mondaynet/wallet-`hostname -s`
+
 mkdir -p $buildlogs
 
 if [ -f "$HOME/branch.txt" ]; then
 	branch=`cat $HOME/branch.txt`
 fi
+warez="$warezserver/$testnet-$branch.tar.gz"
 
 # Do not change these
 #
