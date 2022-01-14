@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Restart a Mondaynet node
+# Reset a Mondaynet node
 # Chris Pinnock
 #
 # Ming Vase license - if you break it, it will probably be expensive
@@ -10,7 +10,7 @@
 
 
 killscript=$HOME/startup/kill.sh
-startconf=$HOME/startup/mondaynet/`hostname -s`.conf
+startconf=$HOME/startup/mondaynet/mondaynet-common.conf
 perlscript=$HOME/startup/mondaynet/last_monday.pl
 
 # Terminate node gracefully
