@@ -35,7 +35,8 @@ mkdir -p $buildlogs
 if [ -f "$HOME/branch.txt" ]; then
 	branch=`cat $HOME/branch.txt`
 fi
-warez="$warezserver/tezos-$branch.tar.gz"
+warez="tezos-$branch.tar.gz"
+warezurl="$warezserver/$warez"
 
 # Do not change these
 #
@@ -81,10 +82,12 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 	rm -rf $builddir	
 
 	echo "===> Attempting to get binaries"
-	wget $warez
+	wget $warezurl
 	if [ "$?" != "0" ]; then
 		echo "XXX FAIL - will build from scratch"
 		touch "$HOME/.build"
+	else
+		tar zxvf $warez
 	fi
 
 fi
