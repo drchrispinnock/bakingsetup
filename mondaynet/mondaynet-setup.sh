@@ -25,11 +25,9 @@ monday="2022-01-10"
 if [ "$1" != "" ]; then
 	branch=$1
 fi
+echo "Setting software branch to $branch"
 echo $branch > "$HOME/branch.txt"
 
-# Terminate node gracefully
-#
-$killscript $startconf
 
 # Has Monday changed
 #
@@ -43,7 +41,12 @@ if [ "$monday" != "$newmonday" ]; then
 	echo "New Monday! Will reset wallet on next boot."
 	touch "$HOME/.resetwallet"
 fi
+echo "Setting network ID to $newmonday"
 
+echo "Terminating node software"
+# Terminate node gracefully
+#
+$killscript $startconf
 
 exit 1
 
