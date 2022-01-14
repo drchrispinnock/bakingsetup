@@ -14,9 +14,13 @@ if [ `whoami` != "ubuntu" ]; then
 	exit 3;
 fi
 
+testnetrepos=https://teztnets.xyz
+testnetfile=teztnets.json
+
 killscript=$HOME/startup/kill.sh
 startconf=$HOME/startup/mondaynet/mondaynet-common.conf
 perlscript=$HOME/startup/mondaynet/last_monday.pl
+parsejson=$HOME/startup/mondaynet/parse_testnet_json.pl
 newbranch=96b50a69 # default
 monday="2022-01-10"
 
@@ -55,12 +59,6 @@ if [ -f "$HOME/branch.txt" ]; then
 	branch=`cat $HOME/branch.txt`
 fi
 
-newbranch=$branch
-if [ "$1" != "" ]; then
-	newbranch=$1
-fi
-echo "Setting software branch old: $branch $newbranch"
-echo $newbranch > "$HOME/branch.txt"
 
 # Has Monday changed
 #
@@ -68,13 +66,34 @@ if [ -f "$HOME/monday.txt" ]; then
 	monday=`cat $HOME/monday.txt`
 fi
 echo $newmonday > $HOME/monday.txt
-echo "$testnetwork-$newmonday" > $HOME/network.txt
+fullname=$testnetwork-$newmonday
+echo "$fullname" > $HOME/network.txt
 
 if [ "$monday" != "$newmonday" ]; then
 	echo "New Period! Will reset wallet on next boot."
 	touch "$HOME/.resetwallet"
 fi
 echo "Setting network ID to $newmonday"
+
+newbranch=$branch
+if [ "$1" != "" ]; then
+	newbranch=$1
+else
+	wget $testnetrepos/$testnetfile
+	if [ "$?" != "0" ]; then
+		echo "XXX Cannot get test repository!"
+	else
+		new=`perl $parsejson $testnetfile $fullname`
+		if [ "$?" != "0" ]; then
+			echo "XXX Cannot grok $testnetfile"
+		else
+			newbranch=$new
+		fi
+	fi
+
+fi
+echo "Setting software branch old: $branch $newbranch"
+echo $newbranch > "$HOME/branch.txt"
 
 echo "Terminating node software"
 # Terminate node gracefully
