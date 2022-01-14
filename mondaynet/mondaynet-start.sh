@@ -64,11 +64,9 @@ echo "===> Installing prerequisites"
 sudo apt-get update > $buildlogs/apt.txt 2>&1
 sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev opam jq zlib1g-dev bc autoconf >> $buildlogs/apt.txt 2>&1
 
-echo "===> Installing rust"
-wget https://sh.rustup.rs/rustup-init.sh > $buildlogs/rust.txt 2>&1
-chmod +x rustup-init.sh
-./rustup-init.sh --profile minimal --default-toolchain 1.52.1 -y >> $buildlogs/rust.txt 2>&1
-source $HOME/.cargo/env
+
+
+
 
 # Update the software to latest master branch of Octez
 #
@@ -78,8 +76,27 @@ if [ ! -d $builddir ]; then
 fi
 
 if [ ! -f "$HOME/.skipbuild" ]; then 
-	echo "===> Cleaning sources"
+	
+	echo "===> Cleaning sources and binaries"
 	rm -rf $builddir	
+
+	echo "===> Attempting to get binaries"
+	wget $warez
+	if [ "$?" != "0" ]; then
+		echo "XXX FAIL - will build from scratch"
+		touch "$HOME/.build"
+	fi
+
+fi
+if [ -f "$HOME/.build" ]; then 
+	echo "===> Cleaning sources and binaries"
+	rm -rf $builddir	
+
+	echo "===> Installing rust"
+	wget https://sh.rustup.rs/rustup-init.sh > $buildlogs/rust.txt 2>&1
+	chmod +x rustup-init.sh
+	./rustup-init.sh --profile minimal --default-toolchain 1.52.1 -y >> $buildlogs/rust.txt 2>&1
+	source $HOME/.cargo/env
 
 	echo "===> Setting up software"
 	mkdir -p "$buildroot"
@@ -107,6 +124,7 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 		echo "XXX Failed to build tezos"
 		exit 1
 	fi
+	rm -f "$HOME/.build"
 fi
 rm -f "$HOME/.skipbuild"
 
