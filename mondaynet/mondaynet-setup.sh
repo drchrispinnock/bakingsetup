@@ -7,7 +7,7 @@
 # but you get to keep the pieces.
 #
 
-sudo apt-get install libjson-perl
+sudo apt-get install -y libjson-perl
 
 # Assuming a throw away AWS environment
 #
