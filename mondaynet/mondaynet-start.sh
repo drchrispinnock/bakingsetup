@@ -35,6 +35,8 @@ fi
 startconf=$HOME/startup/mondaynet/$testnet-common.conf
 wallet=$HOME/startup/mondaynet/wallet-`hostname -s`
 
+
+
 mkdir -p $buildlogs
 
 if [ -f "$HOME/branch.txt" ]; then
@@ -42,6 +44,12 @@ if [ -f "$HOME/branch.txt" ]; then
 fi
 warez="tezos-$branch.tar.gz"
 warezurl="$warezserver/$warez"
+
+echo "===> Starting setup"
+echo "Network:      $testnet"
+echo "Branch/tag:   $branch"
+echo "Binary URL:   $warezurl"
+sleep 2
 
 # Do not change these
 #
@@ -53,7 +61,6 @@ if [ -f "$HOME/.cleanup" ]; then
 		.zcash-params .opam .rustup .cargo .cache $HOME/.cleanup \
 		"$HOME/.skipbuild" rustup-init.sh
 fi
-
 
 # Check dependencies
 #
