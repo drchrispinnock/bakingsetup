@@ -89,6 +89,7 @@ echo "Updating OS in 10 seconds"
 sleep 10
 sudo apt-get update
 sudo apt-get upgrade -y
+sudo apt-get dist-upgrade -y
 
 echo "Rebooting in 15 seconds!"
 sleep 15
