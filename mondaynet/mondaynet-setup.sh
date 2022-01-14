@@ -38,10 +38,13 @@ if [ "$mondaynet" = "1" ]; then
 	echo "MondayNet"
 	newmonday=`/usr/bin/perl $perlscript`
 
-else if [ "$dailynet" = "1" ]; then
+fi
+if [ "$dailynet" = "1" ]; then
 	echo "DailyNet"
 	newmonday=`date +%Y-%m-%d`
-else
+fi
+
+if [ "$dailynet" != "1" && "$mondaynet" != 1 ]; then
 	echo "Set hostname to include mondaynet or dailynet please!"
 	exit 1
 fi
