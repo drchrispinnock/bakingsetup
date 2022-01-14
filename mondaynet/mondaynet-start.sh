@@ -112,25 +112,27 @@ if [ ! -f "$builddir/tezos-node" ]; then
 fi
 export PATH=$builddir:$PATH
 
-if [ ! -f "$HOME/.skipreset" ]; then
-	# Reset baking account
+if [ -f "$HOME/.resetnode" ]; then
+	# Reset Node
 	#
-	echo "===> Resetting node and baking"
+	echo "===> Resetting node"
 	rm -rf "$HOME/.tezos-node"
-
-	[ ! -d "$HOME/.tezos-client" ] && touch "$HOME/.resetwallet"
-
-	if [ -f "$HOME/.resetwallet" ]; then
-		echo "===> Resetting client folder"
-		if [ -d "$wallet" ]; then
-			rm -rf "$HOME/.tezos-client"
-			mkdir -p "$HOME/.tezos-client"
-			cp -pR "$wallet/*key*" "$HOME/.tezos-client"
-		fi
-		rm "$HOME/.resetwallet"
-	fi
+	rm -f "$HOME/.resetnode"
 fi
-rm -f "$HOME/.skipreset"
+
+# No wallet - attempt to restore it
+#	
+[ ! -d "$HOME/.tezos-client" ] && touch "$HOME/.resetwallet"
+
+if [ -f "$HOME/.resetwallet" ]; then
+	echo "===> Resetting client folder"
+	if [ -d "$wallet" ]; then
+		rm -rf "$HOME/.tezos-client"
+		mkdir -p "$HOME/.tezos-client"
+		cp -pR "$wallet/*key*" "$HOME/.tezos-client"
+	fi
+	rm "$HOME/.resetwallet"
+fi
 
 # Start the node
 #
