@@ -1,12 +1,51 @@
 
-0. Checkout the startup software and make sure it is in $HOME/startup.
-1. Set your hostname to something suitable like mondaynet-oregon
-2. Add a wallet directory for this
-3. Run mondaynet-setup.sh <branch>
-4. Sync the node
-5. Get a account from the faucet and self-delegate
-6. Preserve the account in the wallet directory
+# How to use this fine work
+#
+1. Setup an Ubuntu AWS host - t3.xlarge, 60GB SSD
+Although the scripts will attempt to update software, it is a good
+idea to apt update, apt upgrade -y && apt dist-upgrade -y
 
+2. Checkout the startup software and make sure it is in $HOME/startup.
+
+git clone git@github.com:drchrispinnock/bakingsetup
+mv bakingsetup startup
+
+3. Set your hostname to something suitable like mondaynet-oregon
+
+edit /etc/hostname
+
+4. Run mondaynet-setup.sh <branch>
+bash ./startup/mondaynet/mondaynet-setup.sh
+
+5. Wait. You can log back in on the reboot and look at start-log.txt
+tail -f start-log.txt (usually complete in under 30 minutes)
+tail -f logs/logfile
+
+6. When the node is synced (this can take some time) get a account from 
+the faucet and self-delegate. The account should be called the same 
+as the hostname. We will use mondaynet-lon2 here. Use the HOSTNAME.
+
+Go to https://teztnets.xyz/ and go to the latest faucet for mondaynet
+Download a json file. Save it as faucet.json on the server.
+
+./tezos/tezos-client activate account mondaynet-lon2 with faucet.json
+./tezos/tezos-client register key mondaynet-lon2 as delegate
+
+7. Add a wallet directory for this and preserve it
+
+cd startup/mondaynet
+mkdir wallet-mondaynet-lon2
+cp ~/.tezos-client/*key* wallet-mondaynet-lon2
+cp ~/faucet.json wallet-mondaynet-lon2
+git add wallet-mondaynet-lon2
+git commit -m "add wallet for lon2" -a
+git push
+
+8. Restart
+touch ~/.skipbuild
+sudo shutdown -r now
+
+Files:
 mondaynet-common.conf - a common configuration file that should work
 	for all instances, based on hostnames. The key should be called
 	the same as the hostname.
@@ -24,10 +63,32 @@ monday.setup - overrides for variables in the start scripts
 	from scratch. This does not clean tezos-node or client dirs though.
 
 .firstrun - set by the script. If not present, attempt to install packages
-	and rust
+	and rust.
 
 .skipbuild - if this exists, do not attempt to get the tezos software
 
-.resetnode - if this exists, skip resetting the wallet and node directory
+.resetnode - if this exists, skip resetting the node directory
 
-.resetwallet - if this exists 
+.resetwallet - if this exists, attempt to move keys from this repos to
+	the client wallet.
+
+
+TODO/IMPROVEMENTS
+=================
+
+* The .firstrun variable is probably not needed anymore and should be 
+nuked - we should just attempt to install rust and prerequisites each
+time. No harm.
+
+* There is no need to rebuild the software if the branch ID is the same as
+the last boot. Maybe look into this. The delay is about 30-40 minutes
+as the node rebuilds itself.
+
+* Actually perhaps it would be better to get a tarball of software from
+somewhere instead. Then the buildid would be irrelevant.
+
+* There is no reason why this could not be used for dailynet, just I've
+littered mondaynet everywhere. If this were a variable somewhere, perhaps
+driven by hostname the same logic could be used.
+
+
