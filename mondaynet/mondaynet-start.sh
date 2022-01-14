@@ -58,6 +58,7 @@ fi
 # Check first run
 #
 if [ ! -f "$HOME/.firstrun" ]; then
+	echo "===> Installing prerequisites"
 	sudo apt-get update > $buildlogs/apt.txt 2>&1
 	sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev opam jq zlib1g-dev bc autoconf >> $buildlogs/apt.txt 2>&1
 
