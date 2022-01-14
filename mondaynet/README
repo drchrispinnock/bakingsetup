@@ -21,6 +21,6 @@ monday.setup - overrides for variables in the start scripts
 
 .skipbuild - if this exists, do not attempt to get the tezos software
 
-.skipreset - if this exists, skip resetting the wallet and node directory
+.resetnode - if this exists, skip resetting the wallet and node directory
 
 .resetwallet - if this exists 
