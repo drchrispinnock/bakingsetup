@@ -26,6 +26,10 @@ if [ -f "$HOME/monday.setup" ]; then
 fi
 mkdir -p $buildlogs
 
+if [ -f "$HOME/branch.txt" ]; then
+	branch=`cat $HOME/branch.txt`
+fi
+
 # Do not change these
 #
 builddir=$buildroot/tezos
