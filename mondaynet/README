@@ -62,9 +62,6 @@ monday.setup - overrides for variables in the start scripts
 .cleanup - if this exists cleanup all sources, rust and so on, and start
 	from scratch. This does not clean tezos-node or client dirs though.
 
-.firstrun - set by the script. If not present, attempt to install packages
-	and rust.
-
 .skipbuild - if this exists, do not attempt to get the tezos software
 
 .resetnode - if this exists, skip resetting the node directory
@@ -75,10 +72,6 @@ monday.setup - overrides for variables in the start scripts
 
 TODO/IMPROVEMENTS
 =================
-
-* The .firstrun variable is probably not needed anymore and should be 
-nuked - we should just attempt to install rust and prerequisites each
-time. No harm.
 
 * There is no need to rebuild the software if the branch ID is the same as
 the last boot. Maybe look into this. The delay is about 30-40 minutes
