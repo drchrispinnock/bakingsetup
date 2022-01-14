@@ -17,7 +17,7 @@ fi
 killscript=$HOME/startup/kill.sh
 startconf=$HOME/startup/mondaynet/mondaynet-common.conf
 perlscript=$HOME/startup/mondaynet/last_monday.pl
-branch=96b50a69 # default
+newbranch=96b50a69 # default
 monday="2022-01-10"
 
 mondaynet=0
@@ -51,12 +51,16 @@ fi
 
 # Set the software branch
 #
-if [ "$1" != "" ]; then
-	branch=$1
+if [ -f "$HOME/branch.txt" ]; then
+	branch=`cat $HOME/branch.txt`
 fi
-echo "Setting software branch to $branch"
-echo $branch > "$HOME/branch.txt"
 
+newbranch=$branch
+if [ "$1" != "" ]; then
+	newbranch=$1
+fi
+echo "Setting software branch old: $branch $newbranch"
+echo $newbranch > "$HOME/branch.txt"
 
 # Has Monday changed
 #
