@@ -117,7 +117,7 @@ crontab -l > /tmp/_cron
 grep mondaynet-setup.sh /tmp/_cron >/dev/null 2>&1
 if [ "$?" != "0" ]; then
 	echo "Adding start scripts to crontab"
-	echo "$freq         /bin/bash $HOME/startup/mondaynet/mondaynet-start.sh >$HOME/start-log.txt 2>&1" >> /tmp/_cron
+	echo "$freq         /bin/bash $HOME/startup/mondaynet/mondaynet-setup.sh >$HOME/setup-log.txt 2>&1" >> /tmp/_cron
 	crontab - < /tmp/_cron
 fi
 
