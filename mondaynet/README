@@ -1,4 +1,9 @@
 
+0. Checkout the startup software and make sure it is in $HOME/startup.
+1. Set your hostname to something suitable like mondaynet-oregon
+2. Add a wallet directory for this
+3. Run mondaynet-setup.sh <branch>
+
 
 mondaynet-common.conf - a common configuration file that should work
 	for all instances, based on hostnames. The key should be called
