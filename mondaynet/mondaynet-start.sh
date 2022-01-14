@@ -12,11 +12,11 @@
 #
 buildroot=$HOME
 gitrepos="https://gitlab.com/tezos/tezos.git"
-branch=96b50a69
+branch=96b50a69 # Will be overriden
 startscript=$HOME/startup/start.sh
-startconf=$HOME/startup/mondaynet/`hostname -s`.conf
+startconf=$HOME/startup/mondaynet/mondaynet-common.conf
 perlscript=$HOME/startup/mondaynet/last_monday.pl
-wallet=$HOME/startup/mondaynet/wallet # XXX set me
+wallet=$HOME/startup/mondaynet/wallet-`hostname -s`
 buildlogs=$HOME/buildlogs
 
 # Config

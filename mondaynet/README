@@ -1,0 +1,26 @@
+
+
+mondaynet-common.conf - a common configuration file that should work
+	for all instances, based on hostnames. The key should be called
+	the same as the hostname.
+
+wallet-<hostname>     - the initial secret and public keys. These will
+	be used to restore the wallet after a network reset.
+
+
+$HOME files
+===========
+
+monday.setup - overrides for variables in the start scripts
+
+.cleanup - if this exists cleanup all sources, rust and so on, and start
+	from scratch. This does not clean tezos-node or client dirs though.
+
+.firstrun - set by the script. If not present, attempt to install packages
+	and rust
+
+.skipbuild - if this exists, do not attempt to get the tezos software
+
+.skipreset - if this exists, skip resetting the wallet and node directory
+
+.resetwallet - if this exists 
