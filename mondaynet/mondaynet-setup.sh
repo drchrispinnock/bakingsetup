@@ -67,7 +67,7 @@ echo $newmonday > $HOME/monday.txt
 echo "$testnetwork-$newmonday" > $HOME/network.txt
 
 if [ "$monday" != "$newmonday" ]; then
-	echo "New Monday! Will reset wallet on next boot."
+	echo "New Period! Will reset wallet on next boot."
 	touch "$HOME/.resetwallet"
 fi
 echo "Setting network ID to $newmonday"
