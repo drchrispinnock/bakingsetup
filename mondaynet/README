@@ -3,7 +3,9 @@
 1. Set your hostname to something suitable like mondaynet-oregon
 2. Add a wallet directory for this
 3. Run mondaynet-setup.sh <branch>
-
+4. Sync the node
+5. Get a account from the faucet and self-delegate
+6. Preserve the account in the wallet directory
 
 mondaynet-common.conf - a common configuration file that should work
 	for all instances, based on hostnames. The key should be called
