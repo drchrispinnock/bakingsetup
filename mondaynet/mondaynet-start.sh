@@ -154,6 +154,11 @@ if [ -f "$HOME/.resetnode" ]; then
 	echo "===> Resetting node"
 	rm -rf "$HOME/.tezos-node"
 	rm -f "$HOME/.resetnode"
+
+	mv -f "$HOME/logs.1" "$HOME/logs.d"
+	mv -f "$HOME/logs" "$HOME/logs.1"
+	rm -rf "$HOME/logs.d"
+	mkdir -p "$HOME/logs"
 fi
 
 # No wallet - attempt to restore it
