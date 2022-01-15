@@ -74,8 +74,9 @@ fullname=$testnetwork-$newmonday
 echo "$fullname" > $HOME/network.txt
 
 if [ "$monday" != "$newmonday" ]; then
-	echo "New Period! Will reset wallet on next boot."
+	echo "New Period! Will reset wallet and node on next boot."
 	touch "$HOME/.resetwallet"
+	touch "$HOME/.resetnode"
 fi
 echo "Setting network ID to $newmonday"
 
