@@ -79,8 +79,6 @@ monday.setup - overrides for variables in the start scripts
 TODO/IMPROVEMENTS
 =================
 
-* There is no need to rebuild the software if the branch ID is the same as
-the last boot. Maybe look into this. The delay is about 30-40 minutes
-as the node rebuilds itself.
+* Do we actually need to reboot? It just causes operator frustration
 
 
