@@ -77,6 +77,10 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 				--log-output=$logging \
 				--network="$network" \
 				--history-mode=$mode $otherconfigopts
+	if [ ! -f "$datadir/identity.json" ]; then
+		$tezosnode identity generate --data-dir=$datadir
+	fi
+
 fi
 
 [ "$justconfig" = "1" ] && echo "Just configuring - exit" && exit 0
