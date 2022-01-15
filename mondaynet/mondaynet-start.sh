@@ -17,6 +17,7 @@ branch=96b50a69 # Will be overriden
 startscript=$HOME/startup/start.sh
 buildlogs=$HOME/buildlogs
 warezserver="http://downloads.chrispinnock.com/tezos"
+warezscript="$HOME/startup/mondaynet/mk-warez.sh" 
 
 testnet="dailynet"
 grep mondaynet /etc/hostname
@@ -59,7 +60,7 @@ if [ -f "$HOME/.cleanup" ]; then
 	echo "===> Cleaning up"
 	rm -rf tezos rustup-init.sh logs fetch-params.sh \
 		.zcash-params .opam .rustup .cargo .cache $HOME/.cleanup \
-		"$HOME/.skipbuild" rustup-init.sh
+		"$HOME/.skipbuild" rustup-init.sh $warez
 fi
 
 # Check dependencies
@@ -90,13 +91,18 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 	rm -rf $builddir	
 
 	echo "===> Attempting to get binaries"
-	wget -q $warezurl 
-	if [ "$?" != "0" ]; then
-		echo "XXX FAIL - will build from scratch"
-		touch "$HOME/.build"
+
+	if [ -f $warez ]; then
+		echo "$warez found"
 	else
+		wget -q $warezurl 
+		if [ "$?" != "0" ]; then
+			echo "XXX FAIL - will build from scratch"
+			touch "$HOME/.build"
+		fi
+	fi
+	if [ -f $warez ]; then
 		tar zxf $warez
-		rm -f $warez
 		rm -f "$HOME/.build"
 	fi
 
@@ -139,6 +145,7 @@ if [ -f "$HOME/.build" ]; then
 		echo "XXX Failed to build tezos"
 		exit 1
 	fi
+	/bin/bash $warezscript
 	rm -f "$HOME/.build"
 fi
 rm -f "$HOME/.skipbuild"
