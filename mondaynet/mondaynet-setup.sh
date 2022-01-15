@@ -98,8 +98,14 @@ else
 	fi
 
 fi
-echo "Setting software branch old: $branch $newbranch"
 echo $newbranch > "$HOME/branch.txt"
+
+if [ "$branch" != "$newbranch" ]; then
+	echo "Setting software branch old: $branch -> $newbranch"
+	rm -f $HOME/tezos-$branch.tar.gz
+fi
+
+
 
 echo "Terminating node software"
 # Terminate node gracefully
