@@ -7,7 +7,7 @@
 # but you get to keep the pieces.
 #
 
-sudo apt-get install libjson-perl
+sudo apt-get install -y libjson-perl
 
 # Assuming a throw away AWS environment
 #
@@ -32,12 +32,14 @@ grep mondaynet /etc/hostname
 if [ "$?" = "0" ]; then
 	mondaynet=1
 	testnetwork=mondaynet
+	freq="10 0 * * 0" # Monday at 00:10
 fi
 
 grep dailynet /etc/hostname
 if [ "$?" = "0" ]; then
 	dailynet=1
 	testnetwork=dailynet
+	freq="10 0 * * *" # Daily at 00:10
 fi
 
 if [ "$mondaynet" = "1" ]; then
@@ -72,8 +74,9 @@ fullname=$testnetwork-$newmonday
 echo "$fullname" > $HOME/network.txt
 
 if [ "$monday" != "$newmonday" ]; then
-	echo "New Period! Will reset wallet on next boot."
+	echo "New Period! Will reset wallet and node on next boot."
 	touch "$HOME/.resetwallet"
+	touch "$HOME/.resetnode"
 fi
 echo "Setting network ID to $newmonday"
 
@@ -91,6 +94,7 @@ else
 		else
 			newbranch=$new
 		fi
+		rm -f $testnetfile
 	fi
 
 fi
@@ -107,6 +111,14 @@ grep mondaynet-start.sh /tmp/_cron >/dev/null 2>&1
 if [ "$?" != "0" ]; then
 	echo "Adding start scripts to crontab"
 	echo "@reboot         /bin/bash $HOME/startup/mondaynet/mondaynet-start.sh >$HOME/start-log.txt 2>&1" >> /tmp/_cron
+	crontab - < /tmp/_cron
+fi
+
+crontab -l > /tmp/_cron
+grep mondaynet-setup.sh /tmp/_cron >/dev/null 2>&1
+if [ "$?" != "0" ]; then
+	echo "Adding start scripts to crontab"
+	echo "$freq         /bin/bash $HOME/startup/mondaynet/mondaynet-setup.sh >$HOME/setup-log.txt 2>&1" >> /tmp/_cron
 	crontab - < /tmp/_cron
 fi
 
