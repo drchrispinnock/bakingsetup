@@ -32,7 +32,7 @@ grep mondaynet /etc/hostname
 if [ "$?" = "0" ]; then
 	mondaynet=1
 	testnetwork=mondaynet
-	freq="10 0 * * 0" # Monday at 00:10
+	freq="10 0 * * 1" # Monday at 00:10
 fi
 
 grep dailynet /etc/hostname
