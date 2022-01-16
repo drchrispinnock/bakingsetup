@@ -1,0 +1,18 @@
+
+cjep@baker% 
+Message from syslogd@baker at Jan 16 11:04:05 ...
+ kernel:[456989.659981] Uhhuh. NMI received for unknown reason 2d on CPU 0.
+
+ Message from syslogd@baker at Jan 16 11:04:05 ...
+  kernel:[456989.659984] Do you have a strange power saving mode enabled?
+
+  Message from syslogd@baker at Jan 16 11:04:05 ...
+   kernel:[456989.659984] Dazed and confused, but trying to continue
+
+
+454221.676281] hid-generic 0003:2C97:0001.0025: hiddev0,hidraw0: USB HID v1.11 Device [Ledger Nano S] on usb-0000:02:00.0-7/input0
+[456989.659981] Uhhuh. NMI received for unknown reason 2d on CPU 0.
+[456989.659984] Do you have a strange power saving mode enabled?
+[456989.659984] Dazed and confused, but trying to continue
+[465123.001753] hid-generic 0003:2C97:0001.0026: hiddev0,hidraw0: USB HID v1.11 Device [Ledger Nano S] on usb-0000:02:00.0-7/input0
+
