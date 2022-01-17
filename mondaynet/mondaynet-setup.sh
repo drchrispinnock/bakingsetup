@@ -137,6 +137,9 @@ sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get dist-upgrade -y
 
+echo "Update mondaynet scripts"
+cd $HOME/startup && git pull
+
 echo "Rebooting in 15 seconds!"
 sleep 15
 # Reboot
