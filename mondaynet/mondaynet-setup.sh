@@ -45,7 +45,7 @@ if [ "$?" = "0" ]; then
 fi
 
 # Experiment	
-freq="30 0 * * *" # Monday at 00:10
+freq="30 * * * *" # Every hour check
 
 # Setup Cron
 #
