@@ -37,7 +37,6 @@ startconf=$HOME/startup/mondaynet/mondaynet-common.conf
 wallet=$HOME/startup/mondaynet/wallet-`hostname -s`
 
 
-
 mkdir -p $buildlogs
 
 if [ -f "$HOME/branch.txt" ]; then
@@ -60,7 +59,12 @@ if [ -f "$HOME/.cleanup" ]; then
 	echo "===> Cleaning up"
 	rm -rf tezos rustup-init.sh logs fetch-params.sh \
 		.zcash-params .opam .rustup .cargo .cache $HOME/.cleanup \
-		"$HOME/.skipbuild" rustup-init.sh $warez
+		"$HOME/.skipbuild" rustup-init.sh $warez $HOME/.stop
+fi
+
+if [ -f "$HOME/.stop" ]; then
+	echo "STOP FILE DETECTED $HOME/.stop"
+	exit 0
 fi
 
 # Check dependencies

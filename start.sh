@@ -77,6 +77,18 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 				--log-output=$logging \
 				--network="$network" \
 				--history-mode=$mode $otherconfigopts
+
+	if [ "$?" != "0" ]; then
+		echo "XXX Configuration failed"
+		exit 1
+	fi
+
+	if [ ! -f "$datadir/config.json" ]; then
+		echo "XXX Configuration failed"
+		exit 1
+	fi
+
+
 	if [ ! -f "$datadir/identity.json" ]; then
 		$tezosnode identity generate --data-dir=$datadir
 	fi
