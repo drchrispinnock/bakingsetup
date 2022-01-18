@@ -109,7 +109,7 @@ fi
 # Has Monday changed
 #
 echo $newmonday > $HOME/monday.txt
-fullname=$testnetwork-$newmonday
+fullname=$newmonday
 echo "$fullname" > $HOME/network.txt
 
 if [ "$monday" != "$newmonday" ]; then
