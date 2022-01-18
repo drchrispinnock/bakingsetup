@@ -107,6 +107,10 @@ echo $newmonday > $HOME/monday.txt
 fullname=$newmonday
 echo "$fullname" > $HOME/network.txt
 
+if [ "$HOME/.cleanup" ]; then
+	monday=""
+fi
+
 if [ "$monday" != "$newmonday" ]; then
 	echo "New Period! Will reset wallet and node on next boot."
 	touch "$HOME/.resetwallet"
@@ -133,4 +137,6 @@ if [ "$monday" != "$newmonday" ]; then
 	# Reboot
 	#
 	sudo shutdown -r now "===Restart==="
+else
+	echo "Network has not changed - .cleanup to reset"
 fi
