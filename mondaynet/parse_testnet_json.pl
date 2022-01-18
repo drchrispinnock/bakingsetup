@@ -42,4 +42,4 @@ if ($hd->{$network}->{'docker_build'}) {
 	exit 2
 }
 #warn "\nUsing:\t$network with $build\n";
-print "$build\n";
+print "$network $build\n";
