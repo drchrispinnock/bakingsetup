@@ -84,11 +84,12 @@ newbranch=$branch
 if [ "$1" != "" ]; then
 	newbranch=$1
 else
+	rm -f $testnetfile
 	wget $testnetrepos/$testnetfile
 	if [ "$?" != "0" ]; then
 		echo "XXX Cannot get test repository!"
 	else
-		new=`perl $parsejson $testnetfile $fullname`
+		new=`perl $parsejson $testnetfile $testnetwork`
 		if [ "$?" != "0" ]; then
 			echo "XXX Cannot grok $testnetfile"
 		else
