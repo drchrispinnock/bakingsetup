@@ -45,7 +45,7 @@ if [ "$?" = "0" ]; then
 fi
 
 # Experiment	
-freq="30 0 * * *" # Monday at 00:10
+freq="30 * * * *" # Monday at 00:10
 
 # Setup Cron
 #
@@ -107,11 +107,12 @@ echo $newmonday > $HOME/monday.txt
 fullname=$newmonday
 echo "$fullname" > $HOME/network.txt
 
-if [ "$HOME/.cleanup" ]; then
+if [ -f "$HOME/.cleanup" ]; then
 	monday=""
 fi
 
 if [ "$monday" != "$newmonday" ]; then
+	echo "$monday -> $newmonday"
 	echo "New Period! Will reset wallet and node on next boot."
 	touch "$HOME/.resetwallet"
 	touch "$HOME/.resetnode"
