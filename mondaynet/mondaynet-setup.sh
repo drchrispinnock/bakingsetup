@@ -47,11 +47,6 @@ fi
 # Experiment	
 freq="30 0 * * *" # Monday at 00:10
 
-if [ "$dailynet" != "1" && "$mondaynet" != 1 ]; then
-	echo "Set hostname to include mondaynet or dailynet please!"
-	exit 1
-fi
-
 # Setup Cron
 #
 crontab -l > /tmp/_cron
