@@ -130,6 +130,7 @@ if [ "$monday" != "$newmonday" ]; then
 	if [ -f "$HOME/.noreboot" ]; then
 		# Let's not reboot then
 		#
+		echo "Restarting (without reboot)"
 		/bin/bash $starter > $startlog 2>&1 &
 		exit 0
 	fi
