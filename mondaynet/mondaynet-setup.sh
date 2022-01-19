@@ -4,10 +4,12 @@
 # Chris Pinnock
 #
 # Ming Vase license - if you break it, it will probably be expensive
-# but you get to keep the pieces.
+# but you get to keep the pieces. Run this on a AWS Ubuntu instance
+# with nothing else that you want to keep.
 #
 
-# Dependency
+# Dependency for JSON parsing
+#
 sudo apt-get install -y libjson-perl
 
 # Assuming a throw away AWS environment
@@ -22,6 +24,8 @@ testnetfile=teztnets.json
 
 killscript=$HOME/startup/kill.sh
 startconf=$HOME/startup/mondaynet/mondaynet-common.conf
+starter=$HOME/startup/mondaynet/mondaynet-start.sh
+startlog=$HOME/start-log.txt
 perlscript=$HOME/startup/mondaynet/last_monday.pl
 parsejson=$HOME/startup/mondaynet/parse_testnet_json.pl
 newbranch=96b50a69 # default
@@ -53,7 +57,7 @@ crontab -l > /tmp/_cron
 grep mondaynet-start.sh /tmp/_cron >/dev/null 2>&1
 if [ "$?" != "0" ]; then
 	echo "Adding start scripts to crontab"
-	echo "@reboot         /bin/bash $HOME/startup/mondaynet/mondaynet-start.sh >$HOME/start-log.txt 2>&1" >> /tmp/_cron
+	echo "@reboot         /bin/bash $starter> $startlog 2>&1" >> /tmp/_cron
 	crontab - < /tmp/_cron
 fi
 
@@ -122,6 +126,14 @@ if [ "$monday" != "$newmonday" ]; then
 	# Terminate node gracefully
 	#
 	$killscript $startconf
+	
+	if [ -f "$HOME/.noreboot" ]; then
+		# Let's not reboot then
+		#
+		/bin/bash $starter > $startlog 2>&1 &
+		exit 0
+	fi
+
 	# Update OS
 	#
 	echo "Updating OS in 10 seconds"
