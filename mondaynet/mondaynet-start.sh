@@ -161,7 +161,7 @@ if [ -f "$HOME/.build" ]; then
 		exit 1
 	fi
 
-	# Save the build
+	# Save the build for the next boot just in case
 	#
 	tar zcf tezos-$branch.tar.gz tezos/tezos-* tezos/active_protocol_versions tezos/active_testing_protocol_versions
 
@@ -169,6 +169,8 @@ if [ -f "$HOME/.build" ]; then
 fi
 rm -f "$HOME/.skipbuild"
 
+# If all the above worked, there should at least be a tezos-node binary
+#
 if [ ! -f "$builddir/tezos-node" ]; then
 	echo "XXX No node binary!"
 	echo "EXITING"
