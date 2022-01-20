@@ -11,7 +11,9 @@ idea to apt update, apt upgrade -y && apt dist-upgrade -y
 
 2. Checkout the startup software in $HOME
 
+```
 git clone https://github.com/drchrispinnock/bakingsetup.git
+```
 
 3. Set your hostname to something suitable like mondaynet-oregon
 
@@ -21,15 +23,17 @@ The hostname needs to include the network name at the beginning.
 
 Examples:
 
+```
 mondaynet
 mondaynet-lon
 dailynet-001
 ithacanet-lon
+```
 
-4. Run mondaynet-setup.sh <branch>
-e.g. bash ./bakingsetup/mondaynet/mondaynet-setup.sh
-e.g. bash ./bakingsetup/mondaynet/mondaynet-setup.sh d0bf56ce
-
+4. Run mondaynet-setup.sh
+```
+bash ./bakingsetup/mondaynet/mondaynet-setup.sh
+```
 5. Wait. You can log back in on the reboot and look at start-log.txt
 tail -f start-log.txt (usually complete in under 30 minutes)
 tail -f logs/logfile
@@ -44,18 +48,21 @@ Download a json file. Save it as faucet.json on the server.
 You can use the delegate.sh script in the repository for this step 
 provided you have a faucet file in faucet.json. Or do it by hand:
 
+```
 ./tezos/tezos-client activate account mondaynet-lon2 with faucet.json
 ./tezos/tezos-client register key mondaynet-lon2 as delegate
 
 mkdir ~/wallet-mondaynet-lon2
 cp ~/.tezos-client/*key* ~/wallet-mondaynet-lon2
 cp ~/faucet.json ~/wallet-mondaynet-lon2
-
+```
 Back this directory up.
 
 7. Restart
+```
 touch ~/.skipbuild
 sudo shutdown -r now
+```
 
 8. The system will check testnets for an updated repository. If the
 network changes, the system will reset.
