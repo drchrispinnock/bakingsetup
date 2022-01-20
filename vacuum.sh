@@ -10,6 +10,7 @@ username=`whoami`
 whereami=`dirname $0`
 stopscript="$whereami/kill.sh"
 startscript="$whereami/start.sh"
+configstore=$HOME/_configs
 
 snapfile=""
 snapshot=""
@@ -19,7 +20,6 @@ if [ -z "$1" ]; then
 	exit 1
 fi
 
-configstore=$HOME/_configs
 
 configfile=$1
 source $configfile 
