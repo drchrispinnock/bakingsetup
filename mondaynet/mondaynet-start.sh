@@ -35,7 +35,7 @@ fi
 # The repos is called mondaynet
 #
 startconf=$HOME/startup/mondaynet/mondaynet-common.conf
-wallet=$HOME/startup/mondaynet/wallet-`hostname -s`
+wallet=$HOME/wallet-`hostname -s`
 
 
 mkdir -p $buildlogs
