@@ -20,7 +20,7 @@ warezserver=""
 
 # Grok the test net from the hostname
 #
-testnet=`cat /etc/hostname | sed -e 's/\-.*//g`
+testnet=`cat /etc/hostname | sed -e 's/\-.*//g'`
 
 # Configs can be overridden
 #
