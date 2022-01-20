@@ -1,0 +1,11 @@
+{ "rpc":
+    { "listen-addrs": [ "127.0.0.1:8732" ],
+      "acl": [ { "address": "127.0.0.1:8732", "blacklist": [] } ] },
+  "p2p":
+    { "bootstrap-peers":
+        [ "ithacanet.teztnets.xyz", "ithacanet.smartpy.io",
+          "ithacanet.kaml.fr", "ithacanet.boot.ecadinfra.com" ],
+      "listen-addr": "[::]:9732" },
+  "log": { "output": "/home/ubuntu/logs/logfile" },
+  "shell": { "history_mode": { "rolling": { "additional_cycles": 5 } } },
+  "network": "ithacanet" }
