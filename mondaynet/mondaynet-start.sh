@@ -15,7 +15,6 @@ buildroot=$HOME
 
 me=$HOME/bakingsetup
 gitrepos="https://gitlab.com/tezos/tezos.git"
-branch=96b50a69 # Will be overriden
 startscript=$me/start.sh
 buildlogs=$HOME/buildlogs
 warezserver="http://downloads.chrispinnock.com/tezos"
@@ -38,12 +37,15 @@ fi
 startconf=$me/mondaynet/mondaynet-common.conf
 wallet=$HOME/wallet-`hostname -s`
 
-
 mkdir -p $buildlogs
 
 if [ -f "$HOME/branch.txt" ]; then
 	branch=`cat $HOME/branch.txt`
+else
+	echo "XXX Branch not set - please run setup"
+	exit 1
 fi
+
 warez="tezos-$branch.tar.gz"
 warezurl="$warezserver/$warez"
 

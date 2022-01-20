@@ -28,7 +28,6 @@ startconf=$me/mondaynet/mondaynet-common.conf
 starter=$me/mondaynet/mondaynet-start.sh
 startlog=$HOME/start-log.txt
 parsejson=$me/mondaynet/parse_testnet_json.pl
-newbranch=96b50a69 # default
 
 mondaynet=0
 dailynet=0
