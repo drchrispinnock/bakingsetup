@@ -78,4 +78,5 @@ monday.setup - overrides for variables in the start scripts
 	the client wallet.
 .noreboot  - do not reboot, just restart when the time is right
 
+.updatesoftware - if it exists, attempt a git pull when updating
 
