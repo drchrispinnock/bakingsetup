@@ -8,6 +8,10 @@
 #
 bake=0
 logging=stdout
+bakerlogging=$HOME/logs/logfile_baking
+accuselogging=$HOME/logs/logfile_accuser
+endorselogging=$HOME/logs/logfile_endorser
+
 background=0
 dontconfig=0
 justconfig=0
@@ -73,6 +77,7 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 	# Sometimes we will want to setup a node manually
 	#
 	[ "$dontconfig" = "1" ] && echo "Skipping configuration!" && exit 1
+
 
 	echo "===> Setting up configuration"
 	mkdir -p "$datadir"
