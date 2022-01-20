@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# This script has the Ming Vase license. If you use the script
-# and it breaks you get to keep the pieces.
+# Start a Tezos baking setup.
+# Chris Pinnock 2022
+# MIT license
 
 # Defaults - override in the configuration file (shell)
 #
@@ -17,6 +18,8 @@ netaddr="[::]"
 piddir=/tmp
 snapshot=""
 
+# Example snaps
+#
 #snapfile="tezos-mainnet.full"
 #snapshot="https://mainnet.xtz-shots.io/full -O $snapfile"
 
@@ -36,17 +39,31 @@ if [ `whoami` != $username ]; then
 	exit 3;
 fi
 
+# If we are baking, we always run in the background
+#
 [ "$bake" = "1" ] && background=1
 
+# Setup PID files
+#
 pidfilebase=$piddir/_pid_tezos_$name
 pidfile=${pidfilebase}_node
 
 [ -f "$pidfile" ] && echo "PID file already exists!" && exit 1
 
-[ -z "$tezosroot" ] && tezosroot=/home/cjep/tezos/$vers/tezos
+# Attempt to find the installation if not set
+#
+[ -z "$tezosroot" ] && tezosroot=$HOME/tezos/$vers/tezos
+[ ! -d "$tezosroot" ] && tezosroot=$HOME/tezos
+
+tezosnode=$tezosroot/tezos-node
+[ ! -x "$tezosnode" ] && echo "Cannot find node software" && exit 1
+
+# Set the network to mainnet if not specified
+#
 [ -z "$network" ] && network=mainnet
 
-# On a proper installation, this is in a file
+# Usually an installation has a list of active protocol versions
+#
 protocols="010-PtGRANAD 011-PtHangz2 alpha"
 if [ -f "$tezosroot/active_protocol_versions" ]; then
 	protocols=`cat $tezosroot/active_protocol_versions`
@@ -54,12 +71,6 @@ else
 	echo "WARNING: check active protocols $protocols"
 	sleep 3
 fi
-
-tezosnode=$tezosroot/tezos-node
-
-# Sanity
-#
-[ ! -x "$tezosnode" ] && echo "Cannot find node software" && exit 1
 
 # Setup
 #
@@ -87,7 +98,6 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 		echo "XXX Configuration failed"
 		exit 1
 	fi
-
 
 	if [ ! -f "$datadir/identity.json" ]; then
 		$tezosnode identity generate --data-dir=$datadir
@@ -126,6 +136,8 @@ if [ "$background" = "1" ]; then
 
 	if [ "$bake" = "1" ]; then
 
+		# Let's bake as well
+		#
 		echo "===> Sleeping for node to come up"
 		sleep 10
 		$tezosroot/tezos-client -E http://127.0.0.1:$rpcport bootstrapped

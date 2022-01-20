@@ -1,38 +1,39 @@
 #!/bin/bash
 
-# Start a Mondaynet node.
-# Chris Pinnock
-#
-# Ming Vase license - if you break it, it will probably be expensive
-# but you get to keep the pieces. Run this on a AWS Ubuntu instance
-# with nothing else that you want to keep.
+# Start a Mondaynet/Dailynet node.
+# Chris Pinnock 2022
+# MIT license
 
 # Runs out of cron at boot or from the setup tool
 
 # Defaults
 #
 buildroot=$HOME
-
 me=$HOME/bakingsetup
 gitrepos="https://gitlab.com/tezos/tezos.git"
 startscript=$me/start.sh
 buildlogs=$HOME/buildlogs
-warezserver="http://downloads.chrispinnock.com/tezos"
-warezscript="$me/mondaynet/mk-warez.sh" 
 
+# Set this in localconfig.txt and put the binary tar there
+# for download
+warezserver=""
+
+# Assume DailyNet unless the hostname contains mondaynet
+#
 testnet="dailynet"
 grep mondaynet /etc/hostname
 if [ "$?" = "0" ]; then
 	testnet="mondaynet"
 fi
 
-# Config
+# Configs can be overridden
 #
-if [ -f "$HOME/testsetup.txt" ]; then
-	source $HOME/testsetup.txt
+if [ -f "$HOME/localconfig.txt" ]; then
+	source $HOME/localconfig.txt
 fi
 
-# The repos is called mondaynet
+# The repos is called mondaynet. The wallet should be backed up at
+# delegation time. See delegation.sh
 #
 startconf=$me/mondaynet/mondaynet-common.conf
 wallet=$HOME/wallet-`hostname -s`
@@ -52,7 +53,7 @@ warezurl="$warezserver/$warez"
 echo "===> Starting setup"
 echo "Network:      $testnet"
 echo "Branch/tag:   $branch"
-echo "Binary URL:   $warezurl"
+[ "$warezserver" != "" ] && echo "Binary URL:   $warezurl"
 sleep 2
 
 # Do not change these
@@ -101,12 +102,18 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 	echo "===> Attempting to get binaries"
 
 	if [ -f $warez ]; then
-		echo "$warez found"
+		echo "$warez found on filesystem"
 	else
-		wget -q $warezurl 
-		if [ "$?" != "0" ]; then
-			echo "XXX FAIL - will build from scratch"
-			touch "$HOME/.build"
+		if [ "$warezserver" != "" ]; then
+			wget -q $warezurl 
+			if [ "$?" != "0" ]; then
+				echo "failed - will build from scratch"
+				touch "$HOME/.build"
+			fi
+		else
+				echo "Will build from scratch"
+				touch "$HOME/.build"
+
 		fi
 	fi
 	if [ -f $warez ]; then
@@ -153,11 +160,17 @@ if [ -f "$HOME/.build" ]; then
 		echo "XXX Failed to build tezos"
 		exit 1
 	fi
-	/bin/bash $warezscript
+
+	# Save the build for the next boot just in case
+	#
+	tar zcf tezos-$branch.tar.gz tezos/tezos-* tezos/active_protocol_versions tezos/active_testing_protocol_versions
+
 	rm -f "$HOME/.build"
 fi
 rm -f "$HOME/.skipbuild"
 
+# If all the above worked, there should at least be a tezos-node binary
+#
 if [ ! -f "$builddir/tezos-node" ]; then
 	echo "XXX No node binary!"
 	echo "EXITING"
