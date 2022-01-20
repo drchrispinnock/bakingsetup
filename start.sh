@@ -58,7 +58,7 @@ tezosnode=$tezosroot/tezos-node
 
 # Usually an installation has a list of active protocol versions
 #
-protocols="010-PtGRANAD 011-PtHangz2 alpha"
+protocols="011-PtHangz2 012-Psithaca alpha"
 if [ -f "$tezosroot/active_protocol_versions" ]; then
 	protocols=`cat $tezosroot/active_protocol_versions`
 else
