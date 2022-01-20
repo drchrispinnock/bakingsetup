@@ -54,7 +54,7 @@ mode=${mode%%:*}  # Remove trailing :n (e.g. for rolling)
 echo "===> Setting up for $network $mode node refresh"
 snapfile="tezos-$network.$mode"
 snapshot="https://$network.xtz-shots.io/$mode -O $snapfile"
-echo "===> Fetching snapshot"
+echo "===> Fetching snapshot $snapfile"
 
 if [ -f "$snapfile" ]; then 
 	echo "Already present $snapfile"
