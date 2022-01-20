@@ -127,6 +127,11 @@ if [ "$monday" != "$newmonday" ]; then
 	#
 	$killscript $startconf
 	
+	if [ -f "$HOME/.updatesoftware" ]; then
+		echo "Update mondaynet scripts"
+		cd $me && git pull
+	fi
+	
 	if [ -f "$HOME/.noreboot" ]; then
 		# Let's not reboot then
 		#
@@ -143,8 +148,6 @@ if [ "$monday" != "$newmonday" ]; then
 	sudo apt-get upgrade -y
 	sudo apt-get dist-upgrade -y
 
-	echo "Update mondaynet scripts"
-	cd $me && git pull
 
 	echo "Rebooting in 15 seconds!"
 	sleep 15
