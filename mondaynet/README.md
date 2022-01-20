@@ -67,19 +67,9 @@ sudo shutdown -r now
 8. The system will check testnets for an updated repository. If the
 network changes, the system will reset.
 
-Files:
-mondaynet-common.conf - a common configuration file that should work
-	for all instances, based on hostnames. The key should be called
-	the same as the hostname.
+Files in $HOME:
 
-~/wallet-<hostname>     - the initial secret and public keys. These will
-	be used to restore the wallet after a network reset.
-
-
-$HOME files
-===========
-
-monday.setup - overrides for variables in the start scripts
+localconfig.txt - overrides for variables in the start scripts
 
 .cleanup - if this exists cleanup all sources, rust and so on, and start
 	from scratch. This does not clean tezos-node or client dirs though.
@@ -94,3 +84,5 @@ monday.setup - overrides for variables in the start scripts
 
 .updatesoftware - if it exists, attempt a git pull when updating
 
+wallet-<hostname>     - the initial secret and public keys. These will
+	be used to restore the wallet after a network reset.
