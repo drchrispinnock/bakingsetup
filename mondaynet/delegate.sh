@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# Assumes a mondaynet setup
+# Assumes a mondaynet setup. Delegate from a faucet file and then
+# save the keys in the right place for wallet resets.
 
 key=`hostname -s`
 walletdir="$HOME/wallet-$key"

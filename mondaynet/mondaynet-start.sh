@@ -1,11 +1,8 @@
 #!/bin/bash
 
-# Start a Mondaynet node.
-# Chris Pinnock
-#
-# Ming Vase license - if you break it, it will probably be expensive
-# but you get to keep the pieces. Run this on a AWS Ubuntu instance
-# with nothing else that you want to keep.
+# Start a Mondaynet/Dailynet node.
+# Chris Pinnock 2022
+# MIT license
 
 # Runs out of cron at boot or from the setup tool
 

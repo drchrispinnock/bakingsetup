@@ -1,12 +1,8 @@
 #!/bin/bash
 
-# Setup or reset a Mondaynet node manually
-# Chris Pinnock
-#
-# Ming Vase license - if you break it, it will probably be expensive
-# but you get to keep the pieces. Run this on a AWS Ubuntu instance
-# with nothing else that you want to keep.
-#
+# Setup or reset a Mondaynet/Dailynet node
+# Chris Pinnock 2022
+# MIT license
 
 # Dependency for JSON parsing
 #
