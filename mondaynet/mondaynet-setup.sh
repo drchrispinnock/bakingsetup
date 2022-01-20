@@ -15,9 +15,6 @@ fi
 #
 sudo apt-get install -y libjson-perl
 
-testnetrepos=https://teztnets.xyz
-testnetfile=teztnets.json
-
 me=$HOME/bakingsetup
 killscript=$me/kill.sh
 startconf=$me/mondaynet/mondaynet-common.conf
@@ -25,28 +22,27 @@ starter=$me/mondaynet/mondaynet-start.sh
 startlog=$HOME/start-log.txt
 parsejson=$me/mondaynet/parse_testnet_json.pl
 
-mondaynet=0
-dailynet=0
+# Hardcoded remote test network repository
+#
+testnetrepos=https://teztnets.xyz
+testnetfile=teztnets.json
+freq="30 * * * *" # Every hour check for changes
+
+# Test the hostname to determine which network we want to join
+#
 grep mondaynet /etc/hostname
 if [ "$?" = "0" ]; then
 	echo "MondayNet"
-	mondaynet=1
 	testnetwork=mondaynet
-	freq="50 0 * * 1" # Monday at 00:10
 fi
 
 grep dailynet /etc/hostname
 if [ "$?" = "0" ]; then
 	echo "DailyNet"
-	dailynet=1
 	testnetwork=dailynet
-	freq="40 0 * * *" # Daily at 00:10
 fi
 
-# Experiment	
-freq="30 * * * *" # Every hour check
-
-# Setup Cron
+# Setup Cronjobs
 #
 crontab -l > /tmp/_cron
 grep mondaynet-start.sh /tmp/_cron >/dev/null 2>&1
@@ -64,7 +60,9 @@ if [ "$?" != "0" ]; then
 	crontab - < /tmp/_cron
 fi
 
-# Setup monday
+# Setup the network names for comparison
+# On first run this will be empty
+#
 monday=""
 if [ -f "$HOME/monday.txt" ]; then
 	monday=`cat $HOME/monday.txt`
@@ -77,6 +75,10 @@ if [ -f "$HOME/branch.txt" ]; then
 fi
 
 newbranch=$branch
+
+# Get the test network repos and determine the correct branch
+# and network
+#
 rm -f $testnetfile
 wget $testnetrepos/$testnetfile
 if [ "$?" != "0" ]; then
@@ -100,22 +102,25 @@ if [ "$branch" != "$newbranch" ]; then
 	rm -f $HOME/tezos-$branch.tar.gz
 fi
 
-# Has Monday changed
+# Has the network changed?
 #
 echo $newmonday > $HOME/monday.txt
 fullname=$newmonday
 echo "$fullname" > $HOME/network.txt
+
+# Regardless, if .cleanup is there zero monday so that we reset
+# on next run
+#
 
 if [ -f "$HOME/.cleanup" ]; then
 	monday=""
 fi
 
 if [ "$monday" != "$newmonday" ]; then
-	echo "$monday -> $newmonday"
-	echo "New Period! Will reset wallet and node on next boot."
+	echo "Network ID: $monday -> $newmonday"
+	echo "New Period! Will reset wallet and node on next run."
 	touch "$HOME/.resetwallet"
 	touch "$HOME/.resetnode"
-	echo "Setting network ID to $newmonday"
 
 	echo "Terminating node software"
 	# Terminate node gracefully
@@ -130,10 +135,10 @@ if [ "$monday" != "$newmonday" ]; then
 		exit 0
 	fi
 
-	# Update OS
+	# Update OS - we sleep because sometimes we need to CTRL-C...
 	#
-	echo "Updating OS in 10 seconds"
-	sleep 10
+	echo "Updating OS in 5 seconds"
+	sleep 5
 	sudo apt-get update
 	sudo apt-get upgrade -y
 	sudo apt-get dist-upgrade -y
@@ -147,5 +152,5 @@ if [ "$monday" != "$newmonday" ]; then
 	#
 	sudo shutdown -r now "===Restart==="
 else
-	echo "Network has not changed - .cleanup to reset"
+	echo "Network has not changed - touch .cleanup to reset"
 fi
