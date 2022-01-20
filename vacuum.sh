@@ -79,7 +79,7 @@ cp -p "${datadir}.1/identity.json" $configstore
 
 echo "===> Importing snapshot"
 mkdir -p ${datadir}
-$tezosnode --data-dir ${datadir} snapshot import "$snapshot"
+$tezosnode snapshot import "$snapshot" --data-dir ${datadir}
 if [ "$?" != "0" ]; then
 	echo "Import failed"
 	exit 1
