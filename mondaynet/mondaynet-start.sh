@@ -172,6 +172,7 @@ if [ -f "$HOME/.resetnode" ]; then
 	rm -rf "$HOME/.tezos-node"
 	rm -f "$HOME/.resetnode"
 
+	echo "===> Rotating logs"
 	mv -f "$HOME/logs.1" "$HOME/logs.d"
 	mv -f "$HOME/logs" "$HOME/logs.1"
 	rm -rf "$HOME/logs.d"
