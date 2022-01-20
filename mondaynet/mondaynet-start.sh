@@ -13,12 +13,13 @@
 #
 buildroot=$HOME
 
+me=$HOME/bakingsetup
 gitrepos="https://gitlab.com/tezos/tezos.git"
 branch=96b50a69 # Will be overriden
-startscript=$HOME/startup/start.sh
+startscript=$me/start.sh
 buildlogs=$HOME/buildlogs
 warezserver="http://downloads.chrispinnock.com/tezos"
-warezscript="$HOME/startup/mondaynet/mk-warez.sh" 
+warezscript="$me/mondaynet/mk-warez.sh" 
 
 testnet="dailynet"
 grep mondaynet /etc/hostname
@@ -34,7 +35,7 @@ fi
 
 # The repos is called mondaynet
 #
-startconf=$HOME/startup/mondaynet/mondaynet-common.conf
+startconf=$me/mondaynet/mondaynet-common.conf
 wallet=$HOME/wallet-`hostname -s`
 
 

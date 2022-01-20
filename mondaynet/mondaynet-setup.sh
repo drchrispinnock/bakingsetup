@@ -22,12 +22,13 @@ fi
 testnetrepos=https://teztnets.xyz
 testnetfile=teztnets.json
 
-killscript=$HOME/startup/kill.sh
-startconf=$HOME/startup/mondaynet/mondaynet-common.conf
-starter=$HOME/startup/mondaynet/mondaynet-start.sh
+me=$HOME/bakingsetup
+killscript=$me/kill.sh
+startconf=$me/mondaynet/mondaynet-common.conf
+starter=$me/mondaynet/mondaynet-start.sh
 startlog=$HOME/start-log.txt
-perlscript=$HOME/startup/mondaynet/last_monday.pl
-parsejson=$HOME/startup/mondaynet/parse_testnet_json.pl
+perlscript=$me/mondaynet/last_monday.pl
+parsejson=$me/mondaynet/parse_testnet_json.pl
 newbranch=96b50a69 # default
 
 mondaynet=0
@@ -65,7 +66,7 @@ crontab -l > /tmp/_cron
 grep mondaynet-setup.sh /tmp/_cron >/dev/null 2>&1
 if [ "$?" != "0" ]; then
 	echo "Adding start scripts to crontab"
-	echo "$freq         /bin/bash $HOME/startup/mondaynet/mondaynet-setup.sh >$HOME/setup-log.txt 2>&1" >> /tmp/_cron
+	echo "$freq         /bin/bash $me/mondaynet/mondaynet-setup.sh >$HOME/setup-log.txt 2>&1" >> /tmp/_cron
 	crontab - < /tmp/_cron
 fi
 
@@ -144,7 +145,7 @@ if [ "$monday" != "$newmonday" ]; then
 	sudo apt-get dist-upgrade -y
 
 	echo "Update mondaynet scripts"
-	cd $HOME/startup && git pull
+	cd $me && git pull
 
 	echo "Rebooting in 15 seconds!"
 	sleep 15
