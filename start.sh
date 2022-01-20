@@ -106,6 +106,18 @@ fi
 
 [ "$justconfig" = "1" ] && echo "Just configuring - exit" && exit 0
 
+# Logs
+#
+if [ "$logging" != "stdout" && "$logging" != "stderr" && \
+		"${logging%%:*}" != "syslog" ]; then
+	mkdir -p `dirname $logging`
+fi
+
+mkdir -p `dirname $bakerlogging`
+mkdir -p `dirname $accuselogging`
+mkdir -p `dirname $endorselogging`
+
+
 # Let's go then
 #
 echo "===> Starting $name node"
