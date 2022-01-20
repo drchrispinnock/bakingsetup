@@ -27,7 +27,6 @@ killscript=$me/kill.sh
 startconf=$me/mondaynet/mondaynet-common.conf
 starter=$me/mondaynet/mondaynet-start.sh
 startlog=$HOME/start-log.txt
-perlscript=$me/mondaynet/last_monday.pl
 parsejson=$me/mondaynet/parse_testnet_json.pl
 newbranch=96b50a69 # default
 
