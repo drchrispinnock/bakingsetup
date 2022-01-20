@@ -104,7 +104,7 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 	if [ -f $warez ]; then
 		echo "$warez found"
 	else
-		if [ "$warezurl" != "" ]; then
+		if [ "$warezserver" != "" ]; then
 			wget -q $warezurl 
 			if [ "$?" != "0" ]; then
 				echo "---- fail - will build from scratch"
