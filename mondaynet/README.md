@@ -1,7 +1,7 @@
 # Introduction
 
-These scripts setup a rolling baker suitable for use on the Mondaynet
-and Dailynet test networks.
+These scripts setup a rolling baker suitable for use on the Mondaynet,
+Dailynet and other test networks.
 
 # How to use this fine work
 
@@ -17,7 +17,14 @@ git clone https://github.com/drchrispinnock/bakingsetup.git
 
 edit /etc/hostname
 
-The hostname needs to include mondaynet or dailynet.
+The hostname needs to include the network name at the beginning.
+
+Examples:
+
+mondaynet
+mondaynet-lon
+dailynet-001
+ithacanet-lon
 
 4. Run mondaynet-setup.sh <branch>
 e.g. bash ./bakingsetup/mondaynet/mondaynet-setup.sh
