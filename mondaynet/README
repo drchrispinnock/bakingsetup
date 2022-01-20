@@ -31,32 +31,31 @@ as the hostname. We will use mondaynet-lon2 here. Use the HOSTNAME.
 Go to https://teztnets.xyz/ and go to the latest faucet for mondaynet
 Download a json file. Save it as faucet.json on the server.
 
+You can use the delegate.sh script in the repository for this step 
+provided you have a faucet file in faucet.json. Or do it by hand:
+
 ./tezos/tezos-client activate account mondaynet-lon2 with faucet.json
 ./tezos/tezos-client register key mondaynet-lon2 as delegate
 
-7. Add a wallet directory for this and preserve it
+mkdir ~/wallet-mondaynet-lon2
+cp ~/.tezos-client/*key* ~/wallet-mondaynet-lon2
+cp ~/faucet.json ~/wallet-mondaynet-lon2
 
-cd startup/mondaynet
-mkdir wallet-mondaynet-lon2
-cp ~/.tezos-client/*key* wallet-mondaynet-lon2
-cp ~/faucet.json wallet-mondaynet-lon2
-git add wallet-mondaynet-lon2
-git commit -m "add wallet for lon2" -a
-git push
+Back this directory up.
 
-8. Restart
+7. Restart
 touch ~/.skipbuild
 sudo shutdown -r now
 
-9. The system should automatically update and reset the wallet on Monday
-at 0 10 for mondaynet and daily for dailynet
+8. The system will check testnets for an updated repository. If the
+network changes, the system will reset.
 
 Files:
 mondaynet-common.conf - a common configuration file that should work
 	for all instances, based on hostnames. The key should be called
 	the same as the hostname.
 
-wallet-<hostname>     - the initial secret and public keys. These will
+~/wallet-<hostname>     - the initial secret and public keys. These will
 	be used to restore the wallet after a network reset.
 
 
