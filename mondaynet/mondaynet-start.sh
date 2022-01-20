@@ -102,16 +102,16 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 	echo "===> Attempting to get binaries"
 
 	if [ -f $warez ]; then
-		echo "$warez found"
+		echo "$warez found on filesystem"
 	else
 		if [ "$warezserver" != "" ]; then
 			wget -q $warezurl 
 			if [ "$?" != "0" ]; then
-				echo "---- fail - will build from scratch"
+				echo "failed - will build from scratch"
 				touch "$HOME/.build"
 			fi
 		else
-				echo "---- Will build from scratch"
+				echo "Will build from scratch"
 				touch "$HOME/.build"
 
 		fi
