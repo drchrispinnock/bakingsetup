@@ -93,3 +93,6 @@ cp -p "${configstore}/identity.json" $datadir
 echo "===> Restarting node"
 $startscript $configfile
 
+echo "===> Cleaning up"
+rm -f "$snapshot"
+rm -rf "${datadir}.d"
