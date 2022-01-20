@@ -1,8 +1,8 @@
 #!/bin/sh
 
-mv startup backingsetup
+mv startup bakingsetup
 host=`hostname -s`
-mv backingsetup/mondaynet/wallet-$host ~/wallet-$host
+mv bakingsetup/mondaynet/wallet-$host ~/wallet-$host
 
 crontab - < /dev/null
 
