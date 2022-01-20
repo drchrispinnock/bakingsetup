@@ -1,14 +1,16 @@
 
+These scripts setup a rolling baker suitable for use on the Mondaynet
+and Dailynet test networks.
+
 # How to use this fine work
 #
 1. Setup an Ubuntu AWS host - t3.xlarge, 60GB SSD
 Although the scripts will attempt to update software, it is a good
 idea to apt update, apt upgrade -y && apt dist-upgrade -y
 
-2. Checkout the startup software and make sure it is in $HOME/startup.
+2. Checkout the startup software in $HOME
 
-git clone git@github.com:drchrispinnock/bakingsetup
-mv bakingsetup startup
+git clone https://github.com/drchrispinnock/bakingsetup.git
 
 3. Set your hostname to something suitable like mondaynet-oregon
 
@@ -17,8 +19,8 @@ edit /etc/hostname
 The hostname needs to include mondaynet or dailynet.
 
 4. Run mondaynet-setup.sh <branch>
-e.g. bash ./startup/mondaynet/mondaynet-setup.sh
-e.g. bash ./startup/mondaynet/mondaynet-setup.sh d0bf56ce
+e.g. bash ./bakingsetup/mondaynet/mondaynet-setup.sh
+e.g. bash ./bakingsetup/mondaynet/mondaynet-setup.sh d0bf56ce
 
 5. Wait. You can log back in on the reboot and look at start-log.txt
 tail -f start-log.txt (usually complete in under 30 minutes)
