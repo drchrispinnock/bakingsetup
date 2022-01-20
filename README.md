@@ -18,7 +18,7 @@ or rc of course.
 
 Really this work is published because of...
 
-# Mondaynet and Dailynet setup
+# Mondaynet, Dailynet and other test networks setup
 
 mondaynet contains setup and maintenance scripts for bakers running
 on the mondaynet and dailynet networks. These were designed for use
