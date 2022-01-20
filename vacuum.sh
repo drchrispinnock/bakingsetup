@@ -68,6 +68,10 @@ $stopscript $configfile
 echo "===> Preserving current node directory"
 [ -d "${datadir}.1" ] && mv "${datadir}.1" "${datadir}.d"
 mv "${datadir}" "${datadir}.1"
+if [ "$?" != "0" ]; then
+	echo "Cannot preserve $datadir"
+	exit 1
+fi
 mkdir -p $configstore
 cp -p "${datadir}.1/config.json" $configstore
 cp -p "${datadir}.1/peers.json" $configstore
