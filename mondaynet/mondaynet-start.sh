@@ -9,26 +9,31 @@
 # Defaults
 #
 buildroot=$HOME
-
 me=$HOME/bakingsetup
 gitrepos="https://gitlab.com/tezos/tezos.git"
 startscript=$me/start.sh
 buildlogs=$HOME/buildlogs
-warezserver="http://downloads.chrispinnock.com/tezos"
 
+# Set this in localconfig.txt and put the binary tar there
+# for download
+warezserver=""
+
+# Assume DailyNet unless the hostname contains mondaynet
+#
 testnet="dailynet"
 grep mondaynet /etc/hostname
 if [ "$?" = "0" ]; then
 	testnet="mondaynet"
 fi
 
-# Config
+# Configs can be overridden
 #
-if [ -f "$HOME/testsetup.txt" ]; then
-	source $HOME/testsetup.txt
+if [ -f "$HOME/localconfig.txt" ]; then
+	source $HOME/localconfig.txt
 fi
 
-# The repos is called mondaynet
+# The repos is called mondaynet. The wallet should be backed up at
+# delegation time. See delegation.sh
 #
 startconf=$me/mondaynet/mondaynet-common.conf
 wallet=$HOME/wallet-`hostname -s`
@@ -99,10 +104,16 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 	if [ -f $warez ]; then
 		echo "$warez found"
 	else
-		wget -q $warezurl 
-		if [ "$?" != "0" ]; then
-			echo "XXX FAIL - will build from scratch"
-			touch "$HOME/.build"
+		if [ "$warezurl" != "" ]; then
+			wget -q $warezurl 
+			if [ "$?" != "0" ]; then
+				echo "---- fail - will build from scratch"
+				touch "$HOME/.build"
+			fi
+		else
+				echo "---- Will build from scratch"
+				touch "$HOME/.build"
+
 		fi
 	fi
 	if [ -f $warez ]; then
