@@ -18,13 +18,9 @@ buildlogs=$HOME/buildlogs
 # for download
 warezserver=""
 
-# Assume DailyNet unless the hostname contains mondaynet
+# Grok the test net from the hostname
 #
-testnet="dailynet"
-grep mondaynet /etc/hostname
-if [ "$?" = "0" ]; then
-	testnet="mondaynet"
-fi
+testnet=`cat /etc/hostname | sed -e 's/\-.*//g`
 
 # Configs can be overridden
 #
