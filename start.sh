@@ -108,8 +108,8 @@ fi
 
 # Logs
 #
-if [ "$logging" != "stdout" && "$logging" != "stderr" && \
-		"${logging%%:*}" != "syslog" ]; then
+if [ "$logging" != "stdout" ] && [ "$logging" != "stderr" ] && \
+		[ "${logging%%:*}" != "syslog" ]; then
 	mkdir -p `dirname $logging`
 fi
 
