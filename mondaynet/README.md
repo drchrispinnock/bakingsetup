@@ -76,7 +76,7 @@ localconfig.txt - overrides for variables in the start scripts
 
 .skipbuild - if this exists, do not attempt to get the tezos software
 
-.resetnode - if this exists, skip resetting the node directory
+.resetnode - if this exists, reset the node directory
 
 .resetwallet - if this exists, attempt to move keys from this repos to
 	the client wallet.
