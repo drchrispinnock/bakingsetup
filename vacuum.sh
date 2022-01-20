@@ -56,10 +56,14 @@ snapfile="tezos-$network.$mode"
 snapshot="https://$network.xtz-shots.io/$mode -O $snapfile"
 echo "===> Fetching snapshot"
 
-wget -q $snapshot
-if [ "$?" != "0" ]; then
-	echo "Failed to get snapshot"
-	exit 1
+if [ -f "$snapfile" ]; then 
+	echo "Already present $snapfile"
+else
+	wget -q $snapshot
+	if [ "$?" != "0" ]; then
+		echo "Failed to get snapshot"
+		exit 1
+	fi
 fi
 
 echo "===> Stopping node"
