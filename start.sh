@@ -16,12 +16,6 @@ rpcport=8732
 rpcaddr="[::]"
 netaddr="[::]"
 piddir=/tmp
-snapshot=""
-
-# Example snaps
-#
-#snapfile="tezos-mainnet.full"
-#snapshot="https://mainnet.xtz-shots.io/full -O $snapfile"
 
 if [ -z "$1" ]; then
 	echo "Usage: $0 configfile"
@@ -106,18 +100,6 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 fi
 
 [ "$justconfig" = "1" ] && echo "Just configuring - exit" && exit 0
-
-# Import a snapshot
-#
-if [ ! -z "$snapshot" ]; then
-
-	[ -z "$snapfile" ] && snapfile=`basename $snapshot`
-	echo "===> Fetching $snapshot"
-	wget $snapshot
-	echo "===> Importing $snapshot"
-	$tezosnode --data-dir=$datadir snapshot import "$snapfile"
-	rm -f "$snapfile"
-fi
 
 # Let's go then
 #

@@ -1,10 +1,11 @@
 # Baking start and stop scripts
 
 The scripts in these directories can be used to start and stop
-tezos nodes and bakers.
+tezos nodes and bakers. Use at your own risk.
 
 start.sh <config> - starts a node/bakers as appropriate
 kill.sh <config>  - stops the node/bakers gracefully
+vacuum.sh <config> - stops the node, imports a snapshot & restarts
 
 See configs for example configurations. When setting up a baker,
 I would setup a node first (with bake=0 in the configuration), sync
