@@ -105,7 +105,7 @@ fi
 # Has the network changed?
 #
 echo $newmonday > $HOME/monday.txt
-fullname=$newmonday
+fullname="https://teztnets.xyz/$newmonday"
 echo "$fullname" > $HOME/network.txt
 
 # Regardless, if .cleanup is there zero monday so that we reset
