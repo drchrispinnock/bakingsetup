@@ -6,7 +6,16 @@ tezos nodes and bakers.
 start.sh <config> - starts a node/bakers as appropriate
 kill.sh <config>  - stops the node/bakers gracefully
 
-See configs for example configurations.
+See configs for example configurations. When setting up a baker,
+I would setup a node first (with bake=0 in the configuration), sync
+or import snapshots (etc), then delegate before restarting with
+bake=1.
+
+You can use cron: e.g.
+@reboot		/home/me/bakingsetup/start.sh /home/me/bakingsetup/configs/baker.conf
+or rc of course.
+
+Really this work is published because of...
 
 # Mondaynet and Dailynet setup
 
