@@ -8,6 +8,10 @@
 #
 bake=0
 logging=stdout
+bakerlogging=$HOME/logs/logfile_baking
+accuselogging=$HOME/logs/logfile_accuser
+endorselogging=$HOME/logs/logfile_endorser
+
 background=0
 dontconfig=0
 justconfig=0
@@ -74,6 +78,7 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 	#
 	[ "$dontconfig" = "1" ] && echo "Skipping configuration!" && exit 1
 
+
 	echo "===> Setting up configuration"
 	mkdir -p "$datadir"
 	$tezosnode config init 	--data-dir=$datadir \
@@ -100,6 +105,18 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 fi
 
 [ "$justconfig" = "1" ] && echo "Just configuring - exit" && exit 0
+
+# Logs
+#
+if [ "$logging" != "stdout" ] && [ "$logging" != "stderr" ] && \
+		[ "${logging%%:*}" != "syslog" ]; then
+	mkdir -p `dirname $logging`
+fi
+
+mkdir -p `dirname $bakerlogging`
+mkdir -p `dirname $accuselogging`
+mkdir -p `dirname $endorselogging`
+
 
 # Let's go then
 #
