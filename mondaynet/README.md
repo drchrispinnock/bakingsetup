@@ -1,9 +1,10 @@
+# Introduction
 
 These scripts setup a rolling baker suitable for use on the Mondaynet
 and Dailynet test networks.
 
 # How to use this fine work
-#
+
 1. Setup an Ubuntu AWS host - t3.xlarge, 60GB SSD
 Although the scripts will attempt to update software, it is a good
 idea to apt update, apt upgrade -y && apt dist-upgrade -y
@@ -76,11 +77,5 @@ monday.setup - overrides for variables in the start scripts
 .resetwallet - if this exists, attempt to move keys from this repos to
 	the client wallet.
 .noreboot  - do not reboot, just restart when the time is right
-
-
-TODO/IMPROVEMENTS
-=================
-
-* Do we actually need to reboot? It just causes operator frustration
 
 
