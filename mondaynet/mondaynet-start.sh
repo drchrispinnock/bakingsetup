@@ -53,7 +53,7 @@ warezurl="$warezserver/$warez"
 echo "===> Starting setup"
 echo "Network:      $testnet"
 echo "Branch/tag:   $branch"
-echo "Binary URL:   $warezurl"
+[ "$warezserver" != "" ] && echo "Binary URL:   $warezurl"
 sleep 2
 
 # Do not change these
