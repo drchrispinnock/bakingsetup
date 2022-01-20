@@ -18,7 +18,6 @@ gitrepos="https://gitlab.com/tezos/tezos.git"
 startscript=$me/start.sh
 buildlogs=$HOME/buildlogs
 warezserver="http://downloads.chrispinnock.com/tezos"
-warezscript="$me/mondaynet/mk-warez.sh" 
 
 testnet="dailynet"
 grep mondaynet /etc/hostname
@@ -153,7 +152,11 @@ if [ -f "$HOME/.build" ]; then
 		echo "XXX Failed to build tezos"
 		exit 1
 	fi
-	/bin/bash $warezscript
+
+	# Save the build
+	#
+	tar zvf tezos-$branch.tar.gz tezos/tezos-* tezos/active_protocol_versions tezos/active_testing_protocol_versions
+
 	rm -f "$HOME/.build"
 fi
 rm -f "$HOME/.skipbuild"
