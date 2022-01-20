@@ -29,18 +29,12 @@ testnetfile=teztnets.json
 freq="30 * * * *" # Every hour check for changes
 
 # Test the hostname to determine which network we want to join
+# Hostnames should be
+# Networkname-something else
 #
-grep mondaynet /etc/hostname
-if [ "$?" = "0" ]; then
-	echo "MondayNet"
-	testnetwork=mondaynet
-fi
-
-grep dailynet /etc/hostname
-if [ "$?" = "0" ]; then
-	echo "DailyNet"
-	testnetwork=dailynet
-fi
+# e.g. mondaynet-lon
+testnetwork=`cat /etc/hostname | sed -e 's/\-.*//g'`
+echo "Setting up for $testnetwork"
 
 # Setup Cronjobs
 #
@@ -52,12 +46,14 @@ if [ "$?" != "0" ]; then
 	crontab - < /tmp/_cron
 fi
 
-crontab -l > /tmp/_cron
-grep mondaynet-setup.sh /tmp/_cron >/dev/null 2>&1
-if [ "$?" != "0" ]; then
-	echo "Adding start scripts to crontab"
-	echo "$freq         /bin/bash $me/mondaynet/mondaynet-setup.sh >$HOME/setup-log.txt 2>&1" >> /tmp/_cron
-	crontab - < /tmp/_cron
+if [ "$testnetwork" = "mondaynet" || "$testnetwork" = "dailynet" ]; then
+	crontab -l > /tmp/_cron
+	grep mondaynet-setup.sh /tmp/_cron >/dev/null 2>&1
+	if [ "$?" != "0" ]; then
+		echo "Adding start scripts to crontab"
+		echo "$freq         /bin/bash $me/mondaynet/mondaynet-setup.sh >$HOME/setup-log.txt 2>&1" >> /tmp/_cron
+		crontab - < /tmp/_cron
+	fi
 fi
 
 # Setup the network names for comparison
@@ -92,6 +88,7 @@ else
 	else
 		newbranch=`echo $new | awk -F' ' '{print $2}'`
 		newmonday=`echo $new | awk -F' ' '{print $1}'`
+		network=`echo $new | awk -F' ' '{print $3}'`
 	fi
 	rm -f $testnetfile
 fi
@@ -102,11 +99,6 @@ if [ "$branch" != "$newbranch" ]; then
 	rm -f $HOME/tezos-$branch.tar.gz
 fi
 
-# Has the network changed?
-#
-echo $newmonday > $HOME/monday.txt
-fullname=$newmonday
-echo "$fullname" > $HOME/network.txt
 
 # Regardless, if .cleanup is there zero monday so that we reset
 # on next run
@@ -115,6 +107,11 @@ echo "$fullname" > $HOME/network.txt
 if [ -f "$HOME/.cleanup" ]; then
 	monday=""
 fi
+
+# Has the network changed?
+#
+echo $newmonday > $HOME/monday.txt
+echo "$network" > $HOME/network.txt
 
 if [ "$monday" != "$newmonday" ]; then
 	echo "Network ID: $monday -> $newmonday"
