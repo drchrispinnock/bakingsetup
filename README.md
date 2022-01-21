@@ -13,7 +13,10 @@ or import snapshots (etc), then delegate before restarting with
 bake=1.
 
 You can use cron: e.g.
+```
 @reboot		/home/me/bakingsetup/start.sh /home/me/bakingsetup/configs/baker.conf
+```
+
 or rc of course.
 
 Really this work is published because of...
