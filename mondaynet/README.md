@@ -84,5 +84,5 @@ localconfig.txt - overrides for variables in the start scripts
 
 .updatesoftware - if it exists, attempt a git pull when updating
 
-wallet-<hostname>     - the initial secret and public keys. These will
+wallet-**hostname**     - the initial secret and public keys. These will
 	be used to restore the wallet after a network reset.
