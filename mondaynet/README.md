@@ -38,7 +38,7 @@ bash ./bakingsetup/mondaynet/mondaynet-setup.sh
 tail -f start-log.txt (usually complete in under 30 minutes)
 tail -f logs/logfile
 
-6. When the node is synced (this can take some time) get a account from 
+6. When the node is synced (this can take some time) get an account from 
 the faucet and self-delegate. The account should be called the same 
 as the hostname. We will use mondaynet-lon2 here. Use the HOSTNAME.
 
