@@ -46,7 +46,7 @@ if [ "$?" != "0" ]; then
 	crontab - < /tmp/_cron
 fi
 
-if [ "$testnetwork" = "mondaynet" || "$testnetwork" = "dailynet" ]; then
+if [ "$testnetwork" = "mondaynet" ] || [ "$testnetwork" = "dailynet" ]; then
 	crontab -l > /tmp/_cron
 	grep mondaynet-setup.sh /tmp/_cron >/dev/null 2>&1
 	if [ "$?" != "0" ]; then
