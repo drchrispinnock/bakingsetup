@@ -100,5 +100,7 @@ $startscript $configfile
 echo "===> Cleaning up"
 rm -f "$snapshot"
 rm -rf "${datadir}.d"
-echo "If you are happy, you can remove ${datadir}.1"
+echo "If you are happy, you can remove"
+echo "   ${datadir}.1"
+echo "   ${snapfile}"
 

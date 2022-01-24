@@ -38,7 +38,7 @@ bash ./bakingsetup/mondaynet/mondaynet-setup.sh
 tail -f start-log.txt (usually complete in under 30 minutes)
 tail -f logs/logfile
 
-6. When the node is synced (this can take some time) get a account from 
+6. When the node is synced (this can take some time) get an account from 
 the faucet and self-delegate. The account should be called the same 
 as the hostname. We will use mondaynet-lon2 here. Use the HOSTNAME.
 
@@ -80,9 +80,10 @@ localconfig.txt - overrides for variables in the start scripts
 
 .resetwallet - if this exists, attempt to move keys from this repos to
 	the client wallet.
+
 .noreboot  - do not reboot, just restart when the time is right
 
 .updatesoftware - if it exists, attempt a git pull when updating
 
-wallet-<hostname>     - the initial secret and public keys. These will
+wallet-**hostname**     - the initial secret and public keys. These will
 	be used to restore the wallet after a network reset.
