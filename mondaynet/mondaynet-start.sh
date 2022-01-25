@@ -13,6 +13,7 @@ me=$HOME/bakingsetup
 gitrepos="https://gitlab.com/tezos/tezos.git"
 startscript=$me/start.sh
 buildlogs=$HOME/buildlogs
+debug=0
 
 # Set this in localconfig.txt and put the binary tar there
 # for download
@@ -201,6 +202,13 @@ if [ -f "$HOME/.resetwallet" ]; then
 		cp -pR $wallet/*key* "$HOME/.tezos-client"
 	fi
 	rm "$HOME/.resetwallet"
+fi
+
+# Debug environment variables
+#
+if [ "$debug" = "1" ]; then
+	TEZOS_LOG="* -> debug"
+	export TEZOS_LOG
 fi
 
 # Start the node
