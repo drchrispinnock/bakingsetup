@@ -32,6 +32,10 @@ fi
 
 source $1
 
+if [ -f "$HOME/localconfig.txt" ]; then
+	source $HOME/localconfig.txt
+fi
+
 if [ `whoami` != $username ]; then
 	echo "Must be run by $username"
 	exit 3;
