@@ -81,9 +81,11 @@ cp -p "${datadir}.1/config.json" $configstore
 cp -p "${datadir}.1/peers.json" $configstore
 cp -p "${datadir}.1/identity.json" $configstore
 
-echo "===> Importing snapshot"
 mkdir -p ${datadir}
-$tezosnode snapshot import "$snapfile" --data-dir ${datadir}
+cp -p "${configstore}/config.json" $datadir
+
+echo "===> Importing snapshot"
+$tezosnode snapshot import "$snapfile" --data-dir ${datadir} --network $network
 if [ "$?" != "0" ]; then
 	echo "Import failed"
 	exit 1
