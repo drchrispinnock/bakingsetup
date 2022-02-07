@@ -38,12 +38,11 @@ tezosnode=$tezosroot/tezos-node
 # Set the network to mainnet if not specified
 #
 [ -z "$network" ] && network=mainnet
+[ -z "$snapnet" ] && snapnet="$network"
+[ "$mode" = "" ] && mode="full"
 
 echo $datadir
 [ ! -d "$datadir" ] && echo "Cannot find $datadir" && exit 1
-
-[ "$mode" = "" ] && mode="full"
-[ "$network" = "" ] && network="mainnet"
 
 if [ "$mode" = "archive" ]; then
 	echo "Cannot refresh an archive node"
@@ -51,9 +50,9 @@ if [ "$mode" = "archive" ]; then
 fi
 
 mode=${mode%%:*}  # Remove trailing :n (e.g. for rolling)
-echo "===> Setting up for $network $mode node refresh"
-snapfile="tezos-$network.$mode"
-snapshot="https://$network.xtz-shots.io/$mode -O $snapfile"
+echo "===> Setting up for $snapnet $mode node refresh"
+snapfile="tezos-$snapnet.$mode"
+snapshot="https://$snapnet.xtz-shots.io/$mode -O $snapfile"
 echo "===> Fetching snapshot $snapfile"
 
 if [ -f "$snapfile" ]; then 
