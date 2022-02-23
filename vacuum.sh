@@ -65,10 +65,10 @@ if [ "$mastersite" = "xtzshots" ]; then
 	snapshot="https://$snapnet.xtz-shots.io/$mode -O $snapfile"
 fi
 
-#if [ "$mastersite" = "giganode" ]; then
-#	snapfile="tezos-$snapnet.$mode"
-#	snapshot="https://$snapnet.xtz-shots.io/$mode -O $snapfile"
-#fi
+if [ "$mastersite" = "giganode" ]; then
+# Cannot figure it out programmatically today
+	snapfile="tezos-$snapnet.$mode"
+fi
 
 
 echo "===> Fetching snapshot $snapfile"
