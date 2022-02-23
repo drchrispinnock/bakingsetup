@@ -12,6 +12,9 @@ stopscript="$whereami/kill.sh"
 startscript="$whereami/start.sh"
 configstore=$HOME/_configs
 
+mastersite=xtzshots
+#mastersite=giganode
+
 snapfile=""
 snapshot=""
 
@@ -52,17 +55,33 @@ fi
 mode=${mode%%:*}  # Remove trailing :n (e.g. for rolling)
 echo "===> Setting up for $snapnet $mode node refresh"
 snapfile="tezos-$snapnet.$mode"
-snapshot="https://$snapnet.xtz-shots.io/$mode -O $snapfile"
+snapshot=""
+
+if [ "$mastersite" = "xtzshots" ]; then
+	snapfile="tezos-$snapnet.$mode"
+	snapshot="https://$snapnet.xtz-shots.io/$mode -O $snapfile"
+fi
+
+#if [ "$mastersite" = "giganode" ]; then
+#	snapfile="tezos-$snapnet.$mode"
+#	snapshot="https://$snapnet.xtz-shots.io/$mode -O $snapfile"
+#fi
+
+
 echo "===> Fetching snapshot $snapfile"
 
 if [ -f "$snapfile" ]; then 
 	echo "Already present $snapfile"
 else
-	wget -q $snapshot
-	if [ "$?" != "0" ]; then
-		echo "Failed to get snapshot"
+	if [ "$snapshot" != "" ]; then
+		wget -q $snapshot
+		if [ "$?" != "0" ]; then
+			echo "Failed to get snapshot - fetch $snapfile manually"
+			exit 1
+		fi
+	else
+		echo "Fetch $snapfile manually"
 		exit 1
-	fi
 fi
 
 echo "===> Stopping node"
