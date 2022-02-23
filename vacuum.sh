@@ -19,10 +19,13 @@ snapfile=""
 snapshot=""
 
 if [ -z "$1" ]; then
-	echo "Usage: $0 configfile"
+	echo "Usage: $0 configfile [mastersite]"
 	exit 1
 fi
 
+if [ ! -z "$2" ]; then
+	mastersite=$2
+fi
 
 configfile=$1
 source $configfile 
@@ -53,7 +56,7 @@ if [ "$mode" = "archive" ]; then
 fi
 
 mode=${mode%%:*}  # Remove trailing :n (e.g. for rolling)
-echo "===> Setting up for $snapnet $mode node refresh"
+echo "===> Setting up for $snapnet $mode node refresh from $mastersite"
 snapfile="tezos-$snapnet.$mode"
 snapshot=""
 
