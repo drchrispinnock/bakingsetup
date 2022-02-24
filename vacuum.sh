@@ -12,14 +12,20 @@ stopscript="$whereami/kill.sh"
 startscript="$whereami/start.sh"
 configstore=$HOME/_configs
 
+mastersite=xtzshots
+#mastersite=giganode
+
 snapfile=""
 snapshot=""
 
 if [ -z "$1" ]; then
-	echo "Usage: $0 configfile"
+	echo "Usage: $0 configfile [mastersite]"
 	exit 1
 fi
 
+if [ ! -z "$2" ]; then
+	mastersite=$2
+fi
 
 configfile=$1
 source $configfile 
@@ -38,12 +44,11 @@ tezosnode=$tezosroot/tezos-node
 # Set the network to mainnet if not specified
 #
 [ -z "$network" ] && network=mainnet
+[ -z "$snapnet" ] && snapnet="$network"
+[ "$mode" = "" ] && mode="full"
 
 echo $datadir
 [ ! -d "$datadir" ] && echo "Cannot find $datadir" && exit 1
-
-[ "$mode" = "" ] && mode="full"
-[ "$network" = "" ] && network="mainnet"
 
 if [ "$mode" = "archive" ]; then
 	echo "Cannot refresh an archive node"
@@ -51,19 +56,35 @@ if [ "$mode" = "archive" ]; then
 fi
 
 mode=${mode%%:*}  # Remove trailing :n (e.g. for rolling)
-echo "===> Setting up for $network $mode node refresh"
-snapfile="tezos-$network.$mode"
-snapshot="https://$network.xtz-shots.io/$mode -O $snapfile"
+echo "===> Setting up for $snapnet $mode node refresh from $mastersite"
+snapfile="tezos-$snapnet.$mode"
+snapshot=""
+
+if [ "$mastersite" = "xtzshots" ]; then
+	snapfile="tezos-$snapnet.$mode"
+	snapshot="https://$snapnet.xtz-shots.io/$mode -O $snapfile"
+fi
+
+if [ "$mastersite" = "giganode" ]; then
+# Cannot figure it out programmatically today
+	snapfile="tezos-$snapnet.$mode"
+fi
+
+
 echo "===> Fetching snapshot $snapfile"
 
 if [ -f "$snapfile" ]; then 
 	echo "Already present $snapfile"
 else
-	wget -q $snapshot
-	if [ "$?" != "0" ]; then
-		echo "Failed to get snapshot"
+	if [ "$snapshot" != "" ]; then
+		wget -q $snapshot
+		if [ "$?" != "0" ]; then
+			echo "Failed to get snapshot - fetch $snapfile manually"
+			exit 1
+		fi
+	else
+		echo "Fetch $snapfile manually"
 		exit 1
-	fi
 fi
 
 echo "===> Stopping node"
@@ -81,9 +102,11 @@ cp -p "${datadir}.1/config.json" $configstore
 cp -p "${datadir}.1/peers.json" $configstore
 cp -p "${datadir}.1/identity.json" $configstore
 
-echo "===> Importing snapshot"
 mkdir -p ${datadir}
-$tezosnode snapshot import "$snapfile" --data-dir ${datadir}
+cp -p "${configstore}/config.json" $datadir
+
+echo "===> Importing snapshot"
+$tezosnode snapshot import "$snapfile" --data-dir ${datadir} --network $network
 if [ "$?" != "0" ]; then
 	echo "Import failed"
 	exit 1
