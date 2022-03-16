@@ -13,6 +13,7 @@ accuselogging=$HOME/logs/logfile_accuser
 endorselogging=$HOME/logs/logfile_endorser
 
 lvote=pass
+liquidity_vote_list="NONE"
 
 background=0
 dontconfig=0
@@ -69,7 +70,6 @@ tezosnode=$tezosroot/tezos-node
 # Usually an installation has a list of active protocol versions
 #
 protocols="011-PtHangz2 012-Psithaca alpha"
-liquidity_vote_list="alpha"
 
 if [ -f "$tezosroot/active_protocol_versions" ]; then
 	protocols=`cat $tezosroot/active_protocol_versions`
