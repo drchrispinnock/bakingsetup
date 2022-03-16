@@ -150,7 +150,9 @@ if [ "$background" = "1" ]; then
 			tezosendorse=$tezosroot/tezos-endorser-$protocol
 			tezosaccuse=$tezosroot/tezos-accuser-$protocol
 
-			$tezosbaker -E http://127.0.0.1:$rpcport run with local node $datadir $bakerid --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging 2>&1 &
+			bakeropts=bakeropts_$protocol
+
+			$tezosbaker -E http://127.0.0.1:$rpcport run with local node $datadir $bakerid ${!bakeropts} --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging 2>&1 &
 
 			# Future protocols will not have endorsers
 			#
