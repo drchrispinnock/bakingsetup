@@ -12,6 +12,8 @@ bakerlogging=$HOME/logs/logfile_baking
 accuselogging=$HOME/logs/logfile_accuser
 endorselogging=$HOME/logs/logfile_endorser
 
+lvote=pass
+
 background=0
 dontconfig=0
 justconfig=0
@@ -155,7 +157,7 @@ if [ "$background" = "1" ]; then
 			lbakeropts=""
 			for _l in $liquidity_vote_list; do
 				if [ "$_l" = "$protocol" ]; then
-					lbakeropts="--liquidity-baking-toggle-vote pass"
+					lbakeropts="--liquidity-baking-toggle-vote $lvote"
 				fi
 			done
 
