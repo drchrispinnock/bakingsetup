@@ -12,20 +12,29 @@ stopscript="$whereami/kill.sh"
 startscript="$whereami/start.sh"
 configstore=$HOME/_configs
 
+# This is the "old" way of doing it.
+# xtzshots has stopped supplying full snapshots for now
+#
 mastersite=xtzshots
 #mastersite=giganode
 #mastersite=tf
 
 snapfile=""
 snapshot=""
+cliurl=""
 
 if [ -z "$1" ]; then
-	echo "Usage: $0 configfile [mastersite]"
+	echo "Usage: $0 configfile [mastersite] or"
+	echo "       $0 configfile url http://path_to_snapshot"
 	exit 1
 fi
 
 if [ ! -z "$2" ]; then
 	mastersite=$2
+fi
+
+if [ ! -z "$3" ]; then
+	cliurl=$3
 fi
 
 configfile=$1
@@ -68,6 +77,11 @@ echo "===> Fetching snapshot $snapfile"
 if [ "$mastersite" = "xtzshots" ]; then
 	snapfile="tezos-$snapnet.$mode"
 	snapshot="https://$snapnet.xtz-shots.io/$mode -O $snapfile"
+fi
+
+if [ "$mastersite" = "url" ]; then
+	snapfile="tezos-$snapnet.$mode"
+	snapshot="$cliurl -O $snapfile"
 fi
 
 if [ "$mastersite" = "giganode" ]; then
