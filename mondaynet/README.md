@@ -5,9 +5,15 @@ Dailynet and other test networks.
 
 # How to use this fine work
 
-1. Setup an Ubuntu AWS host - t3.xlarge, 60GB SSD
+1. AWS: Setup an Ubuntu AWS host - t3.xlarge, 60GB SSD 
+   GCP: Setup an equivalent GCP host from Ubuntu 20 template
+
 Although the scripts will attempt to update software, it is a good
 idea to apt update, apt upgrade -y && apt dist-upgrade -y
+
+Login to your host (e.g. ubuntu on AWS, you on GCP). On GCP switch to the
+ubuntu account as your personal account won't work properly with cron.
+sudo su - ubuntu
 
 2. Checkout the startup software in $HOME
 

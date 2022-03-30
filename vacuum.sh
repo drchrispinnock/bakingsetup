@@ -12,14 +12,21 @@ stopscript="$whereami/kill.sh"
 startscript="$whereami/start.sh"
 configstore=$HOME/_configs
 
+mastersite=xtzshots
+#mastersite=giganode
+#mastersite=tf
+
 snapfile=""
 snapshot=""
 
 if [ -z "$1" ]; then
-	echo "Usage: $0 configfile"
+	echo "Usage: $0 configfile [mastersite]"
 	exit 1
 fi
 
+if [ ! -z "$2" ]; then
+	mastersite=$2
+fi
 
 configfile=$1
 source $configfile 
@@ -50,19 +57,44 @@ if [ "$mode" = "archive" ]; then
 fi
 
 mode=${mode%%:*}  # Remove trailing :n (e.g. for rolling)
-echo "===> Setting up for $snapnet $mode node refresh"
+echo "===> Setting up for $snapnet $mode node refresh from $mastersite"
 snapfile="tezos-$snapnet.$mode"
-snapshot="https://$snapnet.xtz-shots.io/$mode -O $snapfile"
+snapshot=""
+
 echo "===> Fetching snapshot $snapfile"
+
+# Regular web downloads
+#
+if [ "$mastersite" = "xtzshots" ]; then
+	snapfile="tezos-$snapnet.$mode"
+	snapshot="https://$snapnet.xtz-shots.io/$mode -O $snapfile"
+fi
+
+if [ "$mastersite" = "giganode" ]; then
+# Cannot figure it out programmatically today
+	snapfile="tezos-$snapnet.$mode"
+fi
+
+cmd="wget -q $snapshot"
+
+if [ "$mastersite" = "tf" ]; then
+	snapfile="tezos-$snapnet.$mode.latest"
+	snapshot="s3://mainnet-updater-chainbucket-vwnool266emk/$snapfile"
+	cmd="aws s3 cp --request-payer requester $snapshot ."
+fi
 
 if [ -f "$snapfile" ]; then 
 	echo "Already present $snapfile"
 else
-	wget -q $snapshot
-	if [ "$?" != "0" ]; then
-		echo "Failed to get snapshot"
+	if [ "$snapshot" != "" ]; then
+		$cmd
+		if [ "$?" != "0" ]; then
+			echo "Failed to get snapshot - fetch $snapfile manually"
+			exit 1
+		fi
+	else
+		echo "Fetch $snapfile manually"
 		exit 1
-	fi
 fi
 
 echo "===> Stopping node"

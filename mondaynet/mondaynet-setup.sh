@@ -4,16 +4,9 @@
 # Chris Pinnock 2022
 # MIT license
 
-# Assuming a throw away AWS environment
+# Dependencies
 #
-if [ `whoami` != "ubuntu" ]; then
-	echo "Must be run by ubuntu"
-	exit 3;
-fi
-
-# Dependency for JSON parsing
-#
-sudo apt-get install -y libjson-perl
+sudo apt-get install -y libjson-perl wget
 
 me=$HOME/bakingsetup
 killscript=$me/kill.sh

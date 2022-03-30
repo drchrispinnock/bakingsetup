@@ -12,6 +12,9 @@ bakerlogging=$HOME/logs/logfile_baking
 accuselogging=$HOME/logs/logfile_accuser
 endorselogging=$HOME/logs/logfile_endorser
 
+lvote=pass
+liquidity_vote_list="NONE"
+
 background=0
 dontconfig=0
 justconfig=0
@@ -67,6 +70,7 @@ tezosnode=$tezosroot/tezos-node
 # Usually an installation has a list of active protocol versions
 #
 protocols="011-PtHangz2 012-Psithaca alpha"
+
 if [ -f "$tezosroot/active_protocol_versions" ]; then
 	protocols=`cat $tezosroot/active_protocol_versions`
 else
@@ -150,7 +154,14 @@ if [ "$background" = "1" ]; then
 			tezosendorse=$tezosroot/tezos-endorser-$protocol
 			tezosaccuse=$tezosroot/tezos-accuser-$protocol
 
-			$tezosbaker -E http://127.0.0.1:$rpcport run with local node $datadir $bakerid --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging 2>&1 &
+			lbakeropts=""
+			for _l in $liquidity_vote_list; do
+				if [ "$_l" = "$protocol" ]; then
+					lbakeropts="--liquidity-baking-toggle-vote $lvote"
+				fi
+			done
+
+			$tezosbaker -E http://127.0.0.1:$rpcport run with local node $datadir $bakerid $lbakeropts --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging 2>&1 &
 
 			# Future protocols will not have endorsers
 			#
