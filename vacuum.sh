@@ -14,6 +14,7 @@ configstore=$HOME/_configs
 
 mastersite=xtzshots
 #mastersite=giganode
+#mastersite=tf
 
 snapfile=""
 snapshot=""
@@ -60,6 +61,10 @@ echo "===> Setting up for $snapnet $mode node refresh from $mastersite"
 snapfile="tezos-$snapnet.$mode"
 snapshot=""
 
+echo "===> Fetching snapshot $snapfile"
+
+# Regular web downloads
+#
 if [ "$mastersite" = "xtzshots" ]; then
 	snapfile="tezos-$snapnet.$mode"
 	snapshot="https://$snapnet.xtz-shots.io/$mode -O $snapfile"
@@ -70,14 +75,19 @@ if [ "$mastersite" = "giganode" ]; then
 	snapfile="tezos-$snapnet.$mode"
 fi
 
+cmd="wget -q $snapshot"
 
-echo "===> Fetching snapshot $snapfile"
+if [ "$mastersite" = "tf" ]; then
+	snapfile="tezos-$snapnet.$mode.latest"
+	snapshot="s3://mainnet-updater-chainbucket-vwnool266emk/$snapfile"
+	cmd="aws s3 cp --request-payer requester $snapshot ."
+fi
 
 if [ -f "$snapfile" ]; then 
 	echo "Already present $snapfile"
 else
 	if [ "$snapshot" != "" ]; then
-		wget -q $snapshot
+		$cmd
 		if [ "$?" != "0" ]; then
 			echo "Failed to get snapshot - fetch $snapfile manually"
 			exit 1
