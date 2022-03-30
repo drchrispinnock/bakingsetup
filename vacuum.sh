@@ -109,6 +109,7 @@ else
 	else
 		echo "Fetch $snapfile manually"
 		exit 1
+	fi
 fi
 
 echo "===> Stopping node"
