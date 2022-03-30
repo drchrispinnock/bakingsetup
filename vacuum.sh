@@ -12,32 +12,18 @@ stopscript="$whereami/kill.sh"
 startscript="$whereami/start.sh"
 configstore=$HOME/_configs
 
-# This is the "old" way of doing it.
-# xtzshots has stopped supplying full snapshots for now
-#
-mastersite=xtzshots
-#mastersite=giganode
-#mastersite=tf
-
 snapfile=""
 snapshot=""
 cliurl=""
 
-if [ -z "$1" ]; then
-	echo "Usage: $0 configfile [mastersite] or"
-	echo "       $0 configfile url http://path_to_snapshot"
+if [ -z "$2" ]; then
+	echo "Usage: $0 configfile http(s)://path_to_snapshot"
 	exit 1
 fi
 
-if [ ! -z "$2" ]; then
-	mastersite=$2
-fi
-
-if [ ! -z "$3" ]; then
-	cliurl=$3
-fi
-
 configfile=$1
+cliurl=$2
+
 source $configfile 
 
 if [ `whoami` != $username ]; then
@@ -66,48 +52,18 @@ if [ "$mode" = "archive" ]; then
 fi
 
 mode=${mode%%:*}  # Remove trailing :n (e.g. for rolling)
-echo "===> Setting up for $snapnet $mode node refresh from $mastersite"
-snapfile="tezos-$snapnet.$mode"
-snapshot=""
-
+echo "===> Setting up for $snapnet $mode node refresh from $cliurl"
 echo "===> Fetching snapshot $snapfile"
 
-# Regular web downloads
-#
-if [ "$mastersite" = "xtzshots" ]; then
-	snapfile="tezos-$snapnet.$mode"
-	snapshot="https://$snapnet.xtz-shots.io/$mode -O $snapfile"
-fi
-
-if [ "$mastersite" = "url" ]; then
-	snapfile="tezos-$snapnet.$mode"
-	snapshot="$cliurl -O $snapfile"
-fi
-
-if [ "$mastersite" = "giganode" ]; then
-# Cannot figure it out programmatically today
-	snapfile="tezos-$snapnet.$mode"
-fi
-
-cmd="wget -q $snapshot"
-
-if [ "$mastersite" = "tf" ]; then
-	snapfile="tezos-$snapnet.$mode.latest"
-	snapshot="s3://mainnet-updater-chainbucket-vwnool266emk/$snapfile"
-	cmd="aws s3 cp --request-payer requester $snapshot ."
-fi
+snapfile="tezos-$snapnet.$mode"
+snapshot="$cliurl -O $snapfile"
 
 if [ -f "$snapfile" ]; then 
 	echo "Already present $snapfile"
 else
-	if [ "$snapshot" != "" ]; then
-		$cmd
-		if [ "$?" != "0" ]; then
-			echo "Failed to get snapshot - fetch $snapfile manually"
-			exit 1
-		fi
-	else
-		echo "Fetch $snapfile manually"
+	wget -q $snapshot
+	if [ "$?" != "0" ]; then
+		echo "Failed to get snapshot - fetch $snapfile manually"
 		exit 1
 	fi
 fi
