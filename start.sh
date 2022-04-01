@@ -161,7 +161,7 @@ if [ "$background" = "1" ]; then
 				fi
 			done
 
-			$tezosbaker -E http://127.0.0.1:$rpcport run with local node $datadir $bakerid $lbakeropts --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging 2>&1 &
+			$tezosbaker -E http://127.0.0.1:$rpcport run with local node $datadir $bakerid $lbakeropts --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging-$protocol 2>&1 &
 
 			# Future protocols will not have endorsers
 			#
