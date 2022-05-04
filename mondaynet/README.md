@@ -80,6 +80,8 @@ localconfig.txt - overrides for variables in the start scripts
 .cleanup - if this exists cleanup all sources, rust and so on, and start
 	from scratch. This does not clean tezos-node or client dirs though.
 
+.reallycleanup - if this clean source tar balls and touch .cleanup
+
 .skipbuild - if this exists, do not attempt to get the tezos software
 
 .resetnode - if this exists, reset the node directory
