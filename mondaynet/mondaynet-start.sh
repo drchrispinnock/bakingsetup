@@ -57,11 +57,17 @@ sleep 2
 #
 builddir=$buildroot/tezos
 
+if [ -f "$HOME/.reallycleanup" ]; then
+	rm -rf $warez
+	touch "$HOME/.cleanup"
+	rm "$HOME/.reallycleanup"
+fi
+
 if [ -f "$HOME/.cleanup" ]; then
 	echo "===> Cleaning up"
 	rm -rf tezos rustup-init.sh logs fetch-params.sh \
 		.zcash-params .opam .rustup .cargo .cache $HOME/.cleanup \
-		"$HOME/.skipbuild" rustup-init.sh $warez $HOME/.stop
+		"$HOME/.skipbuild" rustup-init.sh $HOME/.stop
 fi
 
 if [ -f "$HOME/.stop" ]; then
