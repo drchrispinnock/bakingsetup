@@ -32,16 +32,22 @@ foreach my $k (keys(%h)) {
 my $build='';
 my $url='';
 if ($hd->{$network}->{'docker_build'}) {
-	$build=$hd->{$network}->{'docker_build'};
+
 	$url=$hd->{$network}->{'network_url'};
 
-	# tezos/tezos:v12.1
-	# tezos/tezos:master_d0bf56ce_20220113200826	
-	$build =~ s/^tezos\/tezos\://;
-	
-	if ($build =~ m/.*_(.*)_.*/ ) {
-		$build = $1;
-	} 
+	if (defined($hd->{$network}->{'git_ref'})) {
+		$build = $hd->{$network}->{'git_ref'};
+	} else {
+		# Get it from the docker build
+		# tezos/tezos:v12.1
+		# tezos/tezos:master_d0bf56ce_20220113200826	
+		$build=$hd->{$network}->{'docker_build'};
+		$build =~ s/^tezos\/tezos\://;
+		
+		if ($build =~ m/.*_(.*)_.*/ ) {
+			$build = $1;
+		}
+	}
 
 } else {
 	printf "Cannot find $network in Test Network inventory!\n";
