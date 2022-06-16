@@ -1,6 +1,8 @@
 #!/bin/bash
 
+# Setup a tezos-node baker.
 # Start a Mondaynet/Dailynet node.
+#
 # Chris Pinnock 2022
 # MIT license
 
@@ -18,6 +20,7 @@ debug=0
 # Set this in localconfig.txt and put the binary tar there
 # for download
 warezserver=""
+warez="_NOTSET"
 
 # Grok the test net from the hostname
 #
@@ -37,15 +40,23 @@ wallet=$HOME/wallet-`hostname -s`
 
 mkdir -p $buildlogs
 
+if [ "$justbuild" = "yes" ]; then
+	branch="latest-release"
+fi
+
 if [ -f "$HOME/branch.txt" ]; then
 	branch=`cat $HOME/branch.txt`
-else
+fi
+
+if [ "$branch" = "" ]; then
 	echo "XXX Branch not set - please run setup"
 	exit 1
 fi
 
-warez="tezos-$branch.tar.gz"
-warezurl="$warezserver/$warez"
+if [ "$justbuild" != "yes" ]; then
+	warez="tezos-$branch.tar.gz"
+	warezurl="$warezserver/$warez"
+fi
 
 echo "===> Starting setup"
 echo "Network:      $testnet"
@@ -104,7 +115,7 @@ if [ ! -f "$HOME/.skipbuild" ]; then
 
 	echo "===> Attempting to get binaries"
 
-	if [ -f $warez ]; then
+	if [ -f "$warez" ]; then
 		echo "$warez found on filesystem"
 	else
 		if [ "$warezserver" != "" ]; then
@@ -172,6 +183,11 @@ if [ -f "$HOME/.build" ]; then
 	rm -f "$HOME/.build"
 fi
 rm -f "$HOME/.skipbuild"
+
+if [ "$justbuild" = "yes" ]; then
+	echo "Build complete"
+	exit 0
+fi
 
 # If all the above worked, there should at least be a tezos-node binary
 #
