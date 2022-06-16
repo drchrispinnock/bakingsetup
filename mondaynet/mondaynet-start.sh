@@ -6,7 +6,9 @@
 # Chris Pinnock 2022
 # MIT license
 
-# Runs out of cron at boot or from the setup tool
+# Runs out of cron at boot or from the setup tool, or now
+# from the command line to build the software
+# 
 
 # Defaults
 #
@@ -16,6 +18,9 @@ gitrepos="https://gitlab.com/tezos/tezos.git"
 startscript=$me/start.sh
 buildlogs=$HOME/buildlogs
 debug=0
+justbuild="no"
+
+[ "$1" = "build" ] && justbuild="yes"
 
 # Set this in localconfig.txt and put the binary tar there
 # for download
