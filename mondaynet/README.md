@@ -11,7 +11,9 @@ Dailynet and other test networks.
 Although the scripts will attempt to update software, it is a good
 idea to apt update, apt upgrade -y && apt dist-upgrade -y
 
-Login to your host (e.g. ubuntu on AWS, you on GCP)
+Login to your host (e.g. ubuntu on AWS, you on GCP). On GCP switch to the
+ubuntu account as your personal account won't work properly with cron.
+sudo su - ubuntu
 
 2. Checkout the startup software in $HOME
 
@@ -77,6 +79,8 @@ localconfig.txt - overrides for variables in the start scripts
 
 .cleanup - if this exists cleanup all sources, rust and so on, and start
 	from scratch. This does not clean tezos-node or client dirs though.
+
+.reallycleanup - if this clean source tar balls and touch .cleanup
 
 .skipbuild - if this exists, do not attempt to get the tezos software
 

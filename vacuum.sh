@@ -12,22 +12,18 @@ stopscript="$whereami/kill.sh"
 startscript="$whereami/start.sh"
 configstore=$HOME/_configs
 
-mastersite=xtzshots
-#mastersite=giganode
-
 snapfile=""
 snapshot=""
+cliurl=""
 
-if [ -z "$1" ]; then
-	echo "Usage: $0 configfile [mastersite]"
+if [ -z "$2" ]; then
+	echo "Usage: $0 configfile http(s)://path_to_snapshot"
 	exit 1
 fi
 
-if [ ! -z "$2" ]; then
-	mastersite=$2
-fi
-
 configfile=$1
+cliurl=$2
+
 source $configfile 
 
 if [ `whoami` != $username ]; then
@@ -56,35 +52,20 @@ if [ "$mode" = "archive" ]; then
 fi
 
 mode=${mode%%:*}  # Remove trailing :n (e.g. for rolling)
-echo "===> Setting up for $snapnet $mode node refresh from $mastersite"
-snapfile="tezos-$snapnet.$mode"
-snapshot=""
-
-if [ "$mastersite" = "xtzshots" ]; then
-	snapfile="tezos-$snapnet.$mode"
-	snapshot="https://$snapnet.xtz-shots.io/$mode -O $snapfile"
-fi
-
-if [ "$mastersite" = "giganode" ]; then
-# Cannot figure it out programmatically today
-	snapfile="tezos-$snapnet.$mode"
-fi
-
-
+echo "===> Setting up for $snapnet $mode node refresh from $cliurl"
 echo "===> Fetching snapshot $snapfile"
+
+snapfile="tezos-$snapnet.$mode"
+snapshot="$cliurl -O $snapfile"
 
 if [ -f "$snapfile" ]; then 
 	echo "Already present $snapfile"
 else
-	if [ "$snapshot" != "" ]; then
-		wget -q $snapshot
-		if [ "$?" != "0" ]; then
-			echo "Failed to get snapshot - fetch $snapfile manually"
-			exit 1
-		fi
-	else
-		echo "Fetch $snapfile manually"
+	wget -q $snapshot
+	if [ "$?" != "0" ]; then
+		echo "Failed to get snapshot - fetch $snapfile manually"
 		exit 1
+	fi
 fi
 
 echo "===> Stopping node"

@@ -57,11 +57,17 @@ sleep 2
 #
 builddir=$buildroot/tezos
 
+if [ -f "$HOME/.reallycleanup" ]; then
+	rm -rf $warez
+	touch "$HOME/.cleanup"
+	rm "$HOME/.reallycleanup"
+fi
+
 if [ -f "$HOME/.cleanup" ]; then
 	echo "===> Cleaning up"
 	rm -rf tezos rustup-init.sh logs fetch-params.sh \
 		.zcash-params .opam .rustup .cargo .cache $HOME/.cleanup \
-		"$HOME/.skipbuild" rustup-init.sh $warez $HOME/.stop
+		"$HOME/.skipbuild" rustup-init.sh $HOME/.stop
 fi
 
 if [ -f "$HOME/.stop" ]; then
@@ -82,7 +88,7 @@ fi
 #
 echo "===> Installing prerequisites"
 sudo apt-get update > $buildlogs/apt.txt 2>&1
-sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev opam jq zlib1g-dev bc autoconf libjson-perl >> $buildlogs/apt.txt 2>&1
+sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev opam jq zlib1g-dev bc autoconf libjson-perl libpq-dev >> $buildlogs/apt.txt 2>&1
 
 # Update the software to latest master branch of Octez
 #
@@ -161,7 +167,7 @@ if [ -f "$HOME/.build" ]; then
 	# Save the build for the next boot just in case
 	#
 	cd ..
-	tar zcf $HOME/tezos-$branch.tar.gz tezos/tezos-* tezos/active_protocol_versions tezos/active_testing_protocol_versions
+	tar zcf $HOME/tezos-$branch.tar.gz tezos/tezos-* tezos/active_protocol_versions tezos/active_testing_protocol_versions tezos/sc_rollup_protocol_versions tezos/tx_rollup_protocol_versions
 
 	rm -f "$HOME/.build"
 fi

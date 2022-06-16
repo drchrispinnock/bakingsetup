@@ -118,7 +118,7 @@ if [ "$monday" != "$newmonday" ]; then
 	$killscript $startconf
 	
 	if [ -f "$HOME/.updatesoftware" ]; then
-		echo "Update mondaynet scripts"
+		echo "Update Baking Setup software"
 		cd $me && git pull
 	fi
 	
