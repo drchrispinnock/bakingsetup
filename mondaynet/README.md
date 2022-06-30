@@ -35,6 +35,7 @@ ghostnet-123
 mondaynet-lon
 dailynet-001
 ithacanet-lon
+kathmandunet-lon
 ```
 
 4. Run mondaynet-setup.sh
