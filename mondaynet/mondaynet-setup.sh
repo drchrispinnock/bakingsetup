@@ -6,7 +6,7 @@
 
 # Dependencies
 #
-sudo apt-get install -y libjson-perl wget
+sudo apt-get install -y libjson-perl wget cargo
 
 me=$HOME/bakingsetup
 killscript=$me/kill.sh
