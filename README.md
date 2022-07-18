@@ -23,8 +23,9 @@ or rc of course.
 
 Really this work is published because of...
 
-# Mondaynet, Dailynet and other test networks setup
+# Mondaynet, Ghostnet, Dailynet and other test networks setup
 
 mondaynet contains setup and maintenance scripts for bakers running
 on the mondaynet and dailynet networks. These were designed for use
 on Ubuntu instances on AWS.
+

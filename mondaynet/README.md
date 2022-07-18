@@ -1,7 +1,7 @@
 # Introduction
 
-These scripts setup a rolling baker suitable for use on the Mondaynet,
-Dailynet and other test networks.
+These scripts setup a rolling baker suitable for use on the Ghostnet, 
+Mondaynet, Dailynet and other test networks.
 
 # How to use this fine work
 
@@ -31,9 +31,11 @@ Examples:
 
 ```
 mondaynet
+ghostnet-123
 mondaynet-lon
 dailynet-001
 ithacanet-lon
+kathmandunet-lon
 ```
 
 4. Run mondaynet-setup.sh
