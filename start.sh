@@ -13,7 +13,6 @@ accuselogging=$HOME/logs/logfile_accuser
 endorselogging=$HOME/logs/logfile_endorser
 
 lvote=pass
-liquidity_vote_list="013-PtJakart 014-PtKathma alpha"
 
 background=0
 dontconfig=0
@@ -155,12 +154,7 @@ if [ "$background" = "1" ]; then
 			tezosendorse=$tezosroot/tezos-endorser-$protocol
 			tezosaccuse=$tezosroot/tezos-accuser-$protocol
 
-			lbakeropts=""
-			for _l in $liquidity_vote_list; do
-				if [ "$_l" = "$protocol" ]; then
-					lbakeropts="--liquidity-baking-toggle-vote $lvote"
-				fi
-			done
+			lbakeropts="--liquidity-baking-toggle-vote $lvote"
 
 			$tezosbaker -E http://127.0.0.1:$rpcport run with local node $datadir $bakerid $lbakeropts --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging-$protocol 2>&1 &
 
