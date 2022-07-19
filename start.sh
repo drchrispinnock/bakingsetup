@@ -73,9 +73,10 @@ protocols="011-PtHangz2 012-Psithaca alpha"
 
 if [ -f "$tezosroot/active_protocol_versions" ]; then
 	protocols=`cat $tezosroot/active_protocol_versions`
-else
-	echo "WARNING: check active protocols $protocols"
-	sleep 3
+fi
+
+if [ -f "$tezosroot/script-inputs/active_protocol_versions" ]; then
+	protocols=`cat $tezosroot/script-inputs/active_protocol_versions`
 fi
 
 # Setup
