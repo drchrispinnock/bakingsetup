@@ -13,7 +13,7 @@ accuselogging=$HOME/logs/logfile_accuser
 endorselogging=$HOME/logs/logfile_endorser
 
 lvote=pass
-liquidity_vote_list="013-PtJakart"
+liquidity_vote_list="013-PtJakart 014-PtKathma alpha"
 
 background=0
 dontconfig=0
