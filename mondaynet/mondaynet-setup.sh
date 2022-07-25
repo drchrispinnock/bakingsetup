@@ -14,6 +14,9 @@ startconf=$me/mondaynet/mondaynet-common.conf
 starter=$me/mondaynet/mondaynet-start.sh
 startlog=$HOME/start-log.txt
 parsejson=$me/mondaynet/parse_testnet_json.pl
+cronsetup=1
+
+[ "$1" = "once" ] && cronsetup=0
 
 # Hardcoded remote test network repository
 #
@@ -39,12 +42,15 @@ if [ "$?" != "0" ]; then
 	crontab - < /tmp/_cron
 fi
 
-crontab -l > /tmp/_cron
-grep mondaynet-setup.sh /tmp/_cron >/dev/null 2>&1
-if [ "$?" != "0" ]; then
-	echo "Adding start scripts to crontab"
-	echo "$freq         /bin/bash $me/mondaynet/mondaynet-setup.sh >$HOME/setup-log.txt 2>&1" >> /tmp/_cron
-	crontab - < /tmp/_cron
+if [ "$cronsetup" = "1" ]; then
+
+	crontab -l > /tmp/_cron
+	grep mondaynet-setup.sh /tmp/_cron >/dev/null 2>&1
+	if [ "$?" != "0" ]; then
+		echo "Adding start scripts to crontab"
+		echo "$freq         /bin/bash $me/mondaynet/mondaynet-setup.sh >$HOME/setup-log.txt 2>&1" >> /tmp/_cron
+		crontab - < /tmp/_cron
+	fi
 fi
 
 # Setup the network names for comparison
