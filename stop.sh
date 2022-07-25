@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Stop a baking setup.
 # Chris Pinnock 2022
@@ -23,7 +23,7 @@ leave() {
 }
 
 [ -z "$1" ] && leave 1 "Usage: $0 configfile"
-source $1
+. $1
 
 pidfilebase=$piddir/_pid_tezos_$name
 pidfile_node=${pidfilebase}_node

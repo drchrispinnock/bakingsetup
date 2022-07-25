@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Start a Tezos baking setup.
 # Chris Pinnock 2022
@@ -60,7 +60,7 @@ leave() {
 [ -z "$1" ] && leave 1 "Usage: $0 configfile"
 [ "$2" = "justconfig" ] && 	justconfig=1
 
-source $1
+. $1
 mkdir -p $logdir
 mkdir -p $piddir
 
@@ -70,7 +70,7 @@ pidfile_baker=${pidfilebase}_baker
 pidfile_accuser=${pidfilebase}_accuser
 
 if [ -f "$HOME/localconfig.txt" ]; then
-	source $HOME/localconfig.txt
+	. $HOME/localconfig.txt
 fi
 
 [ `whoami` != $username ] && leave 2 "Must be run by $username"
