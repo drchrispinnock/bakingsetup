@@ -14,7 +14,6 @@ endorselogging=$HOME/logs/logfile_endorser
 
 lvote=pass
 
-background=0
 dontconfig=0
 justconfig=0
 netport=9732
@@ -42,10 +41,6 @@ if [ `whoami` != $username ]; then
 	echo "Must be run by $username"
 	exit 3;
 fi
-
-# If we are baking, we always run in the background
-#
-[ "$bake" = "1" ] && background=1
 
 # Setup PID files
 #
@@ -129,51 +124,42 @@ mkdir -p `dirname $endorselogging`
 # Let's go then
 #
 echo "===> Starting $name node"
-com="$tezosnode run --data-dir=$datadir --log-output=$logging $otherrunopts"
-echo "$com"
-if [ "$background" = "1" ]; then
-	$com &
-	pid=$!
-	if [ "$?" != "0" ]; then
-		echo "Failed to start"
-		exit 1
-	fi
-	echo "Started with PID $pid"
-	echo "$pid" > $pidfile
 
-	if [ "$bake" = "1" ]; then
+$tezosnode run --data-dir=$datadir --log-output=$logging $otherrunopts &
+$pid=$!
+[ "$?" != "0" ] && echo "Failed to start" && exit 1
 
-		# Let's bake as well
+echo "Started with PID $pid"
+echo "$pid" > $pidfile
+
+if [ "$bake" = "1" ]; then
+	# Let's cook!
+	#
+	sleep 10
+	while [ 1 = 1 ]; do
+		$tezosroot/tezos-client -E http://127.0.0.1:$rpcport bootstrapped
+	        [ "$?" = "0" ] && break;
+		echo "===> Sleeping for node to come up"
+		sleep 30
+	done
+
+	for protocol in $protocols; do
+		tezosbaker=$tezosroot/tezos-baker-$protocol
+		tezosendorse=$tezosroot/tezos-endorser-$protocol
+		tezosaccuse=$tezosroot/tezos-accuser-$protocol
+
+		lbakeropts="--liquidity-baking-toggle-vote $lvote"
+
+		$tezosbaker -E http://127.0.0.1:$rpcport run with local node $datadir $bakerid $lbakeropts --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging-$protocol 2>&1 &
+
+		# Future protocols will not have endorsers
 		#
-		sleep 10
-		while [ 1 = 1 ]; do
-			$tezosroot/tezos-client -E http://127.0.0.1:$rpcport bootstrapped
-		        [ "$?" = "0" ] && break;
-			echo "===> Sleeping for node to come up"
-			sleep 30
-		done
+		if [ -x "$tezosendorse" ]; then
+			$tezosendorse -E http://127.0.0.1:$rpcport run >> $endorselogging  2>&1 &
+			echo "$!" > ${pidfilebase}_endorser-$protocol
+		fi
 
-		for protocol in $protocols; do
-			tezosbaker=$tezosroot/tezos-baker-$protocol
-			tezosendorse=$tezosroot/tezos-endorser-$protocol
-			tezosaccuse=$tezosroot/tezos-accuser-$protocol
-
-			lbakeropts="--liquidity-baking-toggle-vote $lvote"
-
-			$tezosbaker -E http://127.0.0.1:$rpcport run with local node $datadir $bakerid $lbakeropts --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging-$protocol 2>&1 &
-
-			# Future protocols will not have endorsers
-			#
-			if [ -x "$tezosendorse" ]; then 
-				$tezosendorse -E http://127.0.0.1:$rpcport run >> $endorselogging  2>&1 &
-				echo "$!" > ${pidfilebase}_endorser-$protocol
-			fi
-			
-			$tezosaccuse -E http://127.0.0.1:$rpcport run >> $accuselogging  2>&1 &
-			echo "$!" > ${pidfilebase}_accuser-$protocol
-		done
-	fi
-
-else
-	$com
+		$tezosaccuse -E http://127.0.0.1:$rpcport run >> $accuselogging  2>&1 &
+		echo "$!" > ${pidfilebase}_accuser-$protocol
+	done
 fi
