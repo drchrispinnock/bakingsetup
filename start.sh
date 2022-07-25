@@ -36,9 +36,14 @@ netaddr="[::]"
 # Where to store PID files
 #
 piddir=/tmp
+pidfilebase=$piddir/_pid_tezos_$name
+pidfile_node=${pidfilebase}_node
+pidfile_baker=${pidfilebase}_baker
+pidfile_accuser=${pidfilebase}_accuser
 
 # Assume mainnet
 #
+name=mainnet
 network=mainnet
 
 # Command line options
@@ -66,10 +71,9 @@ fi
 
 # Setup PID files
 #
-pidfilebase=$piddir/_pid_tezos_$name
-pidfile=${pidfilebase}_node
 
-[ -f "$pidfile" ] && echo "PID file already exists!" && exit 1
+
+[ -f "$pidfile_node" ] && echo "PID file already exists!" && exit 1
 
 # Attempt to find the installation if not set
 #
@@ -131,7 +135,7 @@ fi
 
 [ "$justconfig" = "1" ] && echo "Just configuring - exit" && exit 0
 
-# Logs
+# Check log directories
 #
 if [ "$logging" != "stdout" ] && [ "$logging" != "stderr" ] && \
 		[ "${logging%%:*}" != "syslog" ]; then
@@ -140,7 +144,6 @@ fi
 
 mkdir -p `dirname $bakerlogging`
 mkdir -p `dirname $accuselogging`
-
 
 # Let's go then
 #
@@ -151,7 +154,7 @@ $pid=$!
 [ "$?" != "0" ] && echo "Failed to start" && exit 1
 
 echo "Started with PID $pid"
-echo "$pid" > $pidfile
+echo "$pid" > $pidfile_node
 
 if [ "$bake" = "1" ]; then
 	# Let's cook!
@@ -168,11 +171,13 @@ if [ "$bake" = "1" ]; then
 		tezosbaker=$tezosroot/tezos-baker-$protocol
 		tezosaccuse=$tezosroot/tezos-accuser-$protocol
 
+		$tezosbaker -E http://127.0.0.1:$rpcport run with local node \
+			$datadir $bakerid $lbakeropts \
+			--pidfile ${pidfile_baker}-${protocol} \
+			>> ${bakerlogging}-${protocol} 2>&1 &
 
+		$tezosaccuse -E http://127.0.0.1:$rpcport run \
+			--pidfile ${pidfile_accuser}-${protocol} >> ${accuselogging}-${protocol}  2>&1 &
 
-		$tezosbaker -E http://127.0.0.1:$rpcport run with local node $datadir $bakerid $lbakeropts --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging-$protocol 2>&1 &
-
-		$tezosaccuse -E http://127.0.0.1:$rpcport run >> $accuselogging  2>&1 &
-		echo "$!" > ${pidfilebase}_accuser-$protocol
 	done
 fi
