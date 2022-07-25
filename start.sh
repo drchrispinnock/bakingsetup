@@ -8,6 +8,9 @@
 #
 # bake=0 - just run a node; 1 run a baker & a accuser
 bake=0
+
+# logging
+#
 logdir=$HOME/logs
 logging=$logdir/logfile
 bakerlogging=$logdir/logfile_baking
@@ -18,13 +21,24 @@ accuselogging=$logdir/logfile_accuser
 lvote=pass
 lbakeropts="--liquidity-baking-toggle-vote $lvote"
 
+# Don't or just config
+#
 dontconfig=0
 justconfig=0
+
+# ports
+#
 netport=9732
 rpcport=8732
 rpcaddr="[::]"
 netaddr="[::]"
+
+# Where to store PID files
+#
 piddir=/tmp
+
+# Assume mainnet
+#
 network=mainnet
 
 if [ -z "$1" ]; then
