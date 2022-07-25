@@ -8,7 +8,7 @@
 #
 username=`whoami`
 whereami=`dirname $0`
-stopscript="$whereami/kill.sh"
+stopscript="$whereami/stop.sh"
 startscript="$whereami/start.sh"
 configstore=$HOME/_configs
 

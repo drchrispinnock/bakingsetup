@@ -4,7 +4,7 @@ The scripts in these directories can be used to start and stop
 tezos nodes and bakers. Use at your own risk.
 
 * start.sh <config> - starts a node/bakers as appropriate
-* kill.sh <config>  - stops the node/bakers gracefully
+* stop.sh <config>  - stops the node/bakers gracefully
 * vacuum.sh <config> <snapshoturl> - stops the node, 
 	imports a snapshot & restarts
 
