@@ -20,7 +20,7 @@ fi
 # Wait for node to come up and bootstrap
 #
 echo "===> Waiting for node to bootstrap"
-while [ 1 == 1 ]; do 
+while [ 1 = 1 ]; do 
 	$HOME/tezos/tezos-client bootstrapped >/dev/null 2>&1
 	[ "$?" = "0" ] && break; 
 	sleep 30
