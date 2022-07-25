@@ -9,7 +9,7 @@
 sudo apt-get install -y libjson-perl wget cargo
 
 me=$HOME/bakingsetup
-killscript=$me/kill.sh
+stopscript=$me/stop.sh
 startconf=$me/mondaynet/mondaynet-common.conf
 starter=$me/mondaynet/mondaynet-start.sh
 startlog=$HOME/start-log.txt
@@ -119,7 +119,7 @@ if [ "$monday" != "$newmonday" ]; then
 	echo "Terminating node software"
 	# Terminate node gracefully
 	#
-	$killscript $startconf
+	$stopscript $startconf
 	
 	if [ -f "$HOME/.updatesoftware" ]; then
 		echo "Update Baking Setup software"
