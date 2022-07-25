@@ -6,12 +6,17 @@
 
 # Defaults - override in the configuration file (shell)
 #
+# bake=0 - just run a node; 1 run a baker & a accuser
 bake=0
-logging=stdout
-bakerlogging=$HOME/logs/logfile_baking
-accuselogging=$HOME/logs/logfile_accuser
+logdir=$HOME/logs
+logging=$logdir/logfile
+bakerlogging=$logdir/logfile_baking
+accuselogging=$logdir/logfile_accuser
 
+# Since Protocol J, Liquidity Baking Votes must be declared
+#
 lvote=pass
+lbakeropts="--liquidity-baking-toggle-vote $lvote"
 
 dontconfig=0
 justconfig=0
@@ -32,6 +37,7 @@ if [ "$2" = "justconfig" ]; then
 fi
 
 source $1
+mkdir -p $logdir
 
 if [ -f "$HOME/localconfig.txt" ]; then
 	source $HOME/localconfig.txt
@@ -148,7 +154,7 @@ if [ "$bake" = "1" ]; then
 		tezosbaker=$tezosroot/tezos-baker-$protocol
 		tezosaccuse=$tezosroot/tezos-accuser-$protocol
 
-		lbakeropts="--liquidity-baking-toggle-vote $lvote"
+
 
 		$tezosbaker -E http://127.0.0.1:$rpcport run with local node $datadir $bakerid $lbakeropts --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging-$protocol 2>&1 &
 
