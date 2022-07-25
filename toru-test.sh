@@ -3,6 +3,9 @@
 datadir="$HOME/rollup-data"
 logdir="$HOME/toru-logs"
 rollup="my_rollup"
+batch="batch"
+final="final"
+remote="remove"
 
 mkdir -p $logdir
 
@@ -24,12 +27,12 @@ for protocol in $protocols; do
 			$HOME/tezos/tezos-tx-rollup-node-$protocol \
 			init operator config for $rollup \
 			--data-dir $mydata  \
-			--batch-signer batcher \
-			--finalize-commitment-signer final  \
-			--remove-commitment-signer final \
-			--operator remove \
-			--rejection-signer remove \
-			--dispatch-withdrawals-signer remove
+			--batch-signer $batch \
+			--finalize-commitment-signer $final  \
+			--remove-commitment-signer $final \
+			--operator $remove \
+			--rejection-signer $remove \
+			--dispatch-withdrawals-signer $remove
 		fi	
 		echo "===> Running Toru node $protocol"
 
