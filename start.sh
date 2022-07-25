@@ -47,16 +47,18 @@ name=mainnet
 network=mainnet
 mode=full
 
+# exit function
+#
+leave() {
+	_code="$1"
+	_msg="$2"
+	echo "$_msg" >&2
+	exit $_code
+}
 # Command line options
 #
-if [ -z "$1" ]; then
-	echo "Usage: $0 configfile"
-	exit 1
-fi
-
-if [ "$2" = "justconfig" ]; then
-	justconfig=1
-fi
+[ -z "$1" ] && leave 1 "Usage: $0 configfile"
+[ "$2" = "justconfig" ] && 	justconfig=1
 
 source $1
 mkdir -p $logdir
@@ -65,16 +67,11 @@ if [ -f "$HOME/localconfig.txt" ]; then
 	source $HOME/localconfig.txt
 fi
 
-if [ `whoami` != $username ]; then
-	echo "Must be run by $username"
-	exit 3;
-fi
+[ `whoami` != $username ] && leave 2 "Must be run by $username"
 
 # Setup PID files
 #
-
-
-[ -f "$pidfile_node" ] && echo "PID file already exists!" && exit 1
+[ -f "$pidfile_node" ] && leave 3 "PID file already exists!"
 
 # Attempt to find the installation if not set
 #
@@ -82,7 +79,7 @@ fi
 [ ! -d "$tezosroot" ] && tezosroot=$HOME/tezos
 
 tezosnode=$tezosroot/tezos-node
-[ ! -x "$tezosnode" ] && echo "Cannot find node software" && exit 1
+[ ! -x "$tezosnode" ] && leave 4 "Cannot find node software"
 
 # The installation has a list of active protocol versions
 #
@@ -96,9 +93,7 @@ for loc in "$tezosroot" "$tezosroot/script-inputs" 	"/usr/local/share/tezos"; do
 	fi
 done
 
-if [ "$protocols" = "NONE" ]; then
-	echo "Cannot location active protocol file" && exit 2
-fi
+[ "$protocols" = "NONE" ] && leave 5 "Cannot location active protocol file"fi
 
 # Setup
 #
@@ -106,8 +101,7 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 
 	# Sometimes we will want to setup a node manually
 	#
-	[ "$dontconfig" = "1" ] && echo "Skipping configuration!" && exit 1
-
+	[ "$dontconfig" = "1" ] && leave 0 "Skipping configuration"
 
 	echo "===> Setting up configuration"
 	mkdir -p "$datadir"
@@ -118,15 +112,8 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 				--network="$network" \
 				--history-mode=$mode $otherconfigopts
 
-	if [ "$?" != "0" ]; then
-		echo "XXX Configuration failed"
-		exit 1
-	fi
-
-	if [ ! -f "$datadir/config.json" ]; then
-		echo "XXX Configuration failed"
-		exit 1
-	fi
+	[ "$?" != "0" ] && leave 6 "Configuration failed"
+	[ ! -f "$datadir/config.json" ] && leave 6 "Configuration failed"
 
 	if [ ! -f "$datadir/identity.json" ]; then
 		$tezosnode identity generate --data-dir=$datadir
@@ -134,7 +121,7 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 
 fi
 
-[ "$justconfig" = "1" ] && echo "Just configuring - exit" && exit 0
+[ "$justconfig" = "1" ] && leave 0 "Just configuring - exit"
 
 # Check log directories
 #
@@ -152,7 +139,7 @@ echo "===> Starting $name node"
 
 $tezosnode run --data-dir=$datadir --log-output=$logging $otherrunopts &
 $pid=$!
-[ "$?" != "0" ] && echo "Failed to start" && exit 1
+[ "$?" != "0" ] && leave 8 "Failed to start node"
 
 echo "Started with PID $pid"
 echo "$pid" > $pidfile_node
