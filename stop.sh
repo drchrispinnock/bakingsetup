@@ -1,39 +1,35 @@
 #!/bin/bash
 
-# Stop a baking setup. 
+# Stop a baking setup.
 # Chris Pinnock 2022
 # MIT license
 #
 
 # Defaults - override in the configuration file (shell)
 #
+username=`whoami`
+name=mainnet
 piddir=/tmp
-username=`whoami` # Usually overridden in config
+pidfilebase=$piddir/_pid_tezos_$name
+pidfile_node=${pidfilebase}_node
+pidfile_baker=${pidfilebase}_baker
+pidfile_accuser=${pidfilebase}_accuser
 
-if [ -z "$1" ]; then
-	echo "Usage: $0 configfile"
-	exit 1
-fi
+# exit function
+#
+leave() {
+	_code="$1"
+	_msg="$2"
+	echo "$_msg" >&2
+	exit $_code
+}
 
+[ -z "$1" ] && leave 1 "Usage: $0 configfile"
 source $1
 
-# Pedestrian
-#
-if [ `whoami` != $username ]; then
-        echo "Must be run by $username"
-        exit 3;
-fi
+[ `whoami` != $username ] && leave 2 "Must be run by $username"
 
-
-if [ -z "$name" ]; then
-	echo "I need name set"
-	exit 1
-fi
-
-pidfilebase=$piddir/_pid_tezos_$name
-
-for pidfile in ${pidfilebase}_node* ${pidfilebase}_baker* \
-		${pidfilebase}_endorser* ${pidfilebase}_accuser*; do
+for pidfile in ${pidfile_node}* ${pidfile_baker}* ${pidfile_accuser}*; do
 
 if [ -f $pidfile ]; then
 		pid=`cat $pidfile`
@@ -41,5 +37,3 @@ if [ -f $pidfile ]; then
 		rm $pidfile
 	fi
 done
-
-
