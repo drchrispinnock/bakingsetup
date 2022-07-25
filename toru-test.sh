@@ -5,7 +5,7 @@ logdir="$HOME/toru-logs"
 rollup="my_rollup"
 batch="batch"
 final="final"
-remote="remove"
+remove="remove"
 
 mkdir -p $logdir
 
