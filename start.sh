@@ -47,6 +47,10 @@ name=mainnet
 network=mainnet
 mode=full
 
+# If not set, set to me
+#
+username=`whoami`
+
 # exit function
 #
 leave() {
@@ -77,6 +81,7 @@ fi
 #
 [ -z "$tezosroot" ] && tezosroot=$HOME/tezos/$vers/tezos
 [ ! -d "$tezosroot" ] && tezosroot=$HOME/tezos
+[ ! -d "$tezosroot" ] && tezosroot=/usr/local/bin
 
 tezosnode=$tezosroot/tezos-node
 [ ! -x "$tezosnode" ] && leave 4 "Cannot find node software"
