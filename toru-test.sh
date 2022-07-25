@@ -1,11 +1,29 @@
 #!/bin/sh
 
+# This is very much a test
+#
+# use it with: 
+# - v14 Octez
+# - Start an archive node (see configs/toru.conf)
+# - Get 4 accounts aliases 
+#   o one with 10000tz to originate the rollup
+#   o three others with 10000tz final, batch and remove
+#   o we use these in various ways below...
+#
+# - Once the archive node has synced and you have the accounts,
+#   originate the rollup
+#
+# (Do not use this script on MAINNET.)
+
 datadir="$HOME/rollup-data"
 logdir="$HOME/toru-logs"
 rollup="my_rollup"
 batch="batch"
 final="final"
 remove="remove"
+
+echo "*** DO NOT USE THIS SCRIPT ON MAINNET ***"
+sleep 5
 
 mkdir -p $logdir
 
