@@ -10,7 +10,6 @@ bake=0
 logging=stdout
 bakerlogging=$HOME/logs/logfile_baking
 accuselogging=$HOME/logs/logfile_accuser
-endorselogging=$HOME/logs/logfile_endorser
 
 lvote=pass
 
