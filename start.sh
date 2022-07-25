@@ -41,10 +41,11 @@ pidfile_node=${pidfilebase}_node
 pidfile_baker=${pidfilebase}_baker
 pidfile_accuser=${pidfilebase}_accuser
 
-# Assume mainnet
+# Assume mainnet & full
 #
 name=mainnet
 network=mainnet
+mode=full
 
 # Command line options
 #
