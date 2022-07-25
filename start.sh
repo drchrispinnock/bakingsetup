@@ -20,6 +20,7 @@ rpcport=8732
 rpcaddr="[::]"
 netaddr="[::]"
 piddir=/tmp
+network=mainnet
 
 if [ -z "$1" ]; then
 	echo "Usage: $0 configfile"
@@ -56,20 +57,22 @@ pidfile=${pidfilebase}_node
 tezosnode=$tezosroot/tezos-node
 [ ! -x "$tezosnode" ] && echo "Cannot find node software" && exit 1
 
-# Set the network to mainnet if not specified
+
+
+# The installation has a list of active protocol versions
 #
-[ -z "$network" ] && network=mainnet
+protocols="NONE"
 
-# Usually an installation has a list of active protocol versions
-#
-protocols="011-PtHangz2 012-Psithaca alpha"
+for loc in "$tezosroot" "$tezosroot/script-inputs" 	"/usr/local/share/tezos"; do
 
-if [ -f "$tezosroot/active_protocol_versions" ]; then
-	protocols=`cat $tezosroot/active_protocol_versions`
-fi
+	if [ -f "$loc/active_protocol_versions" ]; then
+		protocols=`cat $loc/active_protocol_versions`
+		break
+	fi
+done
 
-if [ -f "$tezosroot/script-inputs/active_protocol_versions" ]; then
-	protocols=`cat $tezosroot/script-inputs/active_protocol_versions`
+if [ "$protocols" = "NONE"]; then
+	echo "Cannot location active protocol file" && exit 2
 fi
 
 # Setup
