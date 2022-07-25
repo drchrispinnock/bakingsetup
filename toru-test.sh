@@ -4,14 +4,14 @@ datadir="$HOME/rollup-data"
 logdir="$HOME/toru-logs"
 rollup="my_rollup"
 
-mkdir $logdir
+mkdir -p $logdir
 
 if [ -f "$HOME/tezos/tx_rollup_protocol_versions" ]; then
 	protocols=`cat $HOME/tezos/tx_rollup_protocol_versions`
 fi
 
-if [ -f "$HOME/tezos/tx_rollup_protocol_versions" ]; then
-	protocols=`cat $HOME/tezos/tx_rollup_protocol_versions`
+if [ -f "$HOME/tezos/script-inputs/tx_rollup_protocol_versions" ]; then
+	protocols=`cat $HOME/tezos/script-inputs/tx_rollup_protocol_versions`
 fi
 
 echo "Protocols: $protocols"
