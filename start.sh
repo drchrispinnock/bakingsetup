@@ -41,6 +41,8 @@ piddir=/tmp
 #
 network=mainnet
 
+# Command line options
+#
 if [ -z "$1" ]; then
 	echo "Usage: $0 configfile"
 	exit 1
@@ -77,8 +79,6 @@ pidfile=${pidfilebase}_node
 tezosnode=$tezosroot/tezos-node
 [ ! -x "$tezosnode" ] && echo "Cannot find node software" && exit 1
 
-
-
 # The installation has a list of active protocol versions
 #
 protocols="NONE"
@@ -91,7 +91,7 @@ for loc in "$tezosroot" "$tezosroot/script-inputs" 	"/usr/local/share/tezos"; do
 	fi
 done
 
-if [ "$protocols" = "NONE"]; then
+if [ "$protocols" = "NONE" ]; then
 	echo "Cannot location active protocol file" && exit 2
 fi
 
