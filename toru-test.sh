@@ -17,6 +17,16 @@ if [ -f "$HOME/tezos/script-inputs/tx_rollup_protocol_versions" ]; then
 	protocols=`cat $HOME/tezos/script-inputs/tx_rollup_protocol_versions`
 fi
 
+# Wait for node to come up and bootstrap
+#
+echo "===> Waiting for node to bootstrap"
+while [ 1 == 1 ]; do 
+	$HOME/tezos/tezos-client bootstrapped >/dev/null 2>&1
+	[ "$?" = "0" ] && break; 
+	sleep 30
+done
+
+
 for protocol in $protocols; do
 	if [ -x $HOME/tezos/tezos-tx-rollup-node-$protocol ]; then
 
