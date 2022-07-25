@@ -14,6 +14,8 @@ if [ -f "$HOME/tezos/tx_rollup_protocol_versions" ]; then
 	protocols=`cat $HOME/tezos/tx_rollup_protocol_versions`
 fi
 
+echo "Protocols: $protocols"
+
 for protocol in $protocols; do
 	if [ -x $HOME/tezos/tezos-tx-rollup-node-$protocol ]; then
 		mydata="$datadir-$protocol"
