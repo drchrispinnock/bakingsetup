@@ -118,7 +118,6 @@ fi
 
 mkdir -p `dirname $bakerlogging`
 mkdir -p `dirname $accuselogging`
-mkdir -p `dirname $endorselogging`
 
 
 # Let's go then
@@ -145,19 +144,11 @@ if [ "$bake" = "1" ]; then
 
 	for protocol in $protocols; do
 		tezosbaker=$tezosroot/tezos-baker-$protocol
-		tezosendorse=$tezosroot/tezos-endorser-$protocol
 		tezosaccuse=$tezosroot/tezos-accuser-$protocol
 
 		lbakeropts="--liquidity-baking-toggle-vote $lvote"
 
 		$tezosbaker -E http://127.0.0.1:$rpcport run with local node $datadir $bakerid $lbakeropts --pidfile ${pidfilebase}_baker-$protocol >> $bakerlogging-$protocol 2>&1 &
-
-		# Future protocols will not have endorsers
-		#
-		if [ -x "$tezosendorse" ]; then
-			$tezosendorse -E http://127.0.0.1:$rpcport run >> $endorselogging  2>&1 &
-			echo "$!" > ${pidfilebase}_endorser-$protocol
-		fi
 
 		$tezosaccuse -E http://127.0.0.1:$rpcport run >> $accuselogging  2>&1 &
 		echo "$!" > ${pidfilebase}_accuser-$protocol
