@@ -145,9 +145,13 @@ if [ "$background" = "1" ]; then
 
 		# Let's bake as well
 		#
-		echo "===> Sleeping for node to come up"
 		sleep 10
-		$tezosroot/tezos-client -E http://127.0.0.1:$rpcport bootstrapped
+		while [ 1 = 1 ]; do
+			$tezosroot/tezos-client -E http://127.0.0.1:$rpcport bootstrapped
+		        [ "$?" = "0" ] && break;
+			echo "===> Sleeping for node to come up"
+			sleep 30
+		done
 
 		for protocol in $protocols; do
 			tezosbaker=$tezosroot/tezos-baker-$protocol
