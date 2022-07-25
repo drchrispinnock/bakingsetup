@@ -10,10 +10,8 @@
 username=`whoami`
 name=mainnet
 piddir=/tmp
-pidfilebase=$piddir/_pid_tezos_$name
-pidfile_node=${pidfilebase}_node
-pidfile_baker=${pidfilebase}_baker
-pidfile_accuser=${pidfilebase}_accuser
+
+
 
 # exit function
 #
@@ -26,6 +24,11 @@ leave() {
 
 [ -z "$1" ] && leave 1 "Usage: $0 configfile"
 source $1
+
+pidfilebase=$piddir/_pid_tezos_$name
+pidfile_node=${pidfilebase}_node
+pidfile_baker=${pidfilebase}_baker
+pidfile_accuser=${pidfilebase}_accuser
 
 [ `whoami` != $username ] && leave 2 "Must be run by $username"
 

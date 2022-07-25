@@ -36,10 +36,6 @@ netaddr="[::]"
 # Where to store PID files
 #
 piddir=/tmp
-pidfilebase=$piddir/_pid_tezos_$name
-pidfile_node=${pidfilebase}_node
-pidfile_baker=${pidfilebase}_baker
-pidfile_accuser=${pidfilebase}_accuser
 
 # Assume mainnet & full
 #
@@ -66,6 +62,12 @@ leave() {
 
 source $1
 mkdir -p $logdir
+mkdir -p $piddir
+
+pidfilebase=$piddir/_pid_tezos_$name
+pidfile_node=${pidfilebase}_node
+pidfile_baker=${pidfilebase}_baker
+pidfile_accuser=${pidfilebase}_accuser
 
 if [ -f "$HOME/localconfig.txt" ]; then
 	source $HOME/localconfig.txt
@@ -143,7 +145,8 @@ mkdir -p `dirname $accuselogging`
 echo "===> Starting $name node"
 
 $tezosnode run --data-dir=$datadir --log-output=$logging $otherrunopts &
-$pid=$!
+pid=$!
+
 [ "$?" != "0" ] && leave 8 "Failed to start node"
 
 echo "Started with PID $pid"
