@@ -19,6 +19,7 @@ startscript=$me/start.sh
 buildlogs=$HOME/buildlogs
 debug=0
 justbuild="no"
+rustv="1.52.1"
 
 [ "$1" = "build" ] && justbuild="yes"
 
@@ -148,7 +149,7 @@ if [ -f "$HOME/.build" ]; then
 	echo "===> Installing rust"
 	wget https://sh.rustup.rs/rustup-init.sh > $buildlogs/rust.txt 2>&1
 	chmod +x rustup-init.sh
-	./rustup-init.sh --profile minimal --default-toolchain 1.52.1 -y >> $buildlogs/rust.txt 2>&1
+	./rustup-init.sh --profile minimal --default-toolchain $rustv -y >> $buildlogs/rust.txt 2>&1
 	source $HOME/.cargo/env
 	rm -f rustup-init.sh
 	rm -f rustup-init.sh.?
