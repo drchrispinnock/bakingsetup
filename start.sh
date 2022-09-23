@@ -100,7 +100,7 @@ for loc in "$tezosroot" "$tezosroot/script-inputs" 	"/usr/local/share/tezos"; do
 	fi
 done
 
-[ "$protocols" = "NONE" ] && leave 5 "Cannot location active protocol file"fi
+[ "$protocols" = "NONE" ] && leave 5 "Cannot location active protocol file"
 
 # Setup
 #

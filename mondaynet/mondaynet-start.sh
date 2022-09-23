@@ -104,7 +104,7 @@ fi
 #
 echo "===> Installing prerequisites"
 sudo apt-get update > $buildlogs/apt.txt 2>&1
-sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev opam jq zlib1g-dev bc autoconf libjson-perl libpq-dev >> $buildlogs/apt.txt 2>&1
+sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev opam jq zlib1g-dev bc autoconf libjson-perl libpq-dev lz4 >> $buildlogs/apt.txt 2>&1
 
 # Update the software to latest master branch of Octez
 #
@@ -148,7 +148,7 @@ if [ -f "$HOME/.build" ]; then
 	echo "===> Installing rust"
 	wget https://sh.rustup.rs/rustup-init.sh > $buildlogs/rust.txt 2>&1
 	chmod +x rustup-init.sh
-	./rustup-init.sh --profile minimal --default-toolchain 1.52.1 -y >> $buildlogs/rust.txt 2>&1
+	./rustup-init.sh --profile minimal --default-toolchain 1.60.0 -y >> $buildlogs/rust.txt 2>&1
 	source $HOME/.cargo/env
 	rm -f rustup-init.sh
 	rm -f rustup-init.sh.?
@@ -183,7 +183,7 @@ if [ -f "$HOME/.build" ]; then
 	# Save the build for the next boot just in case
 	#
 	cd ..
-	tar zcf $HOME/tezos-$branch.tar.gz tezos/tezos-* tezos/*_protocol_versions tezos/script-inputs 
+	tar zcf $HOME/tezos-$branch.tar.gz tezos/tezos-* `find tezos -name \*_protocol_versions`
 
 	rm -f "$HOME/.build"
 fi
