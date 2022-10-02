@@ -4,6 +4,9 @@
 # Chris Pinnock 2022
 # MIT license
 
+# Fun!
+octez=tezos
+
 # Defaults - override in the configuration file (shell)
 #
 username=`whoami`
@@ -39,8 +42,12 @@ cliurl=$2
 [ ! -d "$tezosroot" ] && tezosroot=$HOME/tezos
 [ ! -d "$tezosroot" ] && tezosroot=/usr/local/bin
 
-tezosnode=$tezosroot/tezos-node
-[ ! -x "$tezosnode" ] && leave 3 "Cannot find node software"
+if [ -x "$tezosroot/octez-node" ]; then
+	octez=octez
+fi
+
+octeznode=$tezosroot/${octez}-node
+[ ! -x "$octeznode" ] && leave 3 "Cannot find node software"
 
 # Set the network to mainnet if not specified
 #
@@ -81,7 +88,7 @@ mkdir -p ${datadir}
 cp -p "${configstore}/config.json" $datadir
 
 echo "===> Importing snapshot"
-$tezosnode snapshot import "$snapfile" --data-dir ${datadir} --network $network
+$octeznode snapshot import "$snapfile" --data-dir ${datadir} --network $network
 [ "$?" != "0" ] && leave 8 "Import failed"
 
 echo "===> Restoring configuration"

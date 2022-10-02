@@ -25,7 +25,7 @@ leave() {
 [ -z "$1" ] && leave 1 "Usage: $0 configfile"
 . $1
 
-pidfilebase=$piddir/_pid_tezos_$name
+pidfilebase=$piddir/_pid_octez_$name
 pidfile_node=${pidfilebase}_node
 pidfile_baker=${pidfilebase}_baker
 pidfile_accuser=${pidfilebase}_accuser

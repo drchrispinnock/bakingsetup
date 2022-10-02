@@ -9,6 +9,11 @@
 # bake=0 - just run a node; 1 run a baker & a accuser
 bake=0
 
+# Yeah! Transitional binary name fun
+#
+octez="tezos"
+
+
 # logging
 #
 logdir=$HOME/logs
@@ -64,7 +69,7 @@ leave() {
 mkdir -p $logdir
 mkdir -p $piddir
 
-pidfilebase=$piddir/_pid_tezos_$name
+pidfilebase=$piddir/_pid_octez_$name
 pidfile_node=${pidfilebase}_node
 pidfile_baker=${pidfilebase}_baker
 pidfile_accuser=${pidfilebase}_accuser
@@ -85,8 +90,12 @@ fi
 [ ! -d "$tezosroot" ] && tezosroot=$HOME/tezos
 [ ! -d "$tezosroot" ] && tezosroot=/usr/local/bin
 
-tezosnode=$tezosroot/tezos-node
-[ ! -x "$tezosnode" ] && leave 4 "Cannot find node software"
+if [ -x "$tezosroot/octez-node" ]; then
+	octez="octez"
+fi
+
+octeznode=$tezosroot/${octez}-node
+[ ! -x "$octeznode" ] && leave 4 "Cannot find node software"
 
 # The installation has a list of active protocol versions
 #
@@ -112,7 +121,7 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 
 	echo "===> Setting up configuration"
 	mkdir -p "$datadir"
-	$tezosnode config init 	--data-dir=$datadir \
+	$octeznode config init 	--data-dir=$datadir \
 				--net-addr=$netaddr:$netport \
 				--rpc-addr=$rpcaddr:$rpcport \
 				--log-output=$logging \
@@ -123,7 +132,7 @@ if [ ! -d "$datadir" ] || [ ! -f "$datadir/config.json" ]; then
 	[ ! -f "$datadir/config.json" ] && leave 6 "Configuration failed"
 
 	if [ ! -f "$datadir/identity.json" ]; then
-		$tezosnode identity generate --data-dir=$datadir
+		$octeznode identity generate --data-dir=$datadir
 	fi
 
 fi
@@ -144,7 +153,7 @@ mkdir -p `dirname $accuselogging`
 #
 echo "===> Starting $name node"
 
-$tezosnode run --data-dir=$datadir --log-output=$logging $otherrunopts &
+$octeznode run --data-dir=$datadir --log-output=$logging $otherrunopts &
 pid=$!
 
 [ "$?" != "0" ] && leave 8 "Failed to start node"
@@ -157,22 +166,22 @@ if [ "$bake" = "1" ]; then
 	#
 	sleep 10
 	while [ 1 = 1 ]; do
-		$tezosroot/tezos-client -E http://127.0.0.1:$rpcport bootstrapped
+		$tezosroot/${octez}-client -E http://127.0.0.1:$rpcport bootstrapped
 	        [ "$?" = "0" ] && break;
 		echo "===> Sleeping for node to come up"
 		sleep 30
 	done
 
 	for protocol in $protocols; do
-		tezosbaker=$tezosroot/tezos-baker-$protocol
-		tezosaccuse=$tezosroot/tezos-accuser-$protocol
+		octezbaker=$tezosroot/${octez}-baker-$protocol
+		octezaccuse=$tezosroot/${octez}-accuser-$protocol
 
-		$tezosbaker -E http://127.0.0.1:$rpcport run with local node \
+		$octezbaker -E http://127.0.0.1:$rpcport run with local node \
 			$datadir $bakerid $lbakeropts \
 			--pidfile ${pidfile_baker}-${protocol} \
 			>> ${bakerlogging}-${protocol} 2>&1 &
 
-		$tezosaccuse -E http://127.0.0.1:$rpcport run \
+		$octezaccuse -E http://127.0.0.1:$rpcport run \
 			--pidfile ${pidfile_accuser}-${protocol} >> ${accuselogging}-${protocol}  2>&1 &
 
 	done
