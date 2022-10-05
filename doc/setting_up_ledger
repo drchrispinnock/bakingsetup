@@ -13,6 +13,7 @@ tezos-client list connected ledgers
 tezos-client import secret key ledger_tezos \
 	"ledger://kaleidoscopic-uguisu-gripping-nightingale/ed25519/0h/0h"
 tezos-client setup ledger to bake for ledger_tezos
+tezos-client register key ledger_tezos as delegate
 
 3. You MUST plug the thing into the same port every time.
 
