@@ -196,7 +196,7 @@ fi
 
 # If all the above worked, there should at least be a tezos-node binary
 #
-if [ ! -f "$builddir/octez-node" ] || [ ! -f "$builddir/tezos-node" ]; then
+if [ ! -f "$builddir/octez-node" ] && [ ! -f "$builddir/tezos-node" ]; then
 	echo "XXX No node binary!"
 	echo "EXITING"
 	exit 1
