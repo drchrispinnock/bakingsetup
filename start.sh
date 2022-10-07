@@ -103,6 +103,11 @@ protocols="NONE"
 
 for loc in "$tezosroot" "$tezosroot/script-inputs" 	"/usr/local/share/tezos"; do
 
+	if [ -f "$loc/active_protocol_versions_without_number" ]; then
+		protocols=`cat $loc/active_protocol_versions_without_number`
+		break
+	fi
+	
 	if [ -f "$loc/active_protocol_versions" ]; then
 		protocols=`cat $loc/active_protocol_versions`
 		break
@@ -173,6 +178,7 @@ if [ "$bake" = "1" ]; then
 	done
 
 	for protocol in $protocols; do
+
 		octezbaker=$tezosroot/${octez}-baker-$protocol
 		octezaccuse=$tezosroot/${octez}-accuser-$protocol
 
