@@ -183,7 +183,7 @@ if [ -f "$HOME/.build" ]; then
 	# Save the build for the next boot just in case
 	#
 	cd ..
-	tar zcf $HOME/tezos-$branch.tar.gz tezos/tezos-* `find tezos -name \*_protocol_versions`
+	tar zcf $HOME/tezos-$branch.tar.gz tezos/octez-* tezos/tezos-* `find tezos -name \*_protocol_versions` `find tezos -name \*_protocol_versions_without_number`
 
 	rm -f "$HOME/.build"
 fi
