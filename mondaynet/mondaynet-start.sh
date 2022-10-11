@@ -32,6 +32,12 @@ warez="_NOTSET"
 #
 testnet=`cat /etc/hostname | sed -e 's/\-.*//g'`
 
+# Adjust the Rust version
+#
+if [ "$testnet" = "mondaynet" ]; then
+	rustv="1.60.0"
+fi
+
 # Configs can be overridden
 #
 if [ -f "$HOME/localconfig.txt" ]; then
