@@ -111,7 +111,7 @@ fi
 #
 echo "===> Installing prerequisites"
 sudo apt-get update > $buildlogs/apt.txt 2>&1
-sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev opam jq zlib1g-dev bc autoconf libjson-perl libpq-dev >> $buildlogs/apt.txt 2>&1
+sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev opam jq zlib1g-dev bc autoconf libjson-perl libpq-dev lz4 >> $buildlogs/apt.txt 2>&1
 
 # Update the software to latest master branch of Octez
 #
@@ -190,7 +190,7 @@ if [ -f "$HOME/.build" ]; then
 	# Save the build for the next boot just in case
 	#
 	cd ..
-	tar zcf $HOME/tezos-$branch.tar.gz tezos/tezos-* tezos/*_protocol_versions tezos/script-inputs 
+	tar zcf $HOME/tezos-$branch.tar.gz tezos/octez-* tezos/tezos-* `find tezos -name \*_protocol_versions` `find tezos -name \*_protocol_versions_without_number`
 
 	rm -f "$HOME/.build"
 fi
@@ -203,7 +203,7 @@ fi
 
 # If all the above worked, there should at least be a tezos-node binary
 #
-if [ ! -f "$builddir/tezos-node" ]; then
+if [ ! -f "$builddir/octez-node" ] && [ ! -f "$builddir/tezos-node" ]; then
 	echo "XXX No node binary!"
 	echo "EXITING"
 	exit 1

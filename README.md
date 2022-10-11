@@ -4,7 +4,7 @@ The scripts in these directories can be used to start and stop
 tezos nodes and bakers. Use at your own risk.
 
 * start.sh <config> - starts a node/bakers as appropriate
-* kill.sh <config>  - stops the node/bakers gracefully
+* stop.sh <config>  - stops the node/bakers gracefully
 * vacuum.sh <config> <snapshoturl> - stops the node, 
 	imports a snapshot & restarts
 
@@ -18,7 +18,6 @@ You can use cron: e.g.
 ```
 @reboot		/home/me/bakingsetup/start.sh /home/me/bakingsetup/configs/baker.conf
 ```
-
 or rc of course.
 
 Really this work is published because of...
