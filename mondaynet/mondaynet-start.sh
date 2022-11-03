@@ -19,6 +19,7 @@ startscript=$me/start.sh
 buildlogs=$HOME/buildlogs
 debug=0
 justbuild="no"
+rustv="1.52.1"
 
 [ "$1" = "build" ] && justbuild="yes"
 
@@ -30,6 +31,12 @@ warez="_NOTSET"
 # Grok the test net from the hostname
 #
 testnet=`cat /etc/hostname | sed -e 's/\-.*//g'`
+
+# Adjust the Rust version
+#
+if [ "$testnet" = "mondaynet" ]; then
+	rustv="1.60.0"
+fi
 
 # Configs can be overridden
 #
@@ -148,7 +155,7 @@ if [ -f "$HOME/.build" ]; then
 	echo "===> Installing rust"
 	wget https://sh.rustup.rs/rustup-init.sh > $buildlogs/rust.txt 2>&1
 	chmod +x rustup-init.sh
-	./rustup-init.sh --profile minimal --default-toolchain 1.60.0 -y >> $buildlogs/rust.txt 2>&1
+	./rustup-init.sh --profile minimal --default-toolchain $rustv -y >> $buildlogs/rust.txt 2>&1
 	source $HOME/.cargo/env
 	rm -f rustup-init.sh
 	rm -f rustup-init.sh.?
@@ -183,7 +190,7 @@ if [ -f "$HOME/.build" ]; then
 	# Save the build for the next boot just in case
 	#
 	cd ..
-	tar zcf $HOME/tezos-$branch.tar.gz tezos/tezos-* `find tezos -name \*_protocol_versions`
+	tar zcf $HOME/tezos-$branch.tar.gz tezos/octez-* tezos/tezos-* `find tezos -name \*_protocol_versions` `find tezos -name \*_protocol_versions_without_number`
 
 	rm -f "$HOME/.build"
 fi
@@ -196,7 +203,7 @@ fi
 
 # If all the above worked, there should at least be a tezos-node binary
 #
-if [ ! -f "$builddir/tezos-node" ]; then
+if [ ! -f "$builddir/octez-node" ] && [ ! -f "$builddir/tezos-node" ]; then
 	echo "XXX No node binary!"
 	echo "EXITING"
 	exit 1
