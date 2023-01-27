@@ -3,7 +3,7 @@
 # Run me from cron.
 # Set s3bucket in the environment
 
-[ -z "$snapshotdir" ] && snapshotdir="/tmp/snaps"
+[ -z "$snapshotdir" ] && snapshotdir="snaps""
 [ -z "$s3bucket" ] && echo "Set s3bucket to the target in the environment" \
 		&& exit 1
 
