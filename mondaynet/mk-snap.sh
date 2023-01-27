@@ -5,8 +5,7 @@
 
 [ -z "$snapshotdir" ] && snapshotdir="snaps"
 [ -z "$name" ] && name="mondaynet"
-[ -z "$s3bucket" ] && echo "Set s3bucket to the target in the environment" \
-		&& exit 1
+[ -z "$s3bucket" ] && s3bucket="mondaynet.snapshots"
 
 # Make a snapshot
 mkdir -p $snapshotdir
