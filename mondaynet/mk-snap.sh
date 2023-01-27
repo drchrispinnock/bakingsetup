@@ -11,7 +11,7 @@
 mkdir -p $snapshotdir
 now=`date +%Y%m%d%H%M`
 
-$HOME/tezos/octez-node snapshot export $snapshotdir/$now."snapshot" --block head
+$HOME/tezos/octez-node snapshot export $snapshotdir/$now."snapshot" --block head --history-mode=rolling
 [ $? = "0" ] && echo "Snapshot failed!" && exit 2
 
 aws s3 cp $snapshotdir/$now."snapshot" $s3bucket
