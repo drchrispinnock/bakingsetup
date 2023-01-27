@@ -3,7 +3,8 @@
 # Run me from cron.
 # Set s3bucket in the environment
 
-[ -z "$snapshotdir" ] && snapshotdir="snaps""
+[ -z "$snapshotdir" ] && snapshotdir="snaps"
+[ -z "$name" ] && name="mondaynet"
 [ -z "$s3bucket" ] && echo "Set s3bucket to the target in the environment" \
 		&& exit 1
 
@@ -11,10 +12,11 @@
 mkdir -p $snapshotdir
 now=`date +%Y%m%d%H%M`
 
-$HOME/tezos/octez-node snapshot export $snapshotdir/$now."snapshot" --block head --rolling
-[ $? = "0" ] && echo "Snapshot failed!" && exit 2
+$HOME/tezos/octez-node snapshot export $snapshotdir/$name-$now."snapshot" --block head --rolling
+[ $? != "0" ] && echo "Snapshot failed!" && exit 2
 
-aws s3 cp $snapshotdir/$now."snapshot" $s3bucket
+aws s3 cp $snapshotdir/$name-$now."snapshot" $s3bucket
+rm -f $name-$now."snapshot"
 
 
 
