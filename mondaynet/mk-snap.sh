@@ -5,7 +5,7 @@
 
 [ -z "$snapshotdir" ] && snapshotdir="snaps"
 [ -z "$name" ] && name="mondaynet"
-[ -z "$s3bucket" ] && s3bucket="mondaynet.snapshots"
+[ -z "$s3bucket" ] && s3bucket="s3://mondaynet.snapshots/"
 
 # Make a snapshot
 mkdir -p $snapshotdir
@@ -16,7 +16,7 @@ $HOME/tezos/octez-node snapshot export $snapshotdir/$name-rolling-snapshot --blo
 
 echo "<html><a href=\"$name-rolling-snapshot\">Mondaynet Snapshot created at $now</a></html>" > $snapshotdir/index.html
 
-aws s3 sync $snapshotdir/ $s3bucket/
+aws s3 sync $snapshotdir/ $s3bucket
 rm -f $snapshotdir/$name-rolling-snapshot
 
 
