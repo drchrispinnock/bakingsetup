@@ -30,6 +30,8 @@ else
 	read STDIN
 fi
 
+echo "Sleeping for 120 seconds"
+sleep 120
 # Self-delegating
 echo "Self-delegating..."
 $HOME/tezos/octez-client register key $key as delegate
