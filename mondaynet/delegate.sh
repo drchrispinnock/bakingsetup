@@ -7,8 +7,7 @@ key=`hostname -s`
 walletdir="$HOME/wallet-$key"
 
 if [ -f "faucet.json" ]; then
-	$HOME/tezos/tezos-client activate account $key with faucet.json
-	$HOME/tezos/tezos-client register key $key as delegate
+	$HOME/tezos/octez-client activate account $key with faucet.json
 
 	if [ -f "$walletdir/public_keys" ]; then
 		echo "Warning - already keys saved in $walletdir"
@@ -19,4 +18,19 @@ if [ -f "faucet.json" ]; then
 		mv faucet.json $walletdir
 		echo "Please backup $walletdir safely!"
 	fi
+else
+	# Generating Key
+	$HOME/tezos/octez-client gen keys $key
+
+	#
+	$HOME/tezos/octez-client list known addresses
+
+	echo "Please go to the faucet and get 6001tz"
+	echo "Press ENTER when done"
+	read STDIN
 fi
+
+# Self-delegating
+echo "Self-delegating..."
+$HOME/tezos/octez-client register key $key as delegate
+
