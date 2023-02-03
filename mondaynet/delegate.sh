@@ -6,18 +6,13 @@
 key=`hostname -s`
 walletdir="$HOME/wallet-$key"
 
+if [ -f "$walletdir/public_keys" ]; then
+	echo "Warning - already keys saved in $walletdir"
+	exit 1
+fi
+
 if [ -f "faucet.json" ]; then
 	$HOME/tezos/octez-client activate account $key with faucet.json
-
-	if [ -f "$walletdir/public_keys" ]; then
-		echo "Warning - already keys saved in $walletdir"
-		exit 1
-	else
-		mkdir -p $walletdir
-		cp ~/.tezos-client/*key* $walletdir
-		mv faucet.json $walletdir
-		echo "Please backup $walletdir safely!"
-	fi
 else
 	# Generating Key
 	$HOME/tezos/octez-client gen keys $key
@@ -29,6 +24,11 @@ else
 	echo "Press ENTER when done"
 	read STDIN
 fi
+
+mkdir -p $walletdir
+cp ~/.tezos-client/*key* $walletdir
+mv -f faucet.json $walletdir
+echo "Please backup $walletdir safely!"
 
 echo "Sleeping for 120 seconds"
 sleep 120
