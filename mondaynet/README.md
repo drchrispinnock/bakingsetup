@@ -46,33 +46,45 @@ bash ./bakingsetup/mondaynet/mondaynet-setup.sh
 tail -f start-log.txt (usually complete in under 30 minutes)
 tail -f logs/logfile
 
-6. When the node is synced (this can take some time) get an account from 
-the faucet and self-delegate. The account should be called the same 
-as the hostname. We will use mondaynet-lon2 here. Use the HOSTNAME.
+6. When the node is synced (this can take some time), generate a wallet.
 
-Go to https://teztnets.xyz/ and go to the latest faucet for mondaynet
-Download a json file. Save it as faucet.json on the server.
+Fund the wallet by going to https://teztnets.xyz/, using the appropriate
+faucet and entering your address.
+
+Then self-delegate. The account should be called the same as the hostname. 
+We will use mondaynet-lon2 here. Use the HOSTNAME.
 
 You can use the delegate.sh script in the repository for this step 
-provided you have a faucet file in faucet.json. Or do it by hand:
+provided you have a faucet file in faucet.json. 
+
+Or do it by hand:
 
 ```
-./tezos/tezos-client activate account mondaynet-lon2 with faucet.json
+./tezos/octez-client gen keys mondaynet-lon2
+./tezos/octez-client list known addresses
+mondaynet-lon-1: tz1i7y4ECTZ1jcryptoiswhatwedo3r3 (unencrypted sk known)
+```
+
+Go to the Faucet... then:
+
+```
 ./tezos/tezos-client register key mondaynet-lon2 as delegate
 
 mkdir ~/wallet-mondaynet-lon2
 cp ~/.tezos-client/*key* ~/wallet-mondaynet-lon2
 cp ~/faucet.json ~/wallet-mondaynet-lon2
 ```
-Back this directory up.
 
-7. Restart
+7. Back the wallet directory up.
+
+8. Restart
+
 ```
 touch ~/.skipbuild
 sudo shutdown -r now
 ```
 
-8. The system will check testnets for an updated repository. If the
+9. The system will check testnets for an updated repository. If the
 network changes, the system will reset.
 
 Files in $HOME:
