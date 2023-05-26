@@ -60,19 +60,16 @@ provided you have a faucet file in faucet.json.
 Or do it by hand:
 
 ```
-./tezos/octez-client gen keys mondaynet-lon2
+./tezos/octez-client gen keys `hostname -s`
 ./tezos/octez-client list known addresses
-mondaynet-lon-1: tz1i7y4ECTZ1jcryptoiswhatwedo3r3 (unencrypted sk known)
+mkdir ~/wallet-`hostname -s`
+cp ~/.tezos-client/*key* ~/wallet-`hostname -s`
 ```
 
 Go to the Faucet... then:
 
 ```
-./tezos/tezos-client register key mondaynet-lon2 as delegate
-
-mkdir ~/wallet-mondaynet-lon2
-cp ~/.tezos-client/*key* ~/wallet-mondaynet-lon2
-cp ~/faucet.json ~/wallet-mondaynet-lon2
+./tezos/octez-client register key `hostname -s` as delegate
 ```
 
 7. Back the wallet directory up.
