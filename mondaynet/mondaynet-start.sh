@@ -104,7 +104,7 @@ if [ ! -d $HOME/.zcash-params ]; then
 	# Fetch Zcash Params
 	#
 	wget https://raw.githubusercontent.com/zcash/zcash/master/zcutil/fetch-params.sh > $buildlogs/zcash.txt 2>&1
-	sh ./fetch-params.sh >> $buildlogs/zcash.txt 2>&1
+	bash ./fetch-params.sh >> $buildlogs/zcash.txt 2>&1
 fi
 
 # Prerequisites
