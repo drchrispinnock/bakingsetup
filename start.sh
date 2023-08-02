@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Start a Tezos baking setup.
 # Chris Pinnock 2022
@@ -179,11 +179,16 @@ if [ "$bake" = "1" ]; then
 
 	for protocol in $protocols; do
 
+		opts=""
+		if [ "$protocol" = "alpha" ]; then
+			opts="--adaptive-issurance-vote=yay"
+		fi
+
 		octezbaker=$tezosroot/${octez}-baker-$protocol
 		octezaccuse=$tezosroot/${octez}-accuser-$protocol
 
 		$octezbaker -E http://127.0.0.1:$rpcport run with local node \
-			$datadir $bakerid $lbakeropts \
+			$datadir $bakerid $lbakeropts $opts \
 			--pidfile ${pidfile_baker}-${protocol} \
 			>> ${bakerlogging}-${protocol} 2>&1 &
 
