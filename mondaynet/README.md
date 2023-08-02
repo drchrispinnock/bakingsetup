@@ -6,18 +6,22 @@ Mondaynet, Dailynet and other test networks.
 # How to use this fine work
 
 1. AWS: Setup an Ubuntu AWS host - t3.xlarge, 60GB SSD 
-   GCP: Setup an equivalent GCP host from Ubuntu 20 template
+   GCP: Setup an equivalent GCP host from Debian 11/12
 
 Although the scripts will attempt to update software, it is a good
 idea to apt update && apt upgrade -y && apt dist-upgrade -y
 
-Login to your host (e.g. ubuntu on AWS, you on GCP). On GCP switch to the
-ubuntu account as your personal account won't work properly with cron.
+Login to your host (e.g. ubuntu on AWS, you on GCP). On GCP create
+a dedicated account e.g. ubuntu  as your personal account won't work 
+properly with cron. This account needs root.
+
 sudo su - ubuntu
+
 
 2. Checkout the startup software in $HOME
 
 ```
+sudo apt install git
 git clone https://github.com/drchrispinnock/bakingsetup.git
 ```
 
