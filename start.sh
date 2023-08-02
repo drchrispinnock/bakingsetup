@@ -181,7 +181,7 @@ if [ "$bake" = "1" ]; then
 
 		opts=""
 		if [ "$protocol" = "alpha" ]; then
-			opts="--adaptive-issurance-vote=yay"
+			opts="--adaptive-issurance-vote on"
 		fi
 
 		octezbaker=$tezosroot/${octez}-baker-$protocol
