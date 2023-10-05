@@ -88,8 +88,8 @@ fi
 
 if [ -f "$HOME/.cleanup" ]; then
 	echo "===> Cleaning up"
-	rm -rf tezos rustup-init.sh logs fetch-params.sh \
-		.zcash-params .opam .rustup .cargo .cache $HOME/.cleanup \
+	rm -rf tezos rustup-init.sh logs \
+		 .opam .rustup .cargo .cache $HOME/.cleanup \
 		"$HOME/.skipbuild" rustup-init.sh $HOME/.stop
 fi
 
@@ -101,10 +101,8 @@ fi
 # Check dependencies
 #
 if [ ! -d $HOME/.zcash-params ]; then
-	# Fetch Zcash Params
-	#
-	wget https://raw.githubusercontent.com/zcash/zcash/master/zcutil/fetch-params.sh > $buildlogs/zcash.txt 2>&1
-	bash ./fetch-params.sh >> $buildlogs/zcash.txt 2>&1
+       	mkdir $HOME/.zcash-params
+	cp zcash/* $HOME/.zcash-params
 fi
 
 # Prerequisites
