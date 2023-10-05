@@ -100,10 +100,6 @@ fi
 
 # Check dependencies
 #
-if [ ! -d $HOME/.zcash-params ]; then
-       	mkdir $HOME/.zcash-params
-	cp zcash/* $HOME/.zcash-params
-fi
 
 # Prerequisites
 #
@@ -188,7 +184,7 @@ if [ -f "$HOME/.build" ]; then
 	# Save the build for the next boot just in case
 	#
 	cd ..
-	tar zcf $HOME/tezos-$branch.tar.gz tezos/octez-* tezos/tezos-* `find tezos -name \*_protocol_versions` `find tezos -name \*_protocol_versions_without_number`
+	tar zcf $HOME/tezos-$branch.tar.gz tezos/_opam/share/zcash-params/* tezos/octez-* tezos/tezos-* `find tezos -name \*_protocol_versions` `find tezos -name \*_protocol_versions_without_number`
 
 	rm -f "$HOME/.build"
 fi
@@ -207,6 +203,11 @@ if [ ! -f "$builddir/octez-node" ] && [ ! -f "$builddir/tezos-node" ]; then
 	exit 1
 fi
 export PATH=$builddir:$PATH
+
+if [ ! -d $HOME/.zcash-params ]; then
+       	mkdir $HOME/.zcash-params
+	cp $builddir/_opam/share/zcash-params/* $HOME/.zcash-params
+fi
 
 if [ -f "$HOME/.resetnode" ]; then
 	# Reset Node
@@ -242,6 +243,7 @@ if [ "$debug" = "1" ]; then
 	TEZOS_LOG="* -> debug"
 	export TEZOS_LOG
 fi
+
 
 # Start the node
 #
