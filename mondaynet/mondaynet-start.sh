@@ -36,6 +36,8 @@ testnet=`cat /etc/hostname | sed -e 's/\-.*//g'`
 #
 if [ "$testnet" = "mondaynet" ]; then
 	rustv="1.60.0"
+	echo "WARN: mondaynet -> weeklynet"
+	testnet="weeklynet"
 fi
 
 # Configs can be overridden

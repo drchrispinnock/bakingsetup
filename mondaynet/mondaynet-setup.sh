@@ -30,6 +30,12 @@ freq="30 * * * *" # Every hour check for changes
 #
 # e.g. mondaynet-lon
 testnetwork=`cat /etc/hostname | sed -e 's/\-.*//g'`
+
+if [ "$testnetwork" = "mondaynet" ]; then
+	echo "WARN: transition to weeklynet"
+	testnetwork="weeklynet"
+fi
+
 echo "Setting up for $testnetwork"
 
 # Setup Cronjobs
