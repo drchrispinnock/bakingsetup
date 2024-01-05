@@ -31,6 +31,9 @@ edit /etc/hostname
 
 The hostname needs to include the network name at the beginning.
 
+*** Note that as of 8th Nov 2023, mondaynet will automatically be changed
+to weeklynet to facilitate an easy migration for Mondaynet bakers. ***
+
 Examples:
 
 ```
