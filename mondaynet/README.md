@@ -55,7 +55,7 @@ tail -f logs/logfile
 
 6. When the node is synced (this can take some time), generate a wallet.
 
-Fund the wallet by going to https://teztnets.xyz/, using the appropriate
+Fund the wallet by going to https://teztnets.com/, using the appropriate
 faucet and entering your address.
 
 Then self-delegate. The account should be called the same as the hostname. 

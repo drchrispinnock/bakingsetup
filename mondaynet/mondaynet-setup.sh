@@ -20,7 +20,7 @@ cronsetup=1
 
 # Hardcoded remote test network repository
 #
-testnetrepos=https://teztnets.xyz
+testnetrepos=https://teztnets.com
 testnetfile=teztnets.json
 freq="30 * * * *" # Every hour check for changes
 
