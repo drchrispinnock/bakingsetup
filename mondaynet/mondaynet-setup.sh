@@ -6,7 +6,7 @@
 
 # Dependencies
 #
-sudo apt-get install -y libjson-perl wget cmake
+sudo apt-get install -y libjson-perl wget cmake libprotobuf-dev protobuf-compiler
 
 me=$HOME/bakingsetup
 stopscript=$me/stop.sh
