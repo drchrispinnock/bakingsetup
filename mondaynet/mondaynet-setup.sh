@@ -127,10 +127,10 @@ if [ "$monday" != "$newmonday" ]; then
 	#
 	$stopscript $startconf
 	
-	if [ -f "$HOME/.updatesoftware" ]; then
+#	if [ -f "$HOME/.updatesoftware" ]; then
 		echo "Update Baking Setup software"
 		cd $me && git pull
-	fi
+#	fi
 	
 	if [ -f "$HOME/.noreboot" ]; then
 		# Let's not reboot then
