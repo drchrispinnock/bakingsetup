@@ -193,7 +193,7 @@ if [ "$bake" = "1" ]; then
 	if [ "$dal" != "0" ]; then 
 		$octezdal config init --endpoint=http://127.0.0.1:$rpcport \
 				--net-addr="[::]"
-		$octezdal run > $logging_dal 2>&1 &
+		$octezdal run > $dallogging 2>&1 &
 		[ "$?" != "0" ] && leave 8 "Failed to start DAL"
 	fi
 
