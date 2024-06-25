@@ -8,6 +8,7 @@
 #
 # bake=0 - just run a node; 1 run a baker & a accuser
 bake=0
+dal=0
 
 # Yeah! Transitional binary name fun
 #
@@ -18,8 +19,12 @@ octez="tezos"
 #
 logdir=$HOME/logs
 logging=$logdir/logfile
+dallogging=$logdir/logfile_dal
 bakerlogging=$logdir/logfile_baking
 accuselogging=$logdir/logfile_accuser
+
+datadir=$HOME/.tezos-node
+daldir=$HOME/.tezos-dal-node
 
 # Since Protocol J, Liquidity Baking Votes must be declared
 #
@@ -72,6 +77,7 @@ mkdir -p $piddir
 pidfilebase=$piddir/_pid_octez_$name
 pidfile_node=${pidfilebase}_node
 pidfile_baker=${pidfilebase}_baker
+pidfile_dal=${pidfilebase}_dal
 pidfile_accuser=${pidfilebase}_accuser
 
 if [ -f "$HOME/localconfig.txt" ]; then
@@ -95,7 +101,14 @@ if [ -x "$tezosroot/octez-node" ]; then
 fi
 
 octeznode=$tezosroot/${octez}-node
+octezdal=$tezosroot/${octez}-dal-node
+
 [ ! -x "$octeznode" ] && leave 4 "Cannot find node software"
+
+if [ "$dal" != "0" ] && [ ! -x "$octezdal" ]; then
+	echo "Cannot find DAL - won't use"
+	dal=0	
+fi
 
 # The installation has a list of active protocol versions
 #
@@ -177,23 +190,30 @@ if [ "$bake" = "1" ]; then
 		sleep 30
 	done
 
+	if [ "$dal" != "0" ]; then 
+		$octezdal config init --endpoint=http://127.0.0.1:$rpcport \
+				--net-addr="[::]"
+		$octezdal run > $logging_dal 2>&1 &
+		[ "$?" != "0" ] && leave 8 "Failed to start DAL"
+	fi
+
 	for protocol in $protocols; do
 
 		opts=""
-		if [ "$protocol" = "alpha" ]; then
-			opts="--adaptive-issuance-vote on"
+		if [ "$dal" != "0" ]; then
+			opts="--dal-node http://127.0.0.1:10732"
 		fi
 
 		octezbaker=$tezosroot/${octez}-baker-$protocol
 		octezaccuse=$tezosroot/${octez}-accuser-$protocol
 
-		$octezbaker -E http://127.0.0.1:$rpcport run with local node \
+		$octezbaker run with local node \
 			$datadir $bakerid $lbakeropts $opts \
 			--pidfile ${pidfile_baker}-${protocol} \
 			>> ${bakerlogging}-${protocol} 2>&1 &
 
-		$octezaccuse -E http://127.0.0.1:$rpcport run \
-			--pidfile ${pidfile_accuser}-${protocol} >> ${accuselogging}-${protocol}  2>&1 &
+		$octezaccuse run --pidfile ${pidfile_accuser}-${protocol} \
+			>> ${accuselogging}-${protocol}  2>&1 &
 
 	done
 fi

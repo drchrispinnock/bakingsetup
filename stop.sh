@@ -28,6 +28,7 @@ leave() {
 pidfilebase=$piddir/_pid_octez_$name
 pidfile_node=${pidfilebase}_node
 pidfile_baker=${pidfilebase}_baker
+pidfile_dal=${pidfilebase}_dal
 pidfile_accuser=${pidfilebase}_accuser
 
 [ `whoami` != $username ] && leave 2 "Must be run by $username"
