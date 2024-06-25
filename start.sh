@@ -74,21 +74,11 @@ leave() {
 mkdir -p $logdir
 mkdir -p $piddir
 
-pidfilebase=$piddir/_pid_octez_$name
-pidfile_node=${pidfilebase}_node
-pidfile_baker=${pidfilebase}_baker
-pidfile_dal=${pidfilebase}_dal
-pidfile_accuser=${pidfilebase}_accuser
-
 if [ -f "$HOME/localconfig.txt" ]; then
 	. $HOME/localconfig.txt
 fi
 
 [ `whoami` != $username ] && leave 2 "Must be run by $username"
-
-# Setup PID files
-#
-[ -f "$pidfile_node" ] && leave 3 "PID file already exists!"
 
 # Attempt to find the installation if not set
 #
@@ -176,9 +166,6 @@ pid=$!
 
 [ "$?" != "0" ] && leave 8 "Failed to start node"
 
-echo "Started with PID $pid"
-echo "$pid" > $pidfile_node
-
 if [ "$bake" = "1" ]; then
 	# Let's cook!
 	#
@@ -209,11 +196,9 @@ if [ "$bake" = "1" ]; then
 
 		$octezbaker run with local node \
 			$datadir $bakerid $lbakeropts $opts \
-			--pidfile ${pidfile_baker}-${protocol} \
 			>> ${bakerlogging}-${protocol} 2>&1 &
 
-		$octezaccuse run --pidfile ${pidfile_accuser}-${protocol} \
-			>> ${accuselogging}-${protocol}  2>&1 &
+		$octezaccuse run >> ${accuselogging}-${protocol}  2>&1 &
 
 	done
 fi
