@@ -29,11 +29,16 @@ freq="30 * * * *" # Every hour check for changes
 # Networkname-something else
 #
 # e.g. mondaynet-lon
-testnetwork=`cat /etc/hostname | sed -e 's/\-.*//g'`
 
-if [ "$testnetwork" = "mondaynet" ]; then
-	echo "WARN: transition to weeklynet"
-	testnetwork="weeklynet"
+testnetwork="weeklynet"
+grep weeklynet /etc/hostname 2>&1 >/dev/null
+if [ "$?" != "0" ]; then
+	testnetwork=`cat /etc/hostname | sed -e 's/\-.*//g'`
+
+	if [ "$testnetwork" = "mondaynet" ]; then
+		echo "WARN: transition to weeklynet"
+		testnetwork="weeklynet"
+	fi
 fi
 
 echo "Setting up for $testnetwork"
