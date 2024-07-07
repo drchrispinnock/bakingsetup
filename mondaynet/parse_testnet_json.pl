@@ -31,9 +31,12 @@ foreach my $k (keys(%h)) {
 
 my $build='';
 my $url='';
+my $chainname='';
+
 if ($hd->{$network}->{'docker_build'}) {
 
 	$url=$hd->{$network}->{'network_url'};
+	$chainname=$hd->{$network}->{'chain_name'};
 
 	if (defined($hd->{$network}->{'git_ref'})) {
 		$build = $hd->{$network}->{'git_ref'};
@@ -54,4 +57,4 @@ if ($hd->{$network}->{'docker_build'}) {
 	exit 2
 }
 #warn "\nUsing:\t$network with $build\n";
-print "$network $build $url\n";
+print "$network $build $url $chainname\n";
