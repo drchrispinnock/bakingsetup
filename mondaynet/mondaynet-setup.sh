@@ -71,6 +71,11 @@ monday=""
 if [ -f "$HOME/monday.txt" ]; then
 	monday=`cat $HOME/monday.txt`
 fi
+oldchain=""
+if [ -f "$HOME/chain.txt" ]; then
+	oldchain=`cat $HOME/chain.txt`
+fi
+
 
 # Set the software branch
 #
@@ -97,6 +102,7 @@ else
 		newbranch=`echo $new | awk -F' ' '{print $2}'`
 		newmonday=`echo $new | awk -F' ' '{print $1}'`
 		network=`echo $new | awk -F' ' '{print $3}'`
+		chain=`echo $new | awk -F' ' '{print $4}'`
 	fi
 	rm -f $testnetfile
 fi
@@ -106,7 +112,6 @@ if [ "$branch" != "$newbranch" ]; then
 	echo "Setting software branch old: $branch -> $newbranch"
 	rm -f $HOME/tezos-$branch.tar.gz
 fi
-
 
 # Regardless, if .cleanup is there zero monday so that we reset
 # on next run
@@ -120,8 +125,9 @@ fi
 #
 echo $newmonday > $HOME/monday.txt
 echo "$network" > $HOME/network.txt
+echo "$chain" > $HOME/chain.txt
 
-if [ "$monday" != "$newmonday" ]; then
+if [ "$monday" != "$newmonday" ] || [ "$chain" != "$oldchain" ]; then
 	echo "Network ID: $monday -> $newmonday"
 	echo "New Period! Will reset wallet and node on next run."
 	touch "$HOME/.resetwallet"
@@ -132,10 +138,8 @@ if [ "$monday" != "$newmonday" ]; then
 	#
 	$stopscript $startconf
 	
-#	if [ -f "$HOME/.updatesoftware" ]; then
-		echo "Update Baking Setup software"
-		cd $me && git pull
-#	fi
+	echo "Update Baking Setup software"
+	cd $me && git pull
 	
 	if [ -f "$HOME/.noreboot" ]; then
 		# Let's not reboot then
