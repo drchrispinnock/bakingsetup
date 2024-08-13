@@ -216,6 +216,7 @@ if [ -f "$HOME/.resetnode" ]; then
 	#
 	echo "===> Resetting node"
 	rm -rf "$HOME/.tezos-node"
+	rm -rf "$HOME/.tezos-dal-node"
 	rm -f "$HOME/.resetnode"
 
 	echo "===> Rotating logs"
