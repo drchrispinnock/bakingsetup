@@ -198,6 +198,7 @@ if [ "$bake" = "1" ]; then
 		if [ "$dal" != "0" ]; then
 			opts="--dal-node http://127.0.0.1:10732"
 		fi
+                echo "===> Starting Baker and Accuser for $protocol"
 
 		octezbaker=$tezosroot/${octez}-baker-$protocol
 		octezaccuse=$tezosroot/${octez}-accuser-$protocol
