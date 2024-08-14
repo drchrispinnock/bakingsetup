@@ -182,6 +182,14 @@ if [ "$bake" = "1" ]; then
 				--net-addr="[::]"
 		$octezdal run > $dallogging 2>&1 &
 		[ "$?" != "0" ] && leave 8 "Failed to start DAL"
+
+		while [ 1 = 1 ]; do
+			curl http://127.0.0.1:10732/version >/dev/null 2>&1
+                	[ "$?" = "0" ] && break;
+	                echo "===> Sleeping for DAL node to come up"
+   	 	         sleep 30
+        	done
+
 	fi
 
 	for protocol in $protocols; do
