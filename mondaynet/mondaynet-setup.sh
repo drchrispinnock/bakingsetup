@@ -18,11 +18,14 @@ cronsetup=1
 
 [ "$1" = "once" ] && cronsetup=0
 
+
+fq="30"
+
 # Hardcoded remote test network repository
 #
 testnetrepos=https://teztnets.com
 testnetfile=teztnets.json
-freq="30 * * * *" # Every hour check for changes
+freq="$fq * * * *" # Every fq for changes
 
 # Test the hostname to determine which network we want to join
 # Hostnames should be
