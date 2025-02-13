@@ -187,7 +187,7 @@ if [ -f "$HOME/.build" ]; then
 	#
 	echo "===> Taring up the build $branch"
 	cd ..
-	tar zcf $HOME/tezos-$branch.tar.gz tezos/_opam/share/zcash-params/* tezos/octez-* tezos/tezos-* `find tezos -name \*_protocol_versions` `find tezos -name \*_protocol_versions_without_number`
+	tar zcf $HOME/tezos-$branch.tar.gz tezos/_opam/share/zcash-params/* tezos/octez-* `find tezos -name \*_protocol_versions` `find tezos -name \*_protocol_versions_without_number`
 
 	rm -f "$HOME/.build"
 fi
