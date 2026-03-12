@@ -106,7 +106,7 @@ fi
 # Prerequisites
 #
 echo "===> Installing prerequisites"
-sudo apt-get remove -y opam > $buildlogs/opam1.txt 2>&1
+sudo apt-get remove -y opam > $buildlogs/opam.txt 2>&1
 sudo apt-get update > $buildlogs/apt.txt 2>&1
 sudo apt-get install -y rsync git m4 build-essential patch unzip wget pkg-config libgmp-dev libev-dev libhidapi-dev libffi-dev jq zlib1g-dev bc autoconf libjson-perl libpq-dev lz4 sqlite3 >> $buildlogs/apt.txt 2>&1
 
@@ -170,9 +170,12 @@ if [ -f "$HOME/.build" ]; then
         sed -e 's/read -r BINDIR/BINDIR=""/g' -e 's/read_tty BINDIR/BINDIR=""/g' < install.sh.in > install.sh
         bash install.sh
 
+	export PATH=/usr/local/bin:$PATH
+	opam --version >> $buildlogs/opam.txt 2>&1
+
 	cd tezos
 	git checkout $branch >> $buildlogs/git.txt 2>&1
-	opam init --bare --yes > $buildlogs/opam.txt 2>&1
+	opam init --bare --yes >> $buildlogs/opam.txt 2>&1
 	eval $(opam env) 
 
 	echo "===> Rebuilding the software - build-deps"
